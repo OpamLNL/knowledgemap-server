@@ -13,7 +13,7 @@ export class MapRevision {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ name: 'map_id' })
+    @Column({ name: 'map_id', type: 'int' })
     mapId: number;
 
     @ManyToOne(() => KnowledgeMap, { onDelete: 'CASCADE' })

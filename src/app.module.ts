@@ -13,6 +13,8 @@ import { NodesModule } from './nodes/nodes.module';
 import { NodeConnectionsModule } from './node-connections/node-connections.module';
 import { KnowledgeMapsModule } from './knowledge-maps/knowledge-maps.module';
 import { GraphModule } from './common/graph/graph.module';
+import { AdminModule } from './admin/admin.module';
+import { ProgressModule } from './progress/progress.module';
 import { AuthRolesGuard } from './auth/auth-roles.guard';
 
 @Module({
@@ -46,6 +48,8 @@ import { AuthRolesGuard } from './auth/auth-roles.guard';
         NodesModule,
         NodeConnectionsModule,
         KnowledgeMapsModule,
+        ProgressModule,
+        AdminModule,
     ],
     controllers: [AppController],
     providers: [

@@ -17,10 +17,10 @@ export class NodeConnection {
     @Column({ name: 'to_node_id' })
     toNodeId: number;
 
-    @Column({ name: 'map_id', nullable: true })
+    @Column({ name: 'map_id', type: 'int', nullable: true })
     mapId: number | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'varchar', length: 50, nullable: true })
     type: string | null;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

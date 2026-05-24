@@ -179,6 +179,31 @@ export class NodesService {
         };
     }
 
+    async getProgressSummary(userUid: string, mapId?: number) {
+        const graph = await this.getGraph(userUid, mapId);
+        const completed = graph.nodes.filter((n) => n.status === 'completed').length;
+        const available = graph.nodes.filter((n) => n.status === 'available').length;
+        const locked = graph.nodes.filter((n) => n.status === 'locked').length;
+        const total = graph.nodes.length;
+
+        return {
+            mapId: graph.mapId,
+            total,
+            completed,
+            available,
+            locked,
+            percent: total > 0 ? Math.round((completed / total) * 100) : 0,
+            nodes: graph.nodes.map((n) => ({
+                id: n.id,
+                title: n.title,
+                topicId: n.topicId,
+                status: n.status,
+                level: n.level,
+                progress: n.progress,
+            })),
+        };
+    }
+
     async validateMapGraph(mapId: number) {
         const nodes = await this.nodeRepo.find({ where: { mapId } });
         const connections = await this.connectionRepo.find({ where: { mapId } });

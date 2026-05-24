@@ -1,5 +1,4 @@
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { User } from './entities/user.entity';
@@ -8,22 +7,18 @@ import { UsersController } from './users.controller';
 
 import { UserTopicProgress } from './entities/user-topic-progress.entity';
 import { UserTopicProgressService } from './user-topic-progress.service';
-import { UserTopicProgressController } from './user-topic-progress.controller';
 
 import { Topic } from '../topics/entities/topic.entity';
+import { Node } from '../nodes/entities/node.entity';
 import { TopicsModule } from '../topics/topics.module';
-// import {FirebaseAuthGuard} from "../auth/firebase-auth.guard";
- import {AuthModule} from "../auth/auth.module";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, UserTopicProgress, Topic]),
-    //JwtModule,
-    TopicsModule,
-    // AuthModule,
-  ],
-  providers: [UsersService, UserTopicProgressService],
-  controllers: [UsersController, UserTopicProgressController],
-  exports: [UsersService],
+    imports: [
+        TypeOrmModule.forFeature([User, UserTopicProgress, Topic, Node]),
+        TopicsModule,
+    ],
+    providers: [UsersService, UserTopicProgressService],
+    controllers: [UsersController],
+    exports: [UsersService, UserTopicProgressService],
 })
 export class UsersModule {}

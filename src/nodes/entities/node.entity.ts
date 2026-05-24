@@ -14,10 +14,10 @@ export class Node {
     @Column()
     title: string;
 
-    @Column({ name: 'topic_id', nullable: true })
+    @Column({ name: 'topic_id', type: 'int', nullable: true })
     topicId: number | null;
 
-    @Column({ name: 'map_id', nullable: true })
+    @Column({ name: 'map_id', type: 'int', nullable: true })
     mapId: number | null;
 
     @Column({ type: 'float', nullable: true })
@@ -26,7 +26,7 @@ export class Node {
     @Column({ type: 'float', nullable: true })
     y: number | null;
 
-    @Column({ nullable: true })
+    @Column({ type: 'varchar', length: 255, nullable: true })
     color: string | null;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
