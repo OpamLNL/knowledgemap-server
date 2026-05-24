@@ -34,6 +34,7 @@ const server = express();
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+    app.setGlobalPrefix('api');
     await app.init();
 
     // (опціонально) відповісти одразу на / поки Nest не готовий
