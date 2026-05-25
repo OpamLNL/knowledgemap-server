@@ -70,6 +70,18 @@ export class BulkGroupEdgeDto {
     type?: string | null;
 }
 
+export class BulkGroupLayoutDto {
+    @IsString()
+    @IsNotEmpty()
+    groupId: string;
+
+    @IsNumber()
+    x: number;
+
+    @IsNumber()
+    y: number;
+}
+
 export class BulkSaveGraphDto {
     @IsArray()
     @ValidateNested({ each: true })
@@ -101,6 +113,12 @@ export class BulkSaveGraphDto {
     @IsInt({ each: true })
     @IsOptional()
     deletedGroupEdgeIds?: number[];
+
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => BulkGroupLayoutDto)
+    @IsOptional()
+    groupLayouts?: BulkGroupLayoutDto[];
 
     @IsBoolean()
     @IsOptional()

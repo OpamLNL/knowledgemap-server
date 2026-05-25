@@ -14,6 +14,7 @@ import { GroupConnection } from './topics/entities/group-connection.entity';
 import { InitialSchema1730000000000 } from './migrations/1730000000000-InitialSchema';
 import { EditorFeatures1730000000001 } from './migrations/1730000000001-EditorFeatures';
 import { KnowledgeGroupsSchema1730000000002 } from './migrations/1730000000002-KnowledgeGroupsSchema';
+import { MapGroupLayout1730000000003 } from './migrations/1730000000003-MapGroupLayout';
 
 const useSsl = process.env.DB_SSL === 'true';
 const caPath = process.env.DB_CA_PATH;
@@ -40,6 +41,7 @@ export const AppDataSource = new DataSource({
         InitialSchema1730000000000,
         EditorFeatures1730000000001,
         KnowledgeGroupsSchema1730000000002,
+        MapGroupLayout1730000000003,
     ],
     synchronize: false,
     logging: true,

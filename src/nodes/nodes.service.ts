@@ -83,11 +83,13 @@ export class NodesService {
             mapId: resolvedMapId,
             groups: graph.groups,
             groupEdges: graph.groupEdges,
+            groupLayout: graph.groupLayout ?? {},
         };
     }
 
     async getGraph(userUid: string, mapId?: number) {
         const resolvedMapId = mapId ?? (await this.getDefaultMapId());
+        const map = await this.mapRepo.findOne({ where: { id: resolvedMapId } });
 
         const nodes = await this.nodeRepo.find({ where: { mapId: resolvedMapId } });
         const connections = await this.connectionRepo.find({ where: { mapId: resolvedMapId } });
@@ -226,6 +228,7 @@ export class NodesService {
             groups: groups.map((g) => {
                 const st = groupStats.get(g.id) ?? { total: 0, completed: 0, available: 0 };
                 const pct = st.total > 0 ? Math.round((st.completed / st.total) * 100) : 0;
+                const layoutPos = map?.groupLayoutJson?.[g.id];
                 return {
                     id: g.id,
                     title: g.title,
@@ -236,6 +239,8 @@ export class NodesService {
                     completedCount: st.completed,
                     availableCount: st.available,
                     progressPercent: pct,
+                    x: layoutPos?.x ?? null,
+                    y: layoutPos?.y ?? null,
                 };
             }),
             groupEdges: groupConnections.map((e) => ({
@@ -244,6 +249,7 @@ export class NodesService {
                 to: e.toGroupId,
                 type: e.type,
             })),
+            groupLayout: map?.groupLayoutJson ?? {},
         };
     }
 

@@ -98,8 +98,11 @@ export class NodeConnectionsService {
         edges.push({ from: fromNodeId, to: toNodeId });
 
         const result = this.graphValidator.validate(nodeIds, edges);
-        if (!result.valid) {
-            throw new BadRequestException(result.errors);
+        const blocking = result.errors.filter(
+            (e) => !e.includes('цикл') && !e.includes('DAG'),
+        );
+        if (blocking.length > 0) {
+            throw new BadRequestException(blocking);
         }
     }
 

@@ -205,10 +205,10 @@ export class KnowledgeMapsService {
                     Object.assign(existing, {
                         title: nodeDto.title,
                         topicId: nodeDto.topicId ?? null,
-                        x: nodeDto.x ?? null,
-                        y: nodeDto.y ?? null,
                         color: nodeDto.color ?? null,
                     });
+                    if (nodeDto.x !== undefined) existing.x = nodeDto.x;
+                    if (nodeDto.y !== undefined) existing.y = nodeDto.y;
                     await queryRunner.manager.save(existing);
                 } else {
                     const tempKey = nodeDto.id;
@@ -336,6 +336,27 @@ export class KnowledgeMapsService {
                         );
                     }
                 }
+            }
+
+            if (dto.groupLayouts !== undefined && dto.groupLayouts.length > 0) {
+                const freshMap = await queryRunner.manager.findOne(KnowledgeMap, {
+                    where: { id: mapId },
+                });
+                if (!freshMap) {
+                    throw new NotFoundException(`Карту id=${mapId} не знайдено`);
+                }
+                const layout: Record<string, { x: number; y: number }> = {
+                    ...(freshMap.groupLayoutJson ?? {}),
+                };
+                for (const item of dto.groupLayouts) {
+                    layout[item.groupId] = {
+                        x: Math.round(item.x),
+                        y: Math.round(item.y),
+                    };
+                }
+                freshMap.groupLayoutJson = layout;
+                await queryRunner.manager.save(KnowledgeMap, freshMap);
+                map.groupLayoutJson = layout;
             }
 
             await queryRunner.commitTransaction();

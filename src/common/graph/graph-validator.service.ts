@@ -12,6 +12,7 @@ export class GraphValidatorService {
     validate(
         nodeIds: number[],
         edges: GraphEdge[],
+        options: { strictCycles?: boolean } = {},
     ): GraphValidationResult {
         const errors: string[] = [];
         const warnings: string[] = [];
@@ -39,7 +40,12 @@ export class GraphValidatorService {
         }
 
         if (this.hasCycle(nodeIds, edges)) {
-            errors.push('Граф містить цикл — карта знань має бути ациклічним (DAG)');
+            const cycleMsg = 'Граф містить цикл — карта не є DAG';
+            if (options.strictCycles) {
+                errors.push(`${cycleMsg} (публікація потребує ациклічного графа)`);
+            } else {
+                warnings.push(`${cycleMsg}; збереження дозволено`);
+            }
         }
 
         const connected = new Set<number>();
@@ -56,8 +62,8 @@ export class GraphValidatorService {
         return { valid: errors.length === 0, errors, warnings };
     }
 
-    assertValid(nodeIds: number[], edges: GraphEdge[]): void {
-        const result = this.validate(nodeIds, edges);
+    assertValid(nodeIds: number[], edges: GraphEdge[], strictCycles = true): void {
+        const result = this.validate(nodeIds, edges, { strictCycles });
         if (!result.valid) {
             throw new BadRequestException({
                 message: 'Граф не пройшов валідацію',

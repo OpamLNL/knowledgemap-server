@@ -36,4 +36,7 @@ export class KnowledgeMap {
 
     @Column({ name: 'published_at', type: 'timestamp', nullable: true })
     publishedAt: Date | null;
+
+    @Column({ name: 'group_layout_json', type: 'json', nullable: true })
+    groupLayoutJson: Record<string, { x: number; y: number }> | null;
 }
