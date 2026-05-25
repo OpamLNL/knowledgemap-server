@@ -2,11 +2,30 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { User, UserRole } from '../users/entities/user.entity';
-import { MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
 import { Node } from '../nodes/entities/node.entity';
 import { UserTopicProgressService } from '../users/user-topic-progress.service';
 import { KnowledgeMapsService } from '../knowledge-maps/knowledge-maps.service';
 import { NodesService } from '../nodes/nodes.service';
+
+type MapTeachingStats = {
+    nodeCount: number;
+    studentsTotal: number;
+    studentsActive: number;
+    averagePercent: number;
+    completionDistribution: {
+        notStarted: number;
+        inProgress: number;
+        completed: number;
+    };
+    topStudents: {
+        name: string;
+        email: string;
+        percent: number;
+        completed: number;
+        total: number;
+    }[];
+};
 
 @Injectable()
 export class UsersCabinetService {
@@ -44,10 +63,30 @@ export class UsersCabinetService {
                 locked: number;
                 percent: number;
             } | null;
+            teachingStats: MapTeachingStats | null;
         }> = [];
 
         let percentSum = 0;
         let mapsWithProgress = 0;
+
+        const isTeacher = role === UserRole.TEACHER;
+        const students = isTeacher
+            ? await this.userRepo.find({
+                  where: { role: UserRole.STUDENT },
+                  select: ['firebase_uid', 'email', 'name'],
+              })
+            : [];
+
+        const teachingByMapId = new Map<number, MapTeachingStats>();
+
+        if (isTeacher) {
+            for (const map of maps) {
+                if (map.ownerUid !== firebaseUid || map.status !== MapStatus.PUBLISHED) {
+                    continue;
+                }
+                teachingByMapId.set(map.id, await this.buildMapTeachingStats(map.id, students));
+            }
+        }
 
         for (const map of maps) {
             const canTrackProgress =
@@ -80,8 +119,12 @@ export class UsersCabinetService {
                 updatedAt: map.updatedAt,
                 ownerUid: map.ownerUid,
                 progress,
+                teachingStats: teachingByMapId.get(map.id) ?? null,
             });
         }
+
+        const teachingMaps = mapItems.filter((m) => m.teachingStats);
+        const teachingStats = isTeacher ? this.buildTeachingSummary(teachingMaps) : null;
 
         const recentCompleted = progressRecords
             .filter((r) => r.status === 'completed' && r.completed_at)
@@ -114,6 +157,7 @@ export class UsersCabinetService {
                 averagePercent:
                     mapsWithProgress > 0 ? Math.round(percentSum / mapsWithProgress) : 0,
             },
+            teachingStats,
             maps: mapItems,
             recentCompleted: recentCompleted.map((r) => {
                 const node = nodeByTopic.get(r.topicId);
@@ -124,6 +168,94 @@ export class UsersCabinetService {
                     mapId: node?.mapId ?? null,
                 };
             }),
+        };
+    }
+
+    private async buildMapTeachingStats(
+        mapId: number,
+        students: Pick<User, 'firebase_uid' | 'email' | 'name'>[],
+    ): Promise<MapTeachingStats> {
+        const nodeCount = await this.nodeRepo.count({ where: { mapId } });
+
+        const userStats: {
+            name: string;
+            email: string;
+            completed: number;
+            total: number;
+            percent: number;
+        }[] = [];
+
+        for (const student of students) {
+            const uid = student.firebase_uid;
+            if (!uid) continue;
+
+            const summary = await this.nodesService.getProgressSummary(uid, mapId);
+            userStats.push({
+                name: student.name ?? student.email,
+                email: student.email,
+                completed: summary.completed,
+                total: summary.total,
+                percent: summary.percent,
+            });
+        }
+
+        userStats.sort((a, b) => b.percent - a.percent);
+
+        const studentsWithNodes = userStats.filter((u) => u.total > 0);
+        const studentsTotal = studentsWithNodes.length;
+        const studentsActive = studentsWithNodes.filter(
+            (u) => u.completed > 0 || u.percent > 0,
+        ).length;
+        const averagePercent =
+            studentsTotal > 0
+                ? Math.round(
+                      studentsWithNodes.reduce((sum, u) => sum + u.percent, 0) / studentsTotal,
+                  )
+                : 0;
+
+        return {
+            nodeCount,
+            studentsTotal,
+            studentsActive,
+            averagePercent,
+            completionDistribution: {
+                notStarted: studentsWithNodes.filter((u) => u.completed === 0).length,
+                inProgress: studentsWithNodes.filter((u) => u.completed > 0 && u.percent < 100)
+                    .length,
+                completed: studentsWithNodes.filter((u) => u.percent === 100).length,
+            },
+            topStudents: userStats.filter((u) => u.completed > 0).slice(0, 5),
+        };
+    }
+
+    private buildTeachingSummary(
+        maps: Array<{ teachingStats: MapTeachingStats | null }>,
+    ) {
+        const withStats = maps.filter((m) => m.teachingStats);
+        if (withStats.length === 0) {
+            return {
+                publishedMaps: 0,
+                studentsActive: 0,
+                averagePercent: 0,
+                completedFully: 0,
+            };
+        }
+
+        const avgSum = withStats.reduce((s, m) => s + (m.teachingStats?.averagePercent ?? 0), 0);
+        const completedFully = withStats.reduce(
+            (s, m) => s + (m.teachingStats?.completionDistribution.completed ?? 0),
+            0,
+        );
+        const activeSum = withStats.reduce(
+            (s, m) => s + (m.teachingStats?.studentsActive ?? 0),
+            0,
+        );
+
+        return {
+            publishedMaps: withStats.length,
+            studentsActive: activeSum,
+            averagePercent: Math.round(avgSum / withStats.length),
+            completedFully,
         };
     }
 }
