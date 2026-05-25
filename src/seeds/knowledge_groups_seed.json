@@ -1,0 +1,242 @@
+[
+  {
+    "id": "programming_intro",
+    "title": "Вступ до програмування",
+    "description": "Базові поняття програмування, алгоритмів і мов програмування",
+    "level": 0,
+    "parentId": null,
+    "order": 1
+  },
+  {
+    "id": "variables_and_basic_types",
+    "title": "Змінні, константи і базові типи",
+    "description": "Змінні, оголошення, присвоєння, константи та прості типи даних",
+    "level": 1,
+    "parentId": null,
+    "order": 2
+  },
+  {
+    "id": "memory_and_data_structures_intro",
+    "title": "Памʼять і базові структури даних",
+    "description": "Початкові поняття про памʼять і структури даних",
+    "level": 2,
+    "parentId": null,
+    "order": 3
+  },
+  {
+    "id": "algorithm_fundamentals",
+    "title": "Основи алгоритмів",
+    "description": "Види алгоритмів, властивості та базові підходи до розвʼязання задач",
+    "level": 3,
+    "parentId": null,
+    "order": 4
+  },
+  {
+    "id": "conditions_and_logic",
+    "title": "Умови, розгалуження і логіка",
+    "description": "Умовні оператори, логічні вирази та булева алгебра",
+    "level": 4,
+    "parentId": null,
+    "order": 5
+  },
+  {
+    "id": "bitwise_operations",
+    "title": "Побітові операції",
+    "description": "Побітові оператори, зсуви та маскування бітів",
+    "level": 5,
+    "parentId": null,
+    "order": 6
+  },
+  {
+    "id": "loops",
+    "title": "Цикли",
+    "description": "Циклічні конструкції, керування циклами та типові помилки",
+    "level": 6,
+    "parentId": null,
+    "order": 7
+  },
+  {
+    "id": "recursion",
+    "title": "Рекурсія",
+    "description": "Рекурсивні функції, базові випадки, стек викликів і оптимізація",
+    "level": 7,
+    "parentId": null,
+    "order": 8
+  },
+  {
+    "id": "arrays",
+    "title": "Масиви",
+    "description": "Одновимірні, багатовимірні й ступінчасті масиви та робота з ними",
+    "level": 8,
+    "parentId": null,
+    "order": 9
+  },
+  {
+    "id": "memory_pointers_references",
+    "title": "Памʼять, адреси і покажчики",
+    "description": "Адресація, стек, купа, посилання, покажчики та керування памʼяттю",
+    "level": 9,
+    "parentId": null,
+    "order": 10
+  },
+  {
+    "id": "structures_struct",
+    "title": "Структури struct",
+    "description": "Оголошення, ініціалізація, властивості та особливості структур",
+    "level": 10,
+    "parentId": null,
+    "order": 11
+  },
+  {
+    "id": "types_and_passing",
+    "title": "Типи даних і передавання параметрів",
+    "description": "Типи значення/посилання, nullable, boxing/unboxing, ref/out/in",
+    "level": 11,
+    "parentId": null,
+    "order": 12
+  },
+  {
+    "id": "functions_methods",
+    "title": "Функції і методи",
+    "description": "Оголошення, виклик, параметри, повернення значень і перевантаження",
+    "level": 12,
+    "parentId": null,
+    "order": 13
+  },
+  {
+    "id": "files",
+    "title": "Файли і зовнішнє збереження",
+    "description": "Файлова система, формати файлів, читання та запис даних",
+    "level": 13,
+    "parentId": null,
+    "order": 14
+  },
+  {
+    "id": "streams",
+    "title": "Потоки Stream",
+    "description": "FileStream, MemoryStream, StreamReader/Writer, буферизація та ресурси",
+    "level": 14,
+    "parentId": null,
+    "order": 15
+  },
+  {
+    "id": "console_io",
+    "title": "Консольне введення і виведення",
+    "description": "Введення даних, форматований вивід, маскування та робота з консоллю",
+    "level": 15,
+    "parentId": null,
+    "order": 16
+  },
+  {
+    "id": "strings",
+    "title": "Рядки string",
+    "description": "Створення, порівняння, обробка рядків і StringBuilder",
+    "level": 16,
+    "parentId": null,
+    "order": 17
+  },
+  {
+    "id": "regular_expressions",
+    "title": "Регулярні вирази",
+    "description": "Regex, метасимволи, квантифікатори, класи символів і приклади",
+    "level": 17,
+    "parentId": null,
+    "order": 18
+  },
+  {
+    "id": "number_systems",
+    "title": "Системи числення",
+    "description": "Двійкова, десяткова, вісімкова, шістнадцяткова системи і представлення чисел",
+    "level": 18,
+    "parentId": null,
+    "order": 19
+  },
+  {
+    "id": "arithmetic_and_math_basics",
+    "title": "Арифметика і базові математичні операції",
+    "description": "Арифметичні оператори, порядок дій, округлення і базові Math-методи",
+    "level": 19,
+    "parentId": null,
+    "order": 20
+  },
+  {
+    "id": "exceptions",
+    "title": "Винятки і обробка помилок",
+    "description": "try/catch/finally, типи винятків, логування та правила обробки",
+    "level": 20,
+    "parentId": null,
+    "order": 21
+  },
+  {
+    "id": "type_conversion",
+    "title": "Перетворення типів",
+    "description": "Неявні й явні перетворення, Parse/TryParse, Convert, boxing/unboxing",
+    "level": 21,
+    "parentId": null,
+    "order": 22
+  },
+  {
+    "id": "datetime",
+    "title": "Дата і час",
+    "description": "DateTime, TimeSpan, форматування, порівняння і вимірювання часу",
+    "level": 22,
+    "parentId": null,
+    "order": 23
+  },
+  {
+    "id": "parsing",
+    "title": "Парсинг даних",
+    "description": "Парсинг чисел, дат, enum, списків і типові помилки",
+    "level": 23,
+    "parentId": null,
+    "order": 24
+  },
+  {
+    "id": "debugging",
+    "title": "Дебагінг",
+    "description": "Breakpoint, step over/into, watch, call stack, логування та тестові дані",
+    "level": 24,
+    "parentId": null,
+    "order": 25
+  },
+  {
+    "id": "math_practice",
+    "title": "Математичні задачі в C#",
+    "description": "Ділення, модуль, степені, корені, випадкові числа, логарифми і константи",
+    "level": 25,
+    "parentId": null,
+    "order": 26
+  },
+  {
+    "id": "collections",
+    "title": "Колекції і структури даних",
+    "description": "Array, List, Queue, Stack, Dictionary та вибір відповідної структури",
+    "level": 26,
+    "parentId": null,
+    "order": 27
+  },
+  {
+    "id": "language_basics_and_code_style",
+    "title": "Елементи мови і стиль коду",
+    "description": "const, readonly, enum, namespace, коментарі, форматування і Visual Studio",
+    "level": 27,
+    "parentId": null,
+    "order": 28
+  },
+  {
+    "id": "compilation_runtime",
+    "title": "Компіляція і виконання C#",
+    "description": "Вихідний код, компіляція, IL, CLR, Debug/Release та .exe",
+    "level": 28,
+    "parentId": null,
+    "order": 29
+  },
+  {
+    "id": "glossary",
+    "title": "Глосарій ключових понять",
+    "description": "Короткі підсумкові поняття для повторення матеріалу",
+    "level": 29,
+    "parentId": null,
+    "order": 30
+  }
+]

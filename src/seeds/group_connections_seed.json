@@ -1,0 +1,428 @@
+[
+  {
+    "fromGroupId": "programming_intro",
+    "toGroupId": "variables_and_basic_types",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "variables_and_basic_types",
+    "toGroupId": "memory_and_data_structures_intro",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "memory_and_data_structures_intro",
+    "toGroupId": "algorithm_fundamentals",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "algorithm_fundamentals",
+    "toGroupId": "conditions_and_logic",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "conditions_and_logic",
+    "toGroupId": "bitwise_operations",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "bitwise_operations",
+    "toGroupId": "loops",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "loops",
+    "toGroupId": "recursion",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "recursion",
+    "toGroupId": "arrays",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "arrays",
+    "toGroupId": "memory_pointers_references",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "memory_pointers_references",
+    "toGroupId": "structures_struct",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "structures_struct",
+    "toGroupId": "types_and_passing",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "types_and_passing",
+    "toGroupId": "variables_and_basic_types",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "types_and_passing",
+    "toGroupId": "memory_pointers_references",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "types_and_passing",
+    "toGroupId": "structures_struct",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "types_and_passing",
+    "toGroupId": "functions_methods",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "types_and_passing",
+    "toGroupId": "type_conversion",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "types_and_passing",
+    "toGroupId": "debugging",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "functions_methods",
+    "toGroupId": "recursion",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "functions_methods",
+    "toGroupId": "files",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "files",
+    "toGroupId": "streams",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "streams",
+    "toGroupId": "console_io",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "streams",
+    "toGroupId": "exceptions",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "streams",
+    "toGroupId": "language_basics_and_code_style",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "console_io",
+    "toGroupId": "strings",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "strings",
+    "toGroupId": "regular_expressions",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "regular_expressions",
+    "toGroupId": "number_systems",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "number_systems",
+    "toGroupId": "bitwise_operations",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "number_systems",
+    "toGroupId": "streams",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "number_systems",
+    "toGroupId": "arithmetic_and_math_basics",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "arithmetic_and_math_basics",
+    "toGroupId": "number_systems",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "arithmetic_and_math_basics",
+    "toGroupId": "exceptions",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "exceptions",
+    "toGroupId": "streams",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "exceptions",
+    "toGroupId": "arithmetic_and_math_basics",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "exceptions",
+    "toGroupId": "type_conversion",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "exceptions",
+    "toGroupId": "parsing",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "variables_and_basic_types",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "arrays",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "memory_pointers_references",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "structures_struct",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "types_and_passing",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "console_io",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "strings",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "arithmetic_and_math_basics",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "exceptions",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "datetime",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "parsing",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "debugging",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "math_practice",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "type_conversion",
+    "toGroupId": "glossary",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "datetime",
+    "toGroupId": "parsing",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "parsing",
+    "toGroupId": "variables_and_basic_types",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "parsing",
+    "toGroupId": "memory_pointers_references",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "parsing",
+    "toGroupId": "strings",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "parsing",
+    "toGroupId": "exceptions",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "parsing",
+    "toGroupId": "type_conversion",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "parsing",
+    "toGroupId": "datetime",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "parsing",
+    "toGroupId": "debugging",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "parsing",
+    "toGroupId": "math_practice",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "debugging",
+    "toGroupId": "math_practice",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "math_practice",
+    "toGroupId": "collections",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "collections",
+    "toGroupId": "language_basics_and_code_style",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "language_basics_and_code_style",
+    "toGroupId": "variables_and_basic_types",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "language_basics_and_code_style",
+    "toGroupId": "memory_pointers_references",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "language_basics_and_code_style",
+    "toGroupId": "structures_struct",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "language_basics_and_code_style",
+    "toGroupId": "types_and_passing",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "language_basics_and_code_style",
+    "toGroupId": "type_conversion",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "language_basics_and_code_style",
+    "toGroupId": "parsing",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "language_basics_and_code_style",
+    "toGroupId": "debugging",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  },
+  {
+    "fromGroupId": "language_basics_and_code_style",
+    "toGroupId": "compilation_runtime",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "compilation_runtime",
+    "toGroupId": "glossary",
+    "type": "recommended_path",
+    "source": "planned_sequence"
+  },
+  {
+    "fromGroupId": "glossary",
+    "toGroupId": "type_conversion",
+    "type": "prerequisite",
+    "source": "derived_from_node_connections"
+  }
+]

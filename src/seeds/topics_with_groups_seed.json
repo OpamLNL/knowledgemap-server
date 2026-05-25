@@ -1,0 +1,4274 @@
+[
+  {
+    "id": 1,
+    "title": "Програмування як процес",
+    "description": "Створення послідовностей інструкцій для керування комп’ютером",
+    "groupId": "programming_intro",
+    "orderInGroup": 1,
+    "globalOrder": 1
+  },
+  {
+    "id": 2,
+    "title": "Поняття алгоритму",
+    "description": "Алгоритм — це точна послідовність дій для досягнення результату",
+    "groupId": "programming_intro",
+    "orderInGroup": 2,
+    "globalOrder": 2
+  },
+  {
+    "id": 3,
+    "title": "Команда виконавця",
+    "description": "Одиниця дії, яку здатен виконати виконавець алгоритму",
+    "groupId": "programming_intro",
+    "orderInGroup": 3,
+    "globalOrder": 3
+  },
+  {
+    "id": 4,
+    "title": "Поняття мови програмування",
+    "description": "Формальна мова для запису алгоритмів і керування комп’ютером",
+    "groupId": "programming_intro",
+    "orderInGroup": 4,
+    "globalOrder": 4
+  },
+  {
+    "id": 5,
+    "title": "Види мов програмування",
+    "description": "Машинні, асемблерні, високорівневі мови програмування",
+    "groupId": "programming_intro",
+    "orderInGroup": 5,
+    "globalOrder": 5
+  },
+  {
+    "id": 6,
+    "title": "Поняття змінної",
+    "description": "Іменована область памʼяті для зберігання значення",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 1,
+    "globalOrder": 6
+  },
+  {
+    "id": 7,
+    "title": "Оголошення змінної",
+    "description": "Процес створення змінної з вказаним типом",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 2,
+    "globalOrder": 7
+  },
+  {
+    "id": 8,
+    "title": "Ініціалізація змінної",
+    "description": "Надання початкового значення змінній",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 3,
+    "globalOrder": 8
+  },
+  {
+    "id": 9,
+    "title": "Присвоєння значення",
+    "description": "Операція надання нового значення існуючій змінній",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 4,
+    "globalOrder": 9
+  },
+  {
+    "id": 10,
+    "title": "Поняття константи",
+    "description": "Змінна, значення якої не змінюється після ініціалізації",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 5,
+    "globalOrder": 10
+  },
+  {
+    "id": 11,
+    "title": "Тип int",
+    "description": "Цілі числа зі знаком (наприклад, -10, 0, 25)",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 6,
+    "globalOrder": 11
+  },
+  {
+    "id": 12,
+    "title": "Тип double",
+    "description": "Дійсні числа з плаваючою крапкою",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 7,
+    "globalOrder": 12
+  },
+  {
+    "id": 13,
+    "title": "Тип bool",
+    "description": "Логічний тип, який може мати лише два значення: true або false",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 8,
+    "globalOrder": 13
+  },
+  {
+    "id": 14,
+    "title": "Тип char",
+    "description": "Тип для зберігання одного символу",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 9,
+    "globalOrder": 14
+  },
+  {
+    "id": 15,
+    "title": "Тип string",
+    "description": "Тип для зберігання рядка тексту",
+    "groupId": "variables_and_basic_types",
+    "orderInGroup": 10,
+    "globalOrder": 15
+  },
+  {
+    "id": 16,
+    "title": "Оперативна памʼять",
+    "description": "Місце тимчасового зберігання даних під час виконання програм",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 1,
+    "globalOrder": 16
+  },
+  {
+    "id": 17,
+    "title": "Стек памʼяті",
+    "description": "Область памʼяті для автоматичних змінних і викликів методів",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 2,
+    "globalOrder": 17
+  },
+  {
+    "id": 18,
+    "title": "Купа памʼяті",
+    "description": "Область памʼяті для динамічно створених обʼєктів",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 3,
+    "globalOrder": 18
+  },
+  {
+    "id": 19,
+    "title": "Масив як структура даних",
+    "description": "Послідовність фіксованої кількості однотипних елементів",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 4,
+    "globalOrder": 19
+  },
+  {
+    "id": 20,
+    "title": "Список як структура даних",
+    "description": "Колекція динамічного розміру, що підтримує додавання і видалення",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 5,
+    "globalOrder": 20
+  },
+  {
+    "id": 21,
+    "title": "Стек як структура даних",
+    "description": "LIFO — останній увійшов, перший вийшов",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 6,
+    "globalOrder": 21
+  },
+  {
+    "id": 22,
+    "title": "Черга як структура даних",
+    "description": "FIFO — перший увійшов, перший вийшов",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 7,
+    "globalOrder": 22
+  },
+  {
+    "id": 23,
+    "title": "Словник як структура даних",
+    "description": "Зберігання пар ключ-значення для швидкого пошуку",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 8,
+    "globalOrder": 23
+  },
+  {
+    "id": 24,
+    "title": "Множина як структура даних",
+    "description": "Колекція унікальних елементів без повторень",
+    "groupId": "memory_and_data_structures_intro",
+    "orderInGroup": 9,
+    "globalOrder": 24
+  },
+  {
+    "id": 25,
+    "title": "Алгоритм як послідовність дій",
+    "description": "Алгоритм — це скінченна послідовність кроків для досягнення мети",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 1,
+    "globalOrder": 25
+  },
+  {
+    "id": 26,
+    "title": "Властивості алгоритму",
+    "description": "Дискретність, визначеність, результативність, масовість, скінченність",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 2,
+    "globalOrder": 26
+  },
+  {
+    "id": 27,
+    "title": "Лінійний алгоритм",
+    "description": "Алгоритм, у якому дії виконуються одна за одною без розгалужень і повторень",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 3,
+    "globalOrder": 27
+  },
+  {
+    "id": 28,
+    "title": "Розгалужений алгоритм",
+    "description": "Алгоритм, у якому виконання дій залежить від умови (if, else)",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 4,
+    "globalOrder": 28
+  },
+  {
+    "id": 29,
+    "title": "Циклічний алгоритм",
+    "description": "Алгоритм, у якому певні дії повторюються (while, for)",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 5,
+    "globalOrder": 29
+  },
+  {
+    "id": 30,
+    "title": "Комбінований алгоритм",
+    "description": "Алгоритм, який містить елементи лінійного, розгалуженого і циклічного",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 6,
+    "globalOrder": 30
+  },
+  {
+    "id": 31,
+    "title": "Рекурсивний алгоритм",
+    "description": "Алгоритм, у якому функція викликає саму себе",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 7,
+    "globalOrder": 31
+  },
+  {
+    "id": 32,
+    "title": "Ітеративний алгоритм",
+    "description": "Алгоритм, що досягає результату через послідовне повторення обчислень",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 8,
+    "globalOrder": 32
+  },
+  {
+    "id": 33,
+    "title": "Детермінований алгоритм",
+    "description": "Алгоритм, у якому на кожному кроці лише один можливий наступний крок",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 9,
+    "globalOrder": 33
+  },
+  {
+    "id": 34,
+    "title": "Недетермінований алгоритм",
+    "description": "Алгоритм, що допускає вибір між кількома діями на одному кроці",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 10,
+    "globalOrder": 34
+  },
+  {
+    "id": 35,
+    "title": "Жадібний алгоритм",
+    "description": "Алгоритм, що приймає локально оптимальні рішення на кожному кроці",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 11,
+    "globalOrder": 35
+  },
+  {
+    "id": 36,
+    "title": "Розділяй і володарюй",
+    "description": "Алгоритм, що ділить задачу на підзадачі, розв’язує їх окремо і об'єднує результат",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 12,
+    "globalOrder": 36
+  },
+  {
+    "id": 37,
+    "title": "Динамічне програмування",
+    "description": "Метод розв’язання задач шляхом збереження результатів підзадач",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 13,
+    "globalOrder": 37
+  },
+  {
+    "id": 38,
+    "title": "Життєвий цикл алгоритму",
+    "description": "Аналіз задачі → Побудова алгоритму → Тестування → Реалізація",
+    "groupId": "algorithm_fundamentals",
+    "orderInGroup": 14,
+    "globalOrder": 38
+  },
+  {
+    "id": 39,
+    "title": "Умова в алгоритмах",
+    "description": "Це логічне твердження, яке визначає, чи виконувати певну дію",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 1,
+    "globalOrder": 39
+  },
+  {
+    "id": 40,
+    "title": "Оператор if",
+    "description": "Умовна конструкція, яка виконує блок коду, якщо умова істинна",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 2,
+    "globalOrder": 40
+  },
+  {
+    "id": 41,
+    "title": "Оператор else",
+    "description": "Виконує альтернативний блок коду, якщо умова в if хибна",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 3,
+    "globalOrder": 41
+  },
+  {
+    "id": 42,
+    "title": "Оператор else if",
+    "description": "Дозволяє перевірити кілька умов послідовно",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 4,
+    "globalOrder": 42
+  },
+  {
+    "id": 43,
+    "title": "Вкладені умовні оператори",
+    "description": "Конструкції if/else, розміщені всередині інших умов",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 5,
+    "globalOrder": 43
+  },
+  {
+    "id": 44,
+    "title": "Оператор switch",
+    "description": "Конструкція для вибору дії залежно від значення змінної",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 6,
+    "globalOrder": 44
+  },
+  {
+    "id": 45,
+    "title": "Оператори порівняння",
+    "description": "==, !=, >, <, >=, <= — використовуються для побудови умов",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 7,
+    "globalOrder": 45
+  },
+  {
+    "id": 46,
+    "title": "Булевий тип даних",
+    "description": "Тип, що може набувати лише двох значень: true або false",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 8,
+    "globalOrder": 46
+  },
+  {
+    "id": 47,
+    "title": "Логічний оператор AND (&&)",
+    "description": "Результат істинний, якщо обидві умови істинні",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 9,
+    "globalOrder": 47
+  },
+  {
+    "id": 48,
+    "title": "Логічний оператор OR (||)",
+    "description": "Результат істинний, якщо хоча б одна умова істинна",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 10,
+    "globalOrder": 48
+  },
+  {
+    "id": 49,
+    "title": "Логічний оператор NOT (!)",
+    "description": "Змінює значення умови на протилежне",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 11,
+    "globalOrder": 49
+  },
+  {
+    "id": 50,
+    "title": "Логічна імплікація",
+    "description": "A → B — якщо A істинне, то і B має бути істинним",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 12,
+    "globalOrder": 50
+  },
+  {
+    "id": 51,
+    "title": "Логічна еквівалентність",
+    "description": "A ⇔ B — істинно, якщо обидва значення однакові",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 13,
+    "globalOrder": 51
+  },
+  {
+    "id": 52,
+    "title": "Таблиця істинності",
+    "description": "Визначає результат логічного виразу для всіх комбінацій істинності",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 14,
+    "globalOrder": 52
+  },
+  {
+    "id": 53,
+    "title": "Закони де Моргана",
+    "description": "!(A && B) ⇔ !A || !B; !(A || B) ⇔ !A && !B",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 15,
+    "globalOrder": 53
+  },
+  {
+    "id": 54,
+    "title": "Складені логічні вирази",
+    "description": "Комбінація умов із використанням логічних операторів",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 16,
+    "globalOrder": 54
+  },
+  {
+    "id": 55,
+    "title": "Пріоритет логічних операторів",
+    "description": "NOT > AND > OR — визначає порядок обчислення",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 17,
+    "globalOrder": 55
+  },
+  {
+    "id": 56,
+    "title": "Розгалуження в алгоритмах",
+    "description": "Алгоритмічна конструкція, що змінює хід виконання залежно від умови",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 18,
+    "globalOrder": 56
+  },
+  {
+    "id": 57,
+    "title": "Булева алгебра в програмуванні",
+    "description": "Формальна система для роботи з логічними значеннями в умовах",
+    "groupId": "conditions_and_logic",
+    "orderInGroup": 19,
+    "globalOrder": 57
+  },
+  {
+    "id": 58,
+    "title": "Побітові оператори",
+    "description": "Оператори, що працюють із двійковим представленням чисел",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 1,
+    "globalOrder": 58
+  },
+  {
+    "id": 59,
+    "title": "Побітовий AND (&)",
+    "description": "Повертає 1, якщо обидва біти — 1",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 2,
+    "globalOrder": 59
+  },
+  {
+    "id": 60,
+    "title": "Побітовий OR (|)",
+    "description": "Повертає 1, якщо хоча б один з бітів — 1",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 3,
+    "globalOrder": 60
+  },
+  {
+    "id": 61,
+    "title": "Побітовий XOR (^)",
+    "description": "Повертає 1, якщо біти відрізняються",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 4,
+    "globalOrder": 61
+  },
+  {
+    "id": 62,
+    "title": "Побітовий NOT (~)",
+    "description": "Інвертує кожен біт (1 → 0, 0 → 1)",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 5,
+    "globalOrder": 62
+  },
+  {
+    "id": 63,
+    "title": "Зсув вліво (<<)",
+    "description": "Зсуває біти вліво, еквівалент множенню на 2",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 6,
+    "globalOrder": 63
+  },
+  {
+    "id": 64,
+    "title": "Зсув вправо (>>)",
+    "description": "Зсуває біти вправо, еквівалент діленню на 2",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 7,
+    "globalOrder": 64
+  },
+  {
+    "id": 65,
+    "title": "Маскування бітів",
+    "description": "Використання побітових операцій для фільтрації окремих бітів",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 8,
+    "globalOrder": 65
+  },
+  {
+    "id": 66,
+    "title": "Встановлення біта",
+    "description": "Використання OR для встановлення певного біта в 1",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 9,
+    "globalOrder": 66
+  },
+  {
+    "id": 67,
+    "title": "Скидання біта",
+    "description": "Використання AND з інверсією для обнулення біта",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 10,
+    "globalOrder": 67
+  },
+  {
+    "id": 68,
+    "title": "Перевірка біта",
+    "description": "Використання AND для перевірки, чи встановлений певний біт",
+    "groupId": "bitwise_operations",
+    "orderInGroup": 11,
+    "globalOrder": 68
+  },
+  {
+    "id": 69,
+    "title": "Поняття циклу",
+    "description": "Цикл — це конструкція для багаторазового виконання блоку коду",
+    "groupId": "loops",
+    "orderInGroup": 1,
+    "globalOrder": 69
+  },
+  {
+    "id": 70,
+    "title": "Умова циклу",
+    "description": "Логічний вираз, який визначає, чи буде продовжено виконання циклу",
+    "groupId": "loops",
+    "orderInGroup": 2,
+    "globalOrder": 70
+  },
+  {
+    "id": 71,
+    "title": "Цикл for",
+    "description": "Цикл із лічильником, де заздалегідь відома кількість ітерацій",
+    "groupId": "loops",
+    "orderInGroup": 3,
+    "globalOrder": 71
+  },
+  {
+    "id": 72,
+    "title": "Цикл while",
+    "description": "Цикл із передумовою — тіло виконується, поки умова істинна",
+    "groupId": "loops",
+    "orderInGroup": 4,
+    "globalOrder": 72
+  },
+  {
+    "id": 73,
+    "title": "Цикл do-while",
+    "description": "Цикл із післяумовою — тіло виконується принаймні один раз",
+    "groupId": "loops",
+    "orderInGroup": 5,
+    "globalOrder": 73
+  },
+  {
+    "id": 74,
+    "title": "Цикл foreach",
+    "description": "Цикл для проходження по колекції або масиву",
+    "groupId": "loops",
+    "orderInGroup": 6,
+    "globalOrder": 74
+  },
+  {
+    "id": 75,
+    "title": "Нескінченний цикл",
+    "description": "Цикл, умова якого завжди істинна (while(true))",
+    "groupId": "loops",
+    "orderInGroup": 7,
+    "globalOrder": 75
+  },
+  {
+    "id": 76,
+    "title": "Вкладені цикли",
+    "description": "Цикл, розміщений усередині іншого циклу",
+    "groupId": "loops",
+    "orderInGroup": 8,
+    "globalOrder": 76
+  },
+  {
+    "id": 77,
+    "title": "Керування циклом — break",
+    "description": "Завершує виконання циклу достроково",
+    "groupId": "loops",
+    "orderInGroup": 9,
+    "globalOrder": 77
+  },
+  {
+    "id": 78,
+    "title": "Керування циклом — continue",
+    "description": "Пропускає поточну ітерацію та переходить до наступної",
+    "groupId": "loops",
+    "orderInGroup": 10,
+    "globalOrder": 78
+  },
+  {
+    "id": 79,
+    "title": "Індекс циклу",
+    "description": "Змінна, яка використовується як лічильник у циклі",
+    "groupId": "loops",
+    "orderInGroup": 11,
+    "globalOrder": 79
+  },
+  {
+    "id": 80,
+    "title": "Типові помилки в циклах",
+    "description": "Забута інкрементація, неправильна умова, нескінченність",
+    "groupId": "loops",
+    "orderInGroup": 12,
+    "globalOrder": 80
+  },
+  {
+    "id": 81,
+    "title": "Перебір масиву циклом for",
+    "description": "Класичний спосіб обійти елементи масиву за індексом",
+    "groupId": "loops",
+    "orderInGroup": 13,
+    "globalOrder": 81
+  },
+  {
+    "id": 82,
+    "title": "Перебір колекції циклом foreach",
+    "description": "Зручна конструкція для читання всіх елементів колекції",
+    "groupId": "loops",
+    "orderInGroup": 14,
+    "globalOrder": 82
+  },
+  {
+    "id": 83,
+    "title": "Цикл з кроком іншим, ніж 1",
+    "description": "Можна змінити крок інкрементації: i += 2",
+    "groupId": "loops",
+    "orderInGroup": 15,
+    "globalOrder": 83
+  },
+  {
+    "id": 84,
+    "title": "Цикл із зменшенням лічильника",
+    "description": "Цикл із зворотним напрямом: for (int i = n; i >= 0; i--)",
+    "groupId": "loops",
+    "orderInGroup": 16,
+    "globalOrder": 84
+  },
+  {
+    "id": 85,
+    "title": "Поняття рекурсії",
+    "description": "Рекурсія — це виклик функцією самої себе",
+    "groupId": "recursion",
+    "orderInGroup": 1,
+    "globalOrder": 85
+  },
+  {
+    "id": 86,
+    "title": "Рекурсивна функція",
+    "description": "Функція, яка містить у тілі виклик себе самої",
+    "groupId": "recursion",
+    "orderInGroup": 2,
+    "globalOrder": 86
+  },
+  {
+    "id": 87,
+    "title": "Базовий випадок рекурсії",
+    "description": "Умова, яка зупиняє подальші виклики функції",
+    "groupId": "recursion",
+    "orderInGroup": 3,
+    "globalOrder": 87
+  },
+  {
+    "id": 88,
+    "title": "Рекурсивний випадок",
+    "description": "Частина функції, де відбувається рекурсивний виклик",
+    "groupId": "recursion",
+    "orderInGroup": 4,
+    "globalOrder": 88
+  },
+  {
+    "id": 89,
+    "title": "Нескінченна рекурсія",
+    "description": "Виникає, коли відсутній або недосяжний базовий випадок",
+    "groupId": "recursion",
+    "orderInGroup": 5,
+    "globalOrder": 89
+  },
+  {
+    "id": 90,
+    "title": "Стек викликів при рекурсії",
+    "description": "Кожен виклик функції зберігається в памʼяті до завершення",
+    "groupId": "recursion",
+    "orderInGroup": 6,
+    "globalOrder": 90
+  },
+  {
+    "id": 91,
+    "title": "Факторіал як приклад рекурсії",
+    "description": "Класичний приклад: n! = n * (n-1)!",
+    "groupId": "recursion",
+    "orderInGroup": 7,
+    "globalOrder": 91
+  },
+  {
+    "id": 92,
+    "title": "Фібоначчі як приклад рекурсії",
+    "description": "fib(n) = fib(n-1) + fib(n-2), приклад подвійної рекурсії",
+    "groupId": "recursion",
+    "orderInGroup": 8,
+    "globalOrder": 92
+  },
+  {
+    "id": 93,
+    "title": "Переваги рекурсії",
+    "description": "Код стає коротшим і зрозумілішим для задач зі вкладеною природою",
+    "groupId": "recursion",
+    "orderInGroup": 9,
+    "globalOrder": 93
+  },
+  {
+    "id": 94,
+    "title": "Недоліки рекурсії",
+    "description": "Велике споживання памʼяті, ризик переповнення стеку",
+    "groupId": "recursion",
+    "orderInGroup": 10,
+    "globalOrder": 94
+  },
+  {
+    "id": 95,
+    "title": "Рекурсія проти ітерації",
+    "description": "Рекурсивні алгоритми можуть бути переписані з використанням циклів",
+    "groupId": "recursion",
+    "orderInGroup": 11,
+    "globalOrder": 95
+  },
+  {
+    "id": 96,
+    "title": "Хвостова рекурсія",
+    "description": "Рекурсія, де результат обчислюється безпосередньо після виклику",
+    "groupId": "recursion",
+    "orderInGroup": 12,
+    "globalOrder": 96
+  },
+  {
+    "id": 97,
+    "title": "Оптимізація рекурсії",
+    "description": "Заміна рекурсії на ітерацію або використання мемоізації",
+    "groupId": "recursion",
+    "orderInGroup": 13,
+    "globalOrder": 97
+  },
+  {
+    "id": 98,
+    "title": "Задачі, що природно розвʼязуються рекурсією",
+    "description": "Дерева, пошук, обходи, математичні формули",
+    "groupId": "recursion",
+    "orderInGroup": 14,
+    "globalOrder": 98
+  },
+  {
+    "id": 99,
+    "title": "Поняття масиву",
+    "description": "Масив — це впорядкована колекція елементів одного типу",
+    "groupId": "arrays",
+    "orderInGroup": 1,
+    "globalOrder": 99
+  },
+  {
+    "id": 100,
+    "title": "Індекс масиву",
+    "description": "Позиція елемента в масиві, що починається з нуля",
+    "groupId": "arrays",
+    "orderInGroup": 2,
+    "globalOrder": 100
+  },
+  {
+    "id": 101,
+    "title": "Оголошення масиву",
+    "description": "Створення змінної-масиву певного типу, наприклад: int[] numbers",
+    "groupId": "arrays",
+    "orderInGroup": 3,
+    "globalOrder": 101
+  },
+  {
+    "id": 102,
+    "title": "Ініціалізація масиву",
+    "description": "Надання початкових значень масиву під час створення",
+    "groupId": "arrays",
+    "orderInGroup": 4,
+    "globalOrder": 102
+  },
+  {
+    "id": 103,
+    "title": "Доступ до елемента масиву",
+    "description": "Отримання або зміна значення за індексом, наприклад: arr[2]",
+    "groupId": "arrays",
+    "orderInGroup": 5,
+    "globalOrder": 103
+  },
+  {
+    "id": 104,
+    "title": "Зміна елемента масиву",
+    "description": "Присвоєння нового значення конкретному елементу масиву",
+    "groupId": "arrays",
+    "orderInGroup": 6,
+    "globalOrder": 104
+  },
+  {
+    "id": 105,
+    "title": "Довжина масиву",
+    "description": "Кількість елементів у масиві, отримується через властивість Length",
+    "groupId": "arrays",
+    "orderInGroup": 7,
+    "globalOrder": 105
+  },
+  {
+    "id": 106,
+    "title": "Прохід масиву через for",
+    "description": "Стандартний спосіб обійти всі елементи за індексом",
+    "groupId": "arrays",
+    "orderInGroup": 8,
+    "globalOrder": 106
+  },
+  {
+    "id": 107,
+    "title": "Прохід масиву через foreach",
+    "description": "Цикл для зручного читання елементів без індексів",
+    "groupId": "arrays",
+    "orderInGroup": 9,
+    "globalOrder": 107
+  },
+  {
+    "id": 108,
+    "title": "Масиви як параметри методу",
+    "description": "Передача масиву в метод для обробки в середині нього",
+    "groupId": "arrays",
+    "orderInGroup": 10,
+    "globalOrder": 108
+  },
+  {
+    "id": 109,
+    "title": "Масиви як результат методу",
+    "description": "Метод може повертати масив значень",
+    "groupId": "arrays",
+    "orderInGroup": 11,
+    "globalOrder": 109
+  },
+  {
+    "id": 110,
+    "title": "Масив рядків",
+    "description": "Масив, що зберігає рядкові значення типу string[]",
+    "groupId": "arrays",
+    "orderInGroup": 12,
+    "globalOrder": 110
+  },
+  {
+    "id": 111,
+    "title": "Масив булевих значень",
+    "description": "Може використовуватись для зберігання станів true/false",
+    "groupId": "arrays",
+    "orderInGroup": 13,
+    "globalOrder": 111
+  },
+  {
+    "id": 112,
+    "title": "Багатовимірний масив",
+    "description": "Масив з кількома вимірами, наприклад матриця: int[,] matrix",
+    "groupId": "arrays",
+    "orderInGroup": 14,
+    "globalOrder": 112
+  },
+  {
+    "id": 113,
+    "title": "Ступінчастий масив (jagged)",
+    "description": "Масив масивів: int[][] jagged = new int[3][]",
+    "groupId": "arrays",
+    "orderInGroup": 15,
+    "globalOrder": 113
+  },
+  {
+    "id": 114,
+    "title": "Копіювання масиву",
+    "description": "Створення нового масиву з таким самим вмістом",
+    "groupId": "arrays",
+    "orderInGroup": 16,
+    "globalOrder": 114
+  },
+  {
+    "id": 115,
+    "title": "Сортування масиву",
+    "description": "Використання Array.Sort() для впорядкування елементів",
+    "groupId": "arrays",
+    "orderInGroup": 17,
+    "globalOrder": 115
+  },
+  {
+    "id": 116,
+    "title": "Пошук в масиві",
+    "description": "Використання циклів або Array.IndexOf() для знаходження елементів",
+    "groupId": "arrays",
+    "orderInGroup": 18,
+    "globalOrder": 116
+  },
+  {
+    "id": 117,
+    "title": "Масиви та памʼять",
+    "description": "Масив — це об'єкт у купі з фіксованим розміром",
+    "groupId": "arrays",
+    "orderInGroup": 19,
+    "globalOrder": 117
+  },
+  {
+    "id": 118,
+    "title": "Масив у памʼяті",
+    "description": "Масив зберігається як послідовна область в оперативній памʼяті",
+    "groupId": "arrays",
+    "orderInGroup": 20,
+    "globalOrder": 118
+  },
+  {
+    "id": 119,
+    "title": "Посилання на масив",
+    "description": "Змінна масиву містить посилання на область памʼяті з даними",
+    "groupId": "arrays",
+    "orderInGroup": 21,
+    "globalOrder": 119
+  },
+  {
+    "id": 120,
+    "title": "Розмір масиву в памʼяті",
+    "description": "Залежить від кількості елементів і розміру кожного елемента",
+    "groupId": "arrays",
+    "orderInGroup": 22,
+    "globalOrder": 120
+  },
+  {
+    "id": 121,
+    "title": "Багатовимірний масив",
+    "description": "Масив із кількома індексами, наприклад: int[3,4]",
+    "groupId": "arrays",
+    "orderInGroup": 23,
+    "globalOrder": 121
+  },
+  {
+    "id": 122,
+    "title": "Зберігання багатовимірного масиву",
+    "description": "Зберігається як єдина таблиця в памʼяті з лінійною адресацією",
+    "groupId": "arrays",
+    "orderInGroup": 24,
+    "globalOrder": 122
+  },
+  {
+    "id": 123,
+    "title": "Індексація в багатовимірному масиві",
+    "description": "Кожен елемент доступний через набір індексів: arr[i, j]",
+    "groupId": "arrays",
+    "orderInGroup": 25,
+    "globalOrder": 123
+  },
+  {
+    "id": 124,
+    "title": "Ступінчастий масив (рваний масив)",
+    "description": "Масив, у якому кожен елемент є окремим одновимірним масивом",
+    "groupId": "arrays",
+    "orderInGroup": 26,
+    "globalOrder": 124
+  },
+  {
+    "id": 125,
+    "title": "Оголошення ступінчастого масиву",
+    "description": "Наприклад: int[][] jagged = new int[3][];",
+    "groupId": "arrays",
+    "orderInGroup": 27,
+    "globalOrder": 125
+  },
+  {
+    "id": 126,
+    "title": "Різниця між рваним і багатовимірним масивом",
+    "description": "Рваний зберігає посилання на масиви різної довжини, а багатовимірний — таблицю фіксованого розміру",
+    "groupId": "arrays",
+    "orderInGroup": 28,
+    "globalOrder": 126
+  },
+  {
+    "id": 127,
+    "title": "Памʼять рваного масиву",
+    "description": "Елементи зберігаються в різних ділянках памʼяті, кожна — окремий масив",
+    "groupId": "arrays",
+    "orderInGroup": 29,
+    "globalOrder": 127
+  },
+  {
+    "id": 128,
+    "title": "Перетворення рваного масиву в звичайний",
+    "description": "Можливе лише при однаковій довжині всіх вкладених масивів",
+    "groupId": "arrays",
+    "orderInGroup": 30,
+    "globalOrder": 128
+  },
+  {
+    "id": 129,
+    "title": "Перетворення багатовимірного масиву на рваний",
+    "description": "Створення масиву рядків із копіюванням значень по індексах",
+    "groupId": "arrays",
+    "orderInGroup": 31,
+    "globalOrder": 129
+  },
+  {
+    "id": 130,
+    "title": "Прохід по багатовимірному масиву",
+    "description": "Цикли з вкладеними індексами: for (int i=0; i<rows; i++)",
+    "groupId": "arrays",
+    "orderInGroup": 32,
+    "globalOrder": 130
+  },
+  {
+    "id": 131,
+    "title": "Прохід по рваному масиву",
+    "description": "foreach по зовнішньому масиву, потім foreach по внутрішньому",
+    "groupId": "arrays",
+    "orderInGroup": 33,
+    "globalOrder": 131
+  },
+  {
+    "id": 132,
+    "title": "Поняття адреси в памʼяті",
+    "description": "Кожна змінна в оперативній памʼяті має власну адресу — числове значення",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 1,
+    "globalOrder": 132
+  },
+  {
+    "id": 133,
+    "title": "Адресна памʼять",
+    "description": "Памʼять, у якій кожна комірка має унікальний номер (адресу)",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 2,
+    "globalOrder": 133
+  },
+  {
+    "id": 134,
+    "title": "Покажчик (pointer)",
+    "description": "Змінна, яка містить адресу іншої змінної або обʼєкта в памʼяті",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 3,
+    "globalOrder": 134
+  },
+  {
+    "id": 135,
+    "title": "Непряме звернення",
+    "description": "Отримання доступу до даних за допомогою покажчика",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 4,
+    "globalOrder": 135
+  },
+  {
+    "id": 136,
+    "title": "Оператор dereference (*)",
+    "description": "Доступ до значення за адресою, що зберігається в покажчику",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 5,
+    "globalOrder": 136
+  },
+  {
+    "id": 137,
+    "title": "Оператор address-of (&)",
+    "description": "Отримання адреси змінної для збереження її в покажчику",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 6,
+    "globalOrder": 137
+  },
+  {
+    "id": 138,
+    "title": "Покажчики в C#",
+    "description": "Доступні лише в unsafe-блоках, використовуються рідко",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 7,
+    "globalOrder": 138
+  },
+  {
+    "id": 139,
+    "title": "Стекова памʼять",
+    "description": "Область памʼяті для зберігання локальних змінних і викликів функцій",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 8,
+    "globalOrder": 139
+  },
+  {
+    "id": 140,
+    "title": "Купа (heap)",
+    "description": "Область памʼяті для динамічно створених обʼєктів",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 9,
+    "globalOrder": 140
+  },
+  {
+    "id": 141,
+    "title": "Розміщення змінних у стеку",
+    "description": "Примітиви та локальні змінні за замовчуванням зберігаються у стеку",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 10,
+    "globalOrder": 141
+  },
+  {
+    "id": 142,
+    "title": "Розміщення обʼєктів у купі",
+    "description": "Обʼєкти створюються в купі й посилання на них зберігаються у стеку",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 11,
+    "globalOrder": 142
+  },
+  {
+    "id": 143,
+    "title": "Garbage Collector",
+    "description": "Служба .NET, що автоматично очищує памʼять від невикористаних обʼєктів",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 12,
+    "globalOrder": 143
+  },
+  {
+    "id": 144,
+    "title": "Мануальне керування памʼяттю",
+    "description": "Підхід, де програміст сам виділяє і звільняє памʼять (у C/C++)",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 13,
+    "globalOrder": 144
+  },
+  {
+    "id": 145,
+    "title": "Памʼять і посилання в C#",
+    "description": "Змінні-обʼєкти зберігають не самі дані, а посилання на них у купі",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 14,
+    "globalOrder": 145
+  },
+  {
+    "id": 146,
+    "title": "Null reference",
+    "description": "Посилання, яке не вказує на жоден обʼєкт (default)",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 15,
+    "globalOrder": 146
+  },
+  {
+    "id": 147,
+    "title": "Витік памʼяті (memory leak)",
+    "description": "Ситуація, коли виділена памʼять не звільняється й не використовується",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 16,
+    "globalOrder": 147
+  },
+  {
+    "id": 148,
+    "title": "Фрагментація памʼяті",
+    "description": "Розбиття памʼяті на багато невеликих невикористаних блоків",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 17,
+    "globalOrder": 148
+  },
+  {
+    "id": 149,
+    "title": "Адресація в масивах",
+    "description": "Елементи масиву зберігаються послідовно в памʼяті, адреси обчислюються",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 18,
+    "globalOrder": 149
+  },
+  {
+    "id": 150,
+    "title": "Покажчик на масив",
+    "description": "Покажчик, що вказує на перший елемент масиву",
+    "groupId": "memory_pointers_references",
+    "orderInGroup": 19,
+    "globalOrder": 150
+  },
+  {
+    "id": 151,
+    "title": "Поняття структури",
+    "description": "Структура — це тип значення, що обʼєднує кілька полів під одним імʼям",
+    "groupId": "structures_struct",
+    "orderInGroup": 1,
+    "globalOrder": 151
+  },
+  {
+    "id": 152,
+    "title": "Відмінність struct від class",
+    "description": "Struct — тип значення; class — тип посилання",
+    "groupId": "structures_struct",
+    "orderInGroup": 2,
+    "globalOrder": 152
+  },
+  {
+    "id": 153,
+    "title": "Оголошення структури",
+    "description": "Використовується ключове слово struct: struct Point { int x; int y; }",
+    "groupId": "structures_struct",
+    "orderInGroup": 3,
+    "globalOrder": 153
+  },
+  {
+    "id": 154,
+    "title": "Ініціалізація структури",
+    "description": "Можна ініціалізувати через конструктор або явно задати значення полів",
+    "groupId": "structures_struct",
+    "orderInGroup": 4,
+    "globalOrder": 154
+  },
+  {
+    "id": 155,
+    "title": "Конструктор у структурі",
+    "description": "Структура може мати конструктор, але без параметрів за замовчуванням",
+    "groupId": "structures_struct",
+    "orderInGroup": 5,
+    "globalOrder": 155
+  },
+  {
+    "id": 156,
+    "title": "Властивості у struct",
+    "description": "Структура може містити поля, властивості, методи",
+    "groupId": "structures_struct",
+    "orderInGroup": 6,
+    "globalOrder": 156
+  },
+  {
+    "id": 157,
+    "title": "Struct як тип значення",
+    "description": "Структура зберігається у стеку, копіюється при передаванні",
+    "groupId": "structures_struct",
+    "orderInGroup": 7,
+    "globalOrder": 157
+  },
+  {
+    "id": 158,
+    "title": "Struct не може мати спадкоємців",
+    "description": "Структури не підтримують наслідування, лише реалізацію інтерфейсів",
+    "groupId": "structures_struct",
+    "orderInGroup": 8,
+    "globalOrder": 158
+  },
+  {
+    "id": 159,
+    "title": "Struct і інтерфейси",
+    "description": "Структура може реалізовувати інтерфейси",
+    "groupId": "structures_struct",
+    "orderInGroup": 9,
+    "globalOrder": 159
+  },
+  {
+    "id": 160,
+    "title": "Застосування структур",
+    "description": "Використовуються для невеликих, незмінних типів, як-от координати, кольори",
+    "groupId": "structures_struct",
+    "orderInGroup": 10,
+    "globalOrder": 160
+  },
+  {
+    "id": 161,
+    "title": "Struct і значення за замовчуванням",
+    "description": "При створенні без ініціалізації поля мають нульові значення",
+    "groupId": "structures_struct",
+    "orderInGroup": 11,
+    "globalOrder": 161
+  },
+  {
+    "id": 162,
+    "title": "Копіювання структур",
+    "description": "Передача структури створює копію, а не посилання",
+    "groupId": "structures_struct",
+    "orderInGroup": 12,
+    "globalOrder": 162
+  },
+  {
+    "id": 163,
+    "title": "Struct як параметр методу",
+    "description": "Передається за значенням, копіюється при виклику",
+    "groupId": "structures_struct",
+    "orderInGroup": 13,
+    "globalOrder": 163
+  },
+  {
+    "id": 164,
+    "title": "Struct як результат методу",
+    "description": "Метод може повертати структуру як значення",
+    "groupId": "structures_struct",
+    "orderInGroup": 14,
+    "globalOrder": 164
+  },
+  {
+    "id": 165,
+    "title": "Struct і null",
+    "description": "Struct не може бути null, якщо явно не вказаний як Nullable",
+    "groupId": "structures_struct",
+    "orderInGroup": 15,
+    "globalOrder": 165
+  },
+  {
+    "id": 166,
+    "title": "Тип даних",
+    "description": "Тип визначає множину можливих значень змінної та допустимі операції над нею",
+    "groupId": "types_and_passing",
+    "orderInGroup": 1,
+    "globalOrder": 166
+  },
+  {
+    "id": 167,
+    "title": "Тип значення",
+    "description": "Тип, змінні якого зберігають самі дані (int, double, bool, struct)",
+    "groupId": "types_and_passing",
+    "orderInGroup": 2,
+    "globalOrder": 167
+  },
+  {
+    "id": 168,
+    "title": "Тип посилання",
+    "description": "Тип, змінні якого зберігають посилання на обʼєкти в купі (class, array, string)",
+    "groupId": "types_and_passing",
+    "orderInGroup": 3,
+    "globalOrder": 168
+  },
+  {
+    "id": 169,
+    "title": "Тип string",
+    "description": "Посилальний тип, що поводиться як значення через іммутабельність",
+    "groupId": "types_and_passing",
+    "orderInGroup": 4,
+    "globalOrder": 169
+  },
+  {
+    "id": 170,
+    "title": "Тип object",
+    "description": "Базовий тип для всіх типів у C#, включаючи значення і посилання",
+    "groupId": "types_and_passing",
+    "orderInGroup": 5,
+    "globalOrder": 170
+  },
+  {
+    "id": 171,
+    "title": "Тип dynamic",
+    "description": "Тип, який визначається під час виконання, без перевірки компілятором",
+    "groupId": "types_and_passing",
+    "orderInGroup": 6,
+    "globalOrder": 171
+  },
+  {
+    "id": 172,
+    "title": "Тип var",
+    "description": "Неявно типізована змінна, тип якої визначається на основі значення",
+    "groupId": "types_and_passing",
+    "orderInGroup": 7,
+    "globalOrder": 172
+  },
+  {
+    "id": 173,
+    "title": "Передача за значенням",
+    "description": "Метод отримує копію значення, зміни не впливають на оригінал",
+    "groupId": "types_and_passing",
+    "orderInGroup": 8,
+    "globalOrder": 173
+  },
+  {
+    "id": 174,
+    "title": "Передача за посиланням",
+    "description": "Метод працює з тією ж змінною, зміни впливають на оригінал",
+    "groupId": "types_and_passing",
+    "orderInGroup": 9,
+    "globalOrder": 174
+  },
+  {
+    "id": 175,
+    "title": "Модифікатор ref",
+    "description": "Змінна передається в метод за посиланням, має бути ініціалізована",
+    "groupId": "types_and_passing",
+    "orderInGroup": 10,
+    "globalOrder": 175
+  },
+  {
+    "id": 176,
+    "title": "Модифікатор out",
+    "description": "Змінна передається для заповнення в методі, не обов’язково ініціалізована",
+    "groupId": "types_and_passing",
+    "orderInGroup": 11,
+    "globalOrder": 176
+  },
+  {
+    "id": 177,
+    "title": "Модифікатор in",
+    "description": "Змінна передається за посиланням, але лише для читання",
+    "groupId": "types_and_passing",
+    "orderInGroup": 12,
+    "globalOrder": 177
+  },
+  {
+    "id": 178,
+    "title": "Nullable типи",
+    "description": "Типи значення, які можуть бути null: int?, bool?",
+    "groupId": "types_and_passing",
+    "orderInGroup": 13,
+    "globalOrder": 178
+  },
+  {
+    "id": 179,
+    "title": "Boxing",
+    "description": "Перетворення значення типу в обʼєкт типу object (упаковка)",
+    "groupId": "types_and_passing",
+    "orderInGroup": 14,
+    "globalOrder": 179
+  },
+  {
+    "id": 180,
+    "title": "Unboxing",
+    "description": "Повернення значення з обʼєкта до початкового типу (розпаковка)",
+    "groupId": "types_and_passing",
+    "orderInGroup": 15,
+    "globalOrder": 180
+  },
+  {
+    "id": 181,
+    "title": "Покажчики в C#",
+    "description": "Доступні лише в unsafe-коді, дозволяють працювати з адресами",
+    "groupId": "types_and_passing",
+    "orderInGroup": 16,
+    "globalOrder": 181
+  },
+  {
+    "id": 182,
+    "title": "Масив як посилальний тип",
+    "description": "Масиви завжди зберігаються в купі й передаються за посиланням",
+    "groupId": "types_and_passing",
+    "orderInGroup": 17,
+    "globalOrder": 182
+  },
+  {
+    "id": 183,
+    "title": "Struct як тип значення",
+    "description": "Struct передається як копія, якщо не використано ref/out",
+    "groupId": "types_and_passing",
+    "orderInGroup": 18,
+    "globalOrder": 183
+  },
+  {
+    "id": 184,
+    "title": "Поняття функції (методу)",
+    "description": "Функція — це іменований блок коду, який виконує певну дію",
+    "groupId": "functions_methods",
+    "orderInGroup": 1,
+    "globalOrder": 184
+  },
+  {
+    "id": 185,
+    "title": "Оголошення функції",
+    "description": "Формальне визначення функції з іменем, параметрами і типом повернення",
+    "groupId": "functions_methods",
+    "orderInGroup": 2,
+    "globalOrder": 185
+  },
+  {
+    "id": 186,
+    "title": "Виклик функції",
+    "description": "Ініціювання виконання функції з передачею аргументів",
+    "groupId": "functions_methods",
+    "orderInGroup": 3,
+    "globalOrder": 186
+  },
+  {
+    "id": 187,
+    "title": "Параметри функції",
+    "description": "Змінні, які приймають значення, передані при виклику функції",
+    "groupId": "functions_methods",
+    "orderInGroup": 4,
+    "globalOrder": 187
+  },
+  {
+    "id": 188,
+    "title": "Аргументи функції",
+    "description": "Значення, які передаються при виклику функції",
+    "groupId": "functions_methods",
+    "orderInGroup": 5,
+    "globalOrder": 188
+  },
+  {
+    "id": 189,
+    "title": "Тип повернення функції",
+    "description": "Тип значення, яке функція повертає після виконання",
+    "groupId": "functions_methods",
+    "orderInGroup": 6,
+    "globalOrder": 189
+  },
+  {
+    "id": 190,
+    "title": "Функція без повернення (void)",
+    "description": "Функція, яка виконує дію, але не повертає значення",
+    "groupId": "functions_methods",
+    "orderInGroup": 7,
+    "globalOrder": 190
+  },
+  {
+    "id": 191,
+    "title": "Функція з поверненням значення",
+    "description": "Функція, яка повертає значення через оператор return",
+    "groupId": "functions_methods",
+    "orderInGroup": 8,
+    "globalOrder": 191
+  },
+  {
+    "id": 192,
+    "title": "Функція без параметрів",
+    "description": "Функція, яка не приймає жодних вхідних значень",
+    "groupId": "functions_methods",
+    "orderInGroup": 9,
+    "globalOrder": 192
+  },
+  {
+    "id": 193,
+    "title": "Функція з кількома параметрами",
+    "description": "Функція, яка приймає два і більше значень на вхід",
+    "groupId": "functions_methods",
+    "orderInGroup": 10,
+    "globalOrder": 193
+  },
+  {
+    "id": 194,
+    "title": "Функція з ref параметром",
+    "description": "Параметр передається за посиланням, зміни впливають на оригінал",
+    "groupId": "functions_methods",
+    "orderInGroup": 11,
+    "globalOrder": 194
+  },
+  {
+    "id": 195,
+    "title": "Функція з out параметром",
+    "description": "Параметр використовується для повернення значення через аргумент",
+    "groupId": "functions_methods",
+    "orderInGroup": 12,
+    "globalOrder": 195
+  },
+  {
+    "id": 196,
+    "title": "Функція з in параметром",
+    "description": "Параметр передається за посиланням, але лише для читання",
+    "groupId": "functions_methods",
+    "orderInGroup": 13,
+    "globalOrder": 196
+  },
+  {
+    "id": 197,
+    "title": "Перевантаження функцій",
+    "description": "Можливість створювати кілька функцій з однаковим іменем, але різними параметрами",
+    "groupId": "functions_methods",
+    "orderInGroup": 14,
+    "globalOrder": 197
+  },
+  {
+    "id": 198,
+    "title": "Рекурсивна функція",
+    "description": "Функція, яка викликає сама себе",
+    "groupId": "functions_methods",
+    "orderInGroup": 15,
+    "globalOrder": 198
+  },
+  {
+    "id": 199,
+    "title": "Локальна функція",
+    "description": "Функція, оголошена всередині іншої функції",
+    "groupId": "functions_methods",
+    "orderInGroup": 16,
+    "globalOrder": 199
+  },
+  {
+    "id": 200,
+    "title": "Функція з параметром за замовчуванням",
+    "description": "Параметр, який має значення за замовчуванням і не обов’язковий при виклику",
+    "groupId": "functions_methods",
+    "orderInGroup": 17,
+    "globalOrder": 200
+  },
+  {
+    "id": 201,
+    "title": "Функція з масивом параметрів (params)",
+    "description": "Дозволяє передавати змінну кількість аргументів у вигляді масиву",
+    "groupId": "functions_methods",
+    "orderInGroup": 18,
+    "globalOrder": 201
+  },
+  {
+    "id": 202,
+    "title": "Повернення масиву з функції",
+    "description": "Функція може повертати масив як результат обчислень",
+    "groupId": "functions_methods",
+    "orderInGroup": 19,
+    "globalOrder": 202
+  },
+  {
+    "id": 203,
+    "title": "Виклик функції з іншого класу",
+    "description": "Використання імені класу або створення обʼєкта для доступу до методу",
+    "groupId": "functions_methods",
+    "orderInGroup": 20,
+    "globalOrder": 203
+  },
+  {
+    "id": 204,
+    "title": "Зовнішнє збереження даних",
+    "description": "Процес збереження інформації на диску або іншому носії",
+    "groupId": "files",
+    "orderInGroup": 1,
+    "globalOrder": 204
+  },
+  {
+    "id": 205,
+    "title": "Що таке файл",
+    "description": "Файл — це одиниця збереження інформації з унікальним іменем і типом",
+    "groupId": "files",
+    "orderInGroup": 2,
+    "globalOrder": 205
+  },
+  {
+    "id": 206,
+    "title": "Розширення файлу",
+    "description": "Суфікс у назві файлу, який вказує на його тип (.txt, .jpg, .exe)",
+    "groupId": "files",
+    "orderInGroup": 3,
+    "globalOrder": 206
+  },
+  {
+    "id": 207,
+    "title": "Текстовий файл",
+    "description": "Файл, який містить лише текстову інформацію, доступну для читання",
+    "groupId": "files",
+    "orderInGroup": 4,
+    "globalOrder": 207
+  },
+  {
+    "id": 208,
+    "title": "Бінарний файл",
+    "description": "Файл, що містить дані у двійковому представленні, нечитабельний напряму",
+    "groupId": "files",
+    "orderInGroup": 5,
+    "globalOrder": 208
+  },
+  {
+    "id": 209,
+    "title": "Формат CSV",
+    "description": "Формат текстового файлу, де значення розділені комами або іншими роздільниками",
+    "groupId": "files",
+    "orderInGroup": 6,
+    "globalOrder": 209
+  },
+  {
+    "id": 210,
+    "title": "Формат JSON",
+    "description": "Структурований формат зберігання даних у вигляді пар ключ-значення",
+    "groupId": "files",
+    "orderInGroup": 7,
+    "globalOrder": 210
+  },
+  {
+    "id": 211,
+    "title": "Формат XML",
+    "description": "Ієрархічний текстовий формат для опису структурованих даних",
+    "groupId": "files",
+    "orderInGroup": 8,
+    "globalOrder": 211
+  },
+  {
+    "id": 212,
+    "title": "Формат INI",
+    "description": "Текстовий файл конфігурації з параметрами, розділеними секціями",
+    "groupId": "files",
+    "orderInGroup": 9,
+    "globalOrder": 212
+  },
+  {
+    "id": 213,
+    "title": "Графічні формати файлів",
+    "description": "Файли, які містять зображення (JPEG, PNG, BMP, GIF, SVG)",
+    "groupId": "files",
+    "orderInGroup": 10,
+    "globalOrder": 213
+  },
+  {
+    "id": 214,
+    "title": "Формат BMP",
+    "description": "Bitmap — простий растровий графічний формат без стиснення",
+    "groupId": "files",
+    "orderInGroup": 11,
+    "globalOrder": 214
+  },
+  {
+    "id": 215,
+    "title": "Особливості BMP",
+    "description": "Містить заголовок, інформацію про пікселі, не підтримує прозорість, великі розміри",
+    "groupId": "files",
+    "orderInGroup": 12,
+    "globalOrder": 215
+  },
+  {
+    "id": 216,
+    "title": "Формат PNG",
+    "description": "Стиснений растровий формат із підтримкою прозорості та без втрат",
+    "groupId": "files",
+    "orderInGroup": 13,
+    "globalOrder": 216
+  },
+  {
+    "id": 217,
+    "title": "Формат JPEG",
+    "description": "Стиснення з втратами, підходить для фотографій, менший розмір",
+    "groupId": "files",
+    "orderInGroup": 14,
+    "globalOrder": 217
+  },
+  {
+    "id": 218,
+    "title": "Формат GIF",
+    "description": "Формат з обмеженою палітрою кольорів, підтримує анімацію",
+    "groupId": "files",
+    "orderInGroup": 15,
+    "globalOrder": 218
+  },
+  {
+    "id": 219,
+    "title": "Формат SVG",
+    "description": "Векторний графічний формат, описаний XML-структурою",
+    "groupId": "files",
+    "orderInGroup": 16,
+    "globalOrder": 219
+  },
+  {
+    "id": 220,
+    "title": "Читання файлу в C#",
+    "description": "Використання File.ReadAllText, File.ReadAllLines або StreamReader",
+    "groupId": "files",
+    "orderInGroup": 17,
+    "globalOrder": 220
+  },
+  {
+    "id": 221,
+    "title": "Запис у файл у C#",
+    "description": "File.WriteAllText, File.AppendAllText, або StreamWriter",
+    "groupId": "files",
+    "orderInGroup": 18,
+    "globalOrder": 221
+  },
+  {
+    "id": 222,
+    "title": "Серійне збереження обʼєктів у JSON",
+    "description": "Перетворення обʼєкта в текст для збереження у файлі",
+    "groupId": "files",
+    "orderInGroup": 19,
+    "globalOrder": 222
+  },
+  {
+    "id": 223,
+    "title": "Десеріалізація JSON у C#",
+    "description": "Відновлення обʼєкта з JSON-файлу за допомогою JsonSerializer",
+    "groupId": "files",
+    "orderInGroup": 20,
+    "globalOrder": 223
+  },
+  {
+    "id": 224,
+    "title": "Обробка помилок при роботі з файлами",
+    "description": "FileNotFoundException, IOException, перевірка існування файлу",
+    "groupId": "files",
+    "orderInGroup": 21,
+    "globalOrder": 224
+  },
+  {
+    "id": 225,
+    "title": "Права доступу до файлу",
+    "description": "Може бути заборонено читання або запис без відповідних прав",
+    "groupId": "files",
+    "orderInGroup": 22,
+    "globalOrder": 225
+  },
+  {
+    "id": 226,
+    "title": "Файлова система",
+    "description": "Організація файлів і папок на носії: FAT, NTFS, ext4",
+    "groupId": "files",
+    "orderInGroup": 23,
+    "globalOrder": 226
+  },
+  {
+    "id": 227,
+    "title": "Абсолютний і відносний шлях до файлу",
+    "description": "Повний шлях до файлу від кореня диска або шлях відносно програми",
+    "groupId": "files",
+    "orderInGroup": 24,
+    "globalOrder": 227
+  },
+  {
+    "id": 228,
+    "title": "Використання using при роботі з файлами",
+    "description": "Автоматичне закриття файлу після завершення роботи",
+    "groupId": "files",
+    "orderInGroup": 25,
+    "globalOrder": 228
+  },
+  {
+    "id": 229,
+    "title": "Потік (Stream)",
+    "description": "Абстракція для послідовного читання або запису даних",
+    "groupId": "streams",
+    "orderInGroup": 1,
+    "globalOrder": 229
+  },
+  {
+    "id": 230,
+    "title": "Види потоків у C#",
+    "description": "FileStream, MemoryStream, NetworkStream, BufferedStream тощо",
+    "groupId": "streams",
+    "orderInGroup": 2,
+    "globalOrder": 230
+  },
+  {
+    "id": 231,
+    "title": "FileStream",
+    "description": "Потік для читання/запису даних у файл",
+    "groupId": "streams",
+    "orderInGroup": 3,
+    "globalOrder": 231
+  },
+  {
+    "id": 232,
+    "title": "MemoryStream",
+    "description": "Потік для роботи з даними, що зберігаються в памʼяті",
+    "groupId": "streams",
+    "orderInGroup": 4,
+    "globalOrder": 232
+  },
+  {
+    "id": 233,
+    "title": "BufferedStream",
+    "description": "Обгортка, яка додає буферизацію до іншого потоку",
+    "groupId": "streams",
+    "orderInGroup": 5,
+    "globalOrder": 233
+  },
+  {
+    "id": 234,
+    "title": "StreamReader",
+    "description": "Зручний клас для читання тексту з потоку",
+    "groupId": "streams",
+    "orderInGroup": 6,
+    "globalOrder": 234
+  },
+  {
+    "id": 235,
+    "title": "StreamWriter",
+    "description": "Зручний клас для запису тексту в потік",
+    "groupId": "streams",
+    "orderInGroup": 7,
+    "globalOrder": 235
+  },
+  {
+    "id": 236,
+    "title": "BinaryReader",
+    "description": "Клас для читання бінарних даних із потоку",
+    "groupId": "streams",
+    "orderInGroup": 8,
+    "globalOrder": 236
+  },
+  {
+    "id": 237,
+    "title": "BinaryWriter",
+    "description": "Клас для запису бінарних даних у потік",
+    "groupId": "streams",
+    "orderInGroup": 9,
+    "globalOrder": 237
+  },
+  {
+    "id": 238,
+    "title": "Відкриття потоку",
+    "description": "Створення обʼєкта потоку з вказаним джерелом (наприклад, шляхом до файлу)",
+    "groupId": "streams",
+    "orderInGroup": 10,
+    "globalOrder": 238
+  },
+  {
+    "id": 239,
+    "title": "Читання з потоку",
+    "description": "Отримання даних з потоку через методи Read(), ReadLine(), ReadAsync()",
+    "groupId": "streams",
+    "orderInGroup": 11,
+    "globalOrder": 239
+  },
+  {
+    "id": 240,
+    "title": "Запис у потік",
+    "description": "Додавання даних до потоку через Write(), WriteLine(), WriteAsync()",
+    "groupId": "streams",
+    "orderInGroup": 12,
+    "globalOrder": 240
+  },
+  {
+    "id": 241,
+    "title": "Закриття потоку",
+    "description": "Метод Close() або using-блок для безпечного завершення",
+    "groupId": "streams",
+    "orderInGroup": 13,
+    "globalOrder": 241
+  },
+  {
+    "id": 242,
+    "title": "Буферизація в потоках",
+    "description": "Тимчасове зберігання даних у памʼяті для зменшення кількості операцій введення/виведення",
+    "groupId": "streams",
+    "orderInGroup": 14,
+    "globalOrder": 242
+  },
+  {
+    "id": 243,
+    "title": "Асинхронна робота з потоками",
+    "description": "Методи ReadAsync(), WriteAsync() для неблокуючої роботи",
+    "groupId": "streams",
+    "orderInGroup": 15,
+    "globalOrder": 243
+  },
+  {
+    "id": 244,
+    "title": "Потік як вхідний параметр",
+    "description": "Метод, який приймає Stream і може працювати з будь-яким джерелом",
+    "groupId": "streams",
+    "orderInGroup": 16,
+    "globalOrder": 244
+  },
+  {
+    "id": 245,
+    "title": "Position і Seek",
+    "description": "Керування поточним положенням у потоці",
+    "groupId": "streams",
+    "orderInGroup": 17,
+    "globalOrder": 245
+  },
+  {
+    "id": 246,
+    "title": "Flush у StreamWriter",
+    "description": "Примусове записування буферизованих даних у потік",
+    "groupId": "streams",
+    "orderInGroup": 18,
+    "globalOrder": 246
+  },
+  {
+    "id": 247,
+    "title": "Read/Write байтами",
+    "description": "Методи роботи з масивами байтів у бінарних потоках",
+    "groupId": "streams",
+    "orderInGroup": 19,
+    "globalOrder": 247
+  },
+  {
+    "id": 248,
+    "title": "Потоки і ресурси",
+    "description": "Необхідність вручну або автоматично звільняти ресурси після використання",
+    "groupId": "streams",
+    "orderInGroup": 20,
+    "globalOrder": 248
+  },
+  {
+    "id": 249,
+    "title": "Введення даних користувачем",
+    "description": "Отримання даних з клавіатури через Console.ReadLine()",
+    "groupId": "console_io",
+    "orderInGroup": 1,
+    "globalOrder": 249
+  },
+  {
+    "id": 250,
+    "title": "Типове введення у C#",
+    "description": "Введення рядка, числа або іншого типу через консоль",
+    "groupId": "console_io",
+    "orderInGroup": 2,
+    "globalOrder": 250
+  },
+  {
+    "id": 251,
+    "title": "Перетворення введеного тексту в число",
+    "description": "Використання int.Parse або Convert.ToInt32 для перетворення рядка",
+    "groupId": "console_io",
+    "orderInGroup": 3,
+    "globalOrder": 251
+  },
+  {
+    "id": 252,
+    "title": "Безпечне введення числа",
+    "description": "Використання int.TryParse для обробки помилок введення",
+    "groupId": "console_io",
+    "orderInGroup": 4,
+    "globalOrder": 252
+  },
+  {
+    "id": 253,
+    "title": "Зчитування кількох значень з одного рядка",
+    "description": "Поділ введеного рядка за допомогою Split()",
+    "groupId": "console_io",
+    "orderInGroup": 5,
+    "globalOrder": 253
+  },
+  {
+    "id": 254,
+    "title": "Зчитування масиву чисел з рядка",
+    "description": "Парсинг чисел через Split() і Select(int.Parse)",
+    "groupId": "console_io",
+    "orderInGroup": 6,
+    "globalOrder": 254
+  },
+  {
+    "id": 255,
+    "title": "Виведення даних у консоль",
+    "description": "Використання Console.Write() та Console.WriteLine()",
+    "groupId": "console_io",
+    "orderInGroup": 7,
+    "globalOrder": 255
+  },
+  {
+    "id": 256,
+    "title": "Форматований вивід",
+    "description": "Виведення змінних у шаблонах через інтерполяцію або string.Format()",
+    "groupId": "console_io",
+    "orderInGroup": 8,
+    "globalOrder": 256
+  },
+  {
+    "id": 257,
+    "title": "Виведення чисел з фіксованою точністю",
+    "description": "Форматування чисел: {x:F2} — два знаки після крапки",
+    "groupId": "console_io",
+    "orderInGroup": 9,
+    "globalOrder": 257
+  },
+  {
+    "id": 258,
+    "title": "Виведення в таблицю",
+    "description": "Вирівнювання тексту за шириною колонок через PadLeft() або табуляцію",
+    "groupId": "console_io",
+    "orderInGroup": 10,
+    "globalOrder": 258
+  },
+  {
+    "id": 259,
+    "title": "Колір тексту в консолі",
+    "description": "Використання Console.ForegroundColor та Console.BackgroundColor",
+    "groupId": "console_io",
+    "orderInGroup": 11,
+    "globalOrder": 259
+  },
+  {
+    "id": 260,
+    "title": "Читання символів окремо",
+    "description": "Console.Read() — зчитує один символ як int-код",
+    "groupId": "console_io",
+    "orderInGroup": 12,
+    "globalOrder": 260
+  },
+  {
+    "id": 261,
+    "title": "Очистка консолі",
+    "description": "Console.Clear() очищує весь вивід",
+    "groupId": "console_io",
+    "orderInGroup": 13,
+    "globalOrder": 261
+  },
+  {
+    "id": 262,
+    "title": "Затримка перед закриттям",
+    "description": "Console.ReadKey() — чекає на натискання клавіші перед виходом",
+    "groupId": "console_io",
+    "orderInGroup": 14,
+    "globalOrder": 262
+  },
+  {
+    "id": 263,
+    "title": "Маскування введення (наприклад, паролі)",
+    "description": "Використання Console.ReadKey(true) для приховування введення",
+    "groupId": "console_io",
+    "orderInGroup": 15,
+    "globalOrder": 263
+  },
+  {
+    "id": 264,
+    "title": "Тип даних string",
+    "description": "Тип для збереження послідовності символів у C#",
+    "groupId": "strings",
+    "orderInGroup": 1,
+    "globalOrder": 264
+  },
+  {
+    "id": 265,
+    "title": "Немінливість string",
+    "description": "Рядки у C# є незмінними: будь-яка операція створює новий обʼєкт",
+    "groupId": "strings",
+    "orderInGroup": 2,
+    "globalOrder": 265
+  },
+  {
+    "id": 266,
+    "title": "Створення рядка",
+    "description": "Оголошення рядка: string name = \"Привіт\"",
+    "groupId": "strings",
+    "orderInGroup": 3,
+    "globalOrder": 266
+  },
+  {
+    "id": 267,
+    "title": "Конкатенація рядків",
+    "description": "Обʼєднання рядків через + або string.Concat()",
+    "groupId": "strings",
+    "orderInGroup": 4,
+    "globalOrder": 267
+  },
+  {
+    "id": 268,
+    "title": "Інтерполяція рядків",
+    "description": "Вставлення змінних у шаблон: $\"Привіт, {name}\"",
+    "groupId": "strings",
+    "orderInGroup": 5,
+    "globalOrder": 268
+  },
+  {
+    "id": 269,
+    "title": "Порівняння рядків",
+    "description": "string.Equals(), ==, StringComparison",
+    "groupId": "strings",
+    "orderInGroup": 6,
+    "globalOrder": 269
+  },
+  {
+    "id": 270,
+    "title": "Довжина рядка",
+    "description": "Властивість string.Length повертає кількість символів",
+    "groupId": "strings",
+    "orderInGroup": 7,
+    "globalOrder": 270
+  },
+  {
+    "id": 271,
+    "title": "Доступ до символів у рядку",
+    "description": "Індексація: name[0] повертає перший символ",
+    "groupId": "strings",
+    "orderInGroup": 8,
+    "globalOrder": 271
+  },
+  {
+    "id": 272,
+    "title": "Метод Substring()",
+    "description": "Отримання підрядка зі string: name.Substring(2, 3)",
+    "groupId": "strings",
+    "orderInGroup": 9,
+    "globalOrder": 272
+  },
+  {
+    "id": 273,
+    "title": "Методи обробки рядків",
+    "description": "ToUpper(), ToLower(), Trim(), Replace(), Split(), Contains() тощо",
+    "groupId": "strings",
+    "orderInGroup": 10,
+    "globalOrder": 273
+  },
+  {
+    "id": 274,
+    "title": "Метод Split()",
+    "description": "Розділення рядка на частини за роздільником",
+    "groupId": "strings",
+    "orderInGroup": 11,
+    "globalOrder": 274
+  },
+  {
+    "id": 275,
+    "title": "Метод Join()",
+    "description": "Обʼєднання масиву рядків в один рядок із роздільником",
+    "groupId": "strings",
+    "orderInGroup": 12,
+    "globalOrder": 275
+  },
+  {
+    "id": 276,
+    "title": "Перевірка вмісту",
+    "description": "string.Contains(), StartsWith(), EndsWith()",
+    "groupId": "strings",
+    "orderInGroup": 13,
+    "globalOrder": 276
+  },
+  {
+    "id": 277,
+    "title": "Перетворення рядка в число",
+    "description": "int.Parse(), int.TryParse() — перетворення тексту в int",
+    "groupId": "strings",
+    "orderInGroup": 14,
+    "globalOrder": 277
+  },
+  {
+    "id": 278,
+    "title": "Форматування рядків",
+    "description": "string.Format(), {}, шаблонізовані рядки",
+    "groupId": "strings",
+    "orderInGroup": 15,
+    "globalOrder": 278
+  },
+  {
+    "id": 279,
+    "title": "Escape-послідовності",
+    "description": "Наприклад: \"\\n\" — новий рядок, \"\\t\" — табуляція, \"\\\\\" — зворотна скісна риса",
+    "groupId": "strings",
+    "orderInGroup": 16,
+    "globalOrder": 279
+  },
+  {
+    "id": 280,
+    "title": "Рядки з декількома рядками",
+    "description": "Використання \"@\"-рядків або потрійних лапок у нових версіях C#",
+    "groupId": "strings",
+    "orderInGroup": 17,
+    "globalOrder": 280
+  },
+  {
+    "id": 281,
+    "title": "StringBuilder",
+    "description": "Клас для ефективної побудови рядків без створення нових обʼєктів",
+    "groupId": "strings",
+    "orderInGroup": 18,
+    "globalOrder": 281
+  },
+  {
+    "id": 282,
+    "title": "Конвертація символів",
+    "description": "char.ToUpper(), char.IsDigit(), char.IsLetter()",
+    "groupId": "strings",
+    "orderInGroup": 19,
+    "globalOrder": 282
+  },
+  {
+    "id": 283,
+    "title": "Пошук у рядку",
+    "description": "IndexOf(), LastIndexOf(), Contains()",
+    "groupId": "strings",
+    "orderInGroup": 20,
+    "globalOrder": 283
+  },
+  {
+    "id": 284,
+    "title": "Регулярні вирази",
+    "description": "Використання Regex для пошуку та заміни шаблонів у рядках",
+    "groupId": "regular_expressions",
+    "orderInGroup": 1,
+    "globalOrder": 284
+  },
+  {
+    "id": 285,
+    "title": "Регулярні вирази",
+    "description": "Шаблони для пошуку і обробки тексту за допомогою правил",
+    "groupId": "regular_expressions",
+    "orderInGroup": 2,
+    "globalOrder": 285
+  },
+  {
+    "id": 286,
+    "title": "Клас Regex у C#",
+    "description": "System.Text.RegularExpressions.Regex — основний клас для роботи з регулярними виразами",
+    "groupId": "regular_expressions",
+    "orderInGroup": 3,
+    "globalOrder": 286
+  },
+  {
+    "id": 287,
+    "title": "Метод Regex.IsMatch",
+    "description": "Перевірка, чи рядок відповідає шаблону",
+    "groupId": "regular_expressions",
+    "orderInGroup": 4,
+    "globalOrder": 287
+  },
+  {
+    "id": 288,
+    "title": "Метод Regex.Match",
+    "description": "Повертає перше співпадіння з шаблоном у рядку",
+    "groupId": "regular_expressions",
+    "orderInGroup": 5,
+    "globalOrder": 288
+  },
+  {
+    "id": 289,
+    "title": "Метод Regex.Matches",
+    "description": "Повертає всі співпадіння шаблону в рядку",
+    "groupId": "regular_expressions",
+    "orderInGroup": 6,
+    "globalOrder": 289
+  },
+  {
+    "id": 290,
+    "title": "Метод Regex.Replace",
+    "description": "Заміна частини рядка, що відповідає шаблону",
+    "groupId": "regular_expressions",
+    "orderInGroup": 7,
+    "globalOrder": 290
+  },
+  {
+    "id": 291,
+    "title": "Метасимвол . (крапка)",
+    "description": "Позначає будь-який символ, крім нового рядка",
+    "groupId": "regular_expressions",
+    "orderInGroup": 8,
+    "globalOrder": 291
+  },
+  {
+    "id": 292,
+    "title": "Квантифікатори *, +, ?",
+    "description": "* — 0 або більше, + — 1 або більше, ? — 0 або 1 входжень",
+    "groupId": "regular_expressions",
+    "orderInGroup": 9,
+    "globalOrder": 292
+  },
+  {
+    "id": 293,
+    "title": "Фігурні дужки {n,m}",
+    "description": "Визначення точної або межової кількості входжень: {2}, {1,3}",
+    "groupId": "regular_expressions",
+    "orderInGroup": 10,
+    "globalOrder": 293
+  },
+  {
+    "id": 294,
+    "title": "Класи символів [abc]",
+    "description": "Будь-який із символів: a, b або c",
+    "groupId": "regular_expressions",
+    "orderInGroup": 11,
+    "globalOrder": 294
+  },
+  {
+    "id": 295,
+    "title": "Діапазони [a-z]",
+    "description": "Будь-яка літера в зазначеному діапазоні",
+    "groupId": "regular_expressions",
+    "orderInGroup": 12,
+    "globalOrder": 295
+  },
+  {
+    "id": 296,
+    "title": "Інверсія класу символів [^0-9]",
+    "description": "Будь-який символ, крім цифр",
+    "groupId": "regular_expressions",
+    "orderInGroup": 13,
+    "globalOrder": 296
+  },
+  {
+    "id": 297,
+    "title": "Префікси \\d, \\w, \\s",
+    "description": "\\d — цифра, \\w — літера/цифра/_, \\s — пробіл",
+    "groupId": "regular_expressions",
+    "orderInGroup": 14,
+    "globalOrder": 297
+  },
+  {
+    "id": 298,
+    "title": "Якір ^ і $",
+    "description": "^ — початок рядка, $ — кінець рядка",
+    "groupId": "regular_expressions",
+    "orderInGroup": 15,
+    "globalOrder": 298
+  },
+  {
+    "id": 299,
+    "title": "Групи ( ... )",
+    "description": "Обʼєднання частин шаблону або збереження підрядків",
+    "groupId": "regular_expressions",
+    "orderInGroup": 16,
+    "globalOrder": 299
+  },
+  {
+    "id": 300,
+    "title": "Альтернація |",
+    "description": "Оператор «або»: a|b відповідає або a, або b",
+    "groupId": "regular_expressions",
+    "orderInGroup": 17,
+    "globalOrder": 300
+  },
+  {
+    "id": 301,
+    "title": "Екранування спеціальних символів",
+    "description": "Використання \\ перед метасимволом: \\. \\* \\+",
+    "groupId": "regular_expressions",
+    "orderInGroup": 18,
+    "globalOrder": 301
+  },
+  {
+    "id": 302,
+    "title": "Приклади використання",
+    "description": "Перевірка email, телефону, номера паспорта тощо",
+    "groupId": "regular_expressions",
+    "orderInGroup": 19,
+    "globalOrder": 302
+  },
+  {
+    "id": 303,
+    "title": "RegexOptions",
+    "description": "Параметри: IgnoreCase, Multiline, Compiled тощо",
+    "groupId": "regular_expressions",
+    "orderInGroup": 20,
+    "globalOrder": 303
+  },
+  {
+    "id": 304,
+    "title": "Система числення",
+    "description": "Спосіб запису чисел за допомогою фіксованого набору цифр і основи (бази)",
+    "groupId": "number_systems",
+    "orderInGroup": 1,
+    "globalOrder": 304
+  },
+  {
+    "id": 305,
+    "title": "Десяткова система",
+    "description": "Найпоширеніша система числення з основою 10",
+    "groupId": "number_systems",
+    "orderInGroup": 2,
+    "globalOrder": 305
+  },
+  {
+    "id": 306,
+    "title": "Двійкова система",
+    "description": "Система числення з основою 2, використовується в комп’ютерах",
+    "groupId": "number_systems",
+    "orderInGroup": 3,
+    "globalOrder": 306
+  },
+  {
+    "id": 307,
+    "title": "Вісімкова система",
+    "description": "Система числення з основою 8, використовується в UNIX",
+    "groupId": "number_systems",
+    "orderInGroup": 4,
+    "globalOrder": 307
+  },
+  {
+    "id": 308,
+    "title": "Шістнадцяткова система",
+    "description": "Система числення з основою 16, зручна для представлення байтів (0–9, A–F)",
+    "groupId": "number_systems",
+    "orderInGroup": 5,
+    "globalOrder": 308
+  },
+  {
+    "id": 309,
+    "title": "Цифри в різних системах",
+    "description": "Двійкова: 0-1, Вісімкова: 0-7, Шістнадцяткова: 0-9, A-F",
+    "groupId": "number_systems",
+    "orderInGroup": 6,
+    "globalOrder": 309
+  },
+  {
+    "id": 310,
+    "title": "Переведення з десяткової в двійкову",
+    "description": "Ділення на 2 з записом остач",
+    "groupId": "number_systems",
+    "orderInGroup": 7,
+    "globalOrder": 310
+  },
+  {
+    "id": 311,
+    "title": "Переведення з двійкової в десяткову",
+    "description": "Множення кожного біта на 2^позиція і додавання",
+    "groupId": "number_systems",
+    "orderInGroup": 8,
+    "globalOrder": 311
+  },
+  {
+    "id": 312,
+    "title": "Переведення з десяткової у шістнадцяткову",
+    "description": "Ділення на 16 з остачею; остачі: 10=A, 11=B тощо",
+    "groupId": "number_systems",
+    "orderInGroup": 9,
+    "globalOrder": 312
+  },
+  {
+    "id": 313,
+    "title": "Переведення між будь-якими системами",
+    "description": "Спочатку в десяткову, потім у потрібну",
+    "groupId": "number_systems",
+    "orderInGroup": 10,
+    "globalOrder": 313
+  },
+  {
+    "id": 314,
+    "title": "Вбудовані методи C# для переведення",
+    "description": "Convert.ToString(value, base), Convert.ToInt32(string, base)",
+    "groupId": "number_systems",
+    "orderInGroup": 11,
+    "globalOrder": 314
+  },
+  {
+    "id": 315,
+    "title": "Представлення чисел у памʼяті",
+    "description": "Компʼютер зберігає всі числа у двійковій формі",
+    "groupId": "number_systems",
+    "orderInGroup": 12,
+    "globalOrder": 315
+  },
+  {
+    "id": 316,
+    "title": "Застосування шістнадцяткової системи",
+    "description": "Представлення кольору, адреси в памʼяті, байтів",
+    "groupId": "number_systems",
+    "orderInGroup": 13,
+    "globalOrder": 316
+  },
+  {
+    "id": 317,
+    "title": "Byte і біт",
+    "description": "1 байт = 8 бітів, мінімальна одиниця зберігання в памʼяті",
+    "groupId": "number_systems",
+    "orderInGroup": 14,
+    "globalOrder": 317
+  },
+  {
+    "id": 318,
+    "title": "Побітові операції",
+    "description": "Операції над двійковими числами: &, |, ^, ~, <<, >>",
+    "groupId": "number_systems",
+    "orderInGroup": 15,
+    "globalOrder": 318
+  },
+  {
+    "id": 319,
+    "title": "Двійковий код",
+    "description": "Кодування чисел у вигляді послідовності 0 і 1",
+    "groupId": "number_systems",
+    "orderInGroup": 16,
+    "globalOrder": 319
+  },
+  {
+    "id": 320,
+    "title": "Поняття нуля в різних системах",
+    "description": "У всіх системах числення 0 — це число без значення",
+    "groupId": "number_systems",
+    "orderInGroup": 17,
+    "globalOrder": 320
+  },
+  {
+    "id": 321,
+    "title": "Представлення від’ємних чисел",
+    "description": "Додатковий код (two’s complement) для від’ємних чисел у двійковій системі",
+    "groupId": "number_systems",
+    "orderInGroup": 18,
+    "globalOrder": 321
+  },
+  {
+    "id": 322,
+    "title": "Реальні числа і округлення",
+    "description": "Обмеження представлення чисел з плаваючою комою у бітовому вигляді",
+    "groupId": "number_systems",
+    "orderInGroup": 19,
+    "globalOrder": 322
+  },
+  {
+    "id": 323,
+    "title": "Арифметичні оператори",
+    "description": "Оператори: + (додавання), - (віднімання), * (множення), / (ділення), % (остача від ділення)",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 1,
+    "globalOrder": 323
+  },
+  {
+    "id": 324,
+    "title": "Оператор % (остача)",
+    "description": "Повертає остачу від ділення одного числа на інше",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 2,
+    "globalOrder": 324
+  },
+  {
+    "id": 325,
+    "title": "Ділення цілих чисел",
+    "description": "У випадку int / int результат буде округлено до цілого вниз",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 3,
+    "globalOrder": 325
+  },
+  {
+    "id": 326,
+    "title": "Ділення з плаваючою крапкою",
+    "description": "Якщо хоча б один операнд — float/double, ділення буде з десятковою частиною",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 4,
+    "globalOrder": 326
+  },
+  {
+    "id": 327,
+    "title": "Порядок виконання операцій",
+    "description": "Спочатку *, /, %, потім +, -; дужки змінюють порядок",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 5,
+    "globalOrder": 327
+  },
+  {
+    "id": 328,
+    "title": "Використання дужок у виразах",
+    "description": "Операції в дужках виконуються першими: (2 + 3) * 4 = 20",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 6,
+    "globalOrder": 328
+  },
+  {
+    "id": 329,
+    "title": "Інкремент і декремент",
+    "description": "Оператори ++ і --; префіксна (до зміни) та постфіксна (після використання) форми",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 7,
+    "globalOrder": 329
+  },
+  {
+    "id": 330,
+    "title": "Комбіновані оператори +=, -=, *=, /=",
+    "description": "Скорочені записи: x += 5 еквівалентно x = x + 5",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 8,
+    "globalOrder": 330
+  },
+  {
+    "id": 331,
+    "title": "Перетворення типів (casting)",
+    "description": "Примусове приведення типів: (int)3.7 => 3",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 9,
+    "globalOrder": 331
+  },
+  {
+    "id": 332,
+    "title": "Автоматичне приведення типів",
+    "description": "C# автоматично конвертує типи з меншого до більшого (наприклад, int → double)",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 10,
+    "globalOrder": 332
+  },
+  {
+    "id": 333,
+    "title": "Округлення чисел",
+    "description": "Math.Round(), Math.Ceiling(), Math.Floor() для округлення чисел",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 11,
+    "globalOrder": 333
+  },
+  {
+    "id": 334,
+    "title": "Математичні функції",
+    "description": "Math.Abs(), Math.Pow(), Math.Sqrt(), Math.Min(), Math.Max()",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 12,
+    "globalOrder": 334
+  },
+  {
+    "id": 335,
+    "title": "Ділення на нуль",
+    "description": "При int / 0 — помилка; при double / 0 — результат Infinity або NaN",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 13,
+    "globalOrder": 335
+  },
+  {
+    "id": 336,
+    "title": "Порядок виконання при змішаних типах",
+    "description": "int + double → результат double; пріоритет типів: int < long < float < double",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 14,
+    "globalOrder": 336
+  },
+  {
+    "id": 337,
+    "title": "Вирази з кількома операціями",
+    "description": "Складні вирази комбінують багато операторів і потребують контролю пріоритету",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 15,
+    "globalOrder": 337
+  },
+  {
+    "id": 338,
+    "title": "Множення та переповнення",
+    "description": "int може переповнитися: перевірка через checked або використання long",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 16,
+    "globalOrder": 338
+  },
+  {
+    "id": 339,
+    "title": "Math.DivRem()",
+    "description": "Функція, що повертає частку й остачу одночасно",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 17,
+    "globalOrder": 339
+  },
+  {
+    "id": 340,
+    "title": "Округлення до n знаків",
+    "description": "Math.Round(число, n) — округлення до n знаків після крапки",
+    "groupId": "arithmetic_and_math_basics",
+    "orderInGroup": 18,
+    "globalOrder": 340
+  },
+  {
+    "id": 341,
+    "title": "Обробка винятків у C#",
+    "description": "Механізм виявлення та перехоплення помилок під час виконання програми",
+    "groupId": "exceptions",
+    "orderInGroup": 1,
+    "globalOrder": 341
+  },
+  {
+    "id": 342,
+    "title": "Блок try",
+    "description": "Містить код, який може викликати виняток",
+    "groupId": "exceptions",
+    "orderInGroup": 2,
+    "globalOrder": 342
+  },
+  {
+    "id": 343,
+    "title": "Блок catch",
+    "description": "Обробляє виняток, який виник у блоці try",
+    "groupId": "exceptions",
+    "orderInGroup": 3,
+    "globalOrder": 343
+  },
+  {
+    "id": 344,
+    "title": "Блок finally",
+    "description": "Код, що виконується завжди — незалежно від того, чи стався виняток",
+    "groupId": "exceptions",
+    "orderInGroup": 4,
+    "globalOrder": 344
+  },
+  {
+    "id": 345,
+    "title": "Типи винятків",
+    "description": "System.Exception, DivideByZeroException, ArgumentNullException, FormatException тощо",
+    "groupId": "exceptions",
+    "orderInGroup": 5,
+    "globalOrder": 345
+  },
+  {
+    "id": 346,
+    "title": "Кілька блоків catch",
+    "description": "Можна мати кілька catch для різних типів помилок",
+    "groupId": "exceptions",
+    "orderInGroup": 6,
+    "globalOrder": 346
+  },
+  {
+    "id": 347,
+    "title": "catch без параметра",
+    "description": "Універсальний catch перехоплює будь-який виняток",
+    "groupId": "exceptions",
+    "orderInGroup": 7,
+    "globalOrder": 347
+  },
+  {
+    "id": 348,
+    "title": "Властивості обʼєкта Exception",
+    "description": "Message, StackTrace, InnerException — інформація про помилку",
+    "groupId": "exceptions",
+    "orderInGroup": 8,
+    "globalOrder": 348
+  },
+  {
+    "id": 349,
+    "title": "Викидання винятку вручну",
+    "description": "Оператор throw для генерації винятку вручну",
+    "groupId": "exceptions",
+    "orderInGroup": 9,
+    "globalOrder": 349
+  },
+  {
+    "id": 350,
+    "title": "Оператор throw у catch",
+    "description": "Повторна генерація винятку для передачі далі",
+    "groupId": "exceptions",
+    "orderInGroup": 10,
+    "globalOrder": 350
+  },
+  {
+    "id": 351,
+    "title": "finally для звільнення ресурсів",
+    "description": "Наприклад, закриття файлу або зʼєднання з БД",
+    "groupId": "exceptions",
+    "orderInGroup": 11,
+    "globalOrder": 351
+  },
+  {
+    "id": 352,
+    "title": "Вкладені блоки try-catch",
+    "description": "Можна вкладати try-catch усередині інших для детального контролю",
+    "groupId": "exceptions",
+    "orderInGroup": 12,
+    "globalOrder": 352
+  },
+  {
+    "id": 353,
+    "title": "Розробка власних винятків",
+    "description": "Створення класів, що наслідують від Exception",
+    "groupId": "exceptions",
+    "orderInGroup": 13,
+    "globalOrder": 353
+  },
+  {
+    "id": 354,
+    "title": "Приклад: перетворення рядка в число",
+    "description": "int.Parse() може викликати FormatException, який треба обробити",
+    "groupId": "exceptions",
+    "orderInGroup": 14,
+    "globalOrder": 354
+  },
+  {
+    "id": 355,
+    "title": "Логування винятків",
+    "description": "Збереження інформації про помилки у файл або консоль",
+    "groupId": "exceptions",
+    "orderInGroup": 15,
+    "globalOrder": 355
+  },
+  {
+    "id": 356,
+    "title": "Небезпечні операції без try-catch",
+    "description": "Код без обробки винятків може призвести до аварійного завершення програми",
+    "groupId": "exceptions",
+    "orderInGroup": 16,
+    "globalOrder": 356
+  },
+  {
+    "id": 357,
+    "title": "Типові джерела винятків",
+    "description": "Неправильне введення, ділення на нуль, неправильний формат, звернення до null, помилки файлів",
+    "groupId": "exceptions",
+    "orderInGroup": 17,
+    "globalOrder": 357
+  },
+  {
+    "id": 358,
+    "title": "DivideByZeroException",
+    "description": "Виникає при спробі ділення на нуль (тільки для цілих чисел)",
+    "groupId": "exceptions",
+    "orderInGroup": 18,
+    "globalOrder": 358
+  },
+  {
+    "id": 359,
+    "title": "FormatException",
+    "description": "Спроба перетворити рядок у число або дату з неправильним форматом",
+    "groupId": "exceptions",
+    "orderInGroup": 19,
+    "globalOrder": 359
+  },
+  {
+    "id": 360,
+    "title": "NullReferenceException",
+    "description": "Спроба доступу до члена об’єкта, що дорівнює null",
+    "groupId": "exceptions",
+    "orderInGroup": 20,
+    "globalOrder": 360
+  },
+  {
+    "id": 361,
+    "title": "IndexOutOfRangeException",
+    "description": "Спроба доступу до елемента масиву або списку за неправильним індексом",
+    "groupId": "exceptions",
+    "orderInGroup": 21,
+    "globalOrder": 361
+  },
+  {
+    "id": 362,
+    "title": "ArgumentException",
+    "description": "Методу передано неправильний аргумент",
+    "groupId": "exceptions",
+    "orderInGroup": 22,
+    "globalOrder": 362
+  },
+  {
+    "id": 363,
+    "title": "ArgumentNullException",
+    "description": "Методу передано null, хоча очікувався обʼєкт",
+    "groupId": "exceptions",
+    "orderInGroup": 23,
+    "globalOrder": 363
+  },
+  {
+    "id": 364,
+    "title": "FileNotFoundException",
+    "description": "Файл не знайдено під час спроби відкрити його",
+    "groupId": "exceptions",
+    "orderInGroup": 24,
+    "globalOrder": 364
+  },
+  {
+    "id": 365,
+    "title": "IOException",
+    "description": "Загальна помилка вводу/виводу при роботі з файлами чи потоками",
+    "groupId": "exceptions",
+    "orderInGroup": 25,
+    "globalOrder": 365
+  },
+  {
+    "id": 366,
+    "title": "OverflowException",
+    "description": "Результат арифметичної операції перевищує межі типу",
+    "groupId": "exceptions",
+    "orderInGroup": 26,
+    "globalOrder": 366
+  },
+  {
+    "id": 367,
+    "title": "InvalidCastException",
+    "description": "Спроба некоректного приведення типів",
+    "groupId": "exceptions",
+    "orderInGroup": 27,
+    "globalOrder": 367
+  },
+  {
+    "id": 368,
+    "title": "OutOfMemoryException",
+    "description": "Недостатньо памʼяті для виконання операції (рідко в основах)",
+    "groupId": "exceptions",
+    "orderInGroup": 28,
+    "globalOrder": 368
+  },
+  {
+    "id": 369,
+    "title": "StackOverflowException",
+    "description": "Занадто глибока рекурсія (неможливо перехопити)",
+    "groupId": "exceptions",
+    "orderInGroup": 29,
+    "globalOrder": 369
+  },
+  {
+    "id": 370,
+    "title": "Exception — базовий тип",
+    "description": "Можна перехопити всі помилки разом, але краще обробляти конкретні",
+    "groupId": "exceptions",
+    "orderInGroup": 30,
+    "globalOrder": 370
+  },
+  {
+    "id": 371,
+    "title": "Коли перехоплювати винятки",
+    "description": "При взаємодії з користувачем, файлами, перетвореннями даних, роботою з масивами",
+    "groupId": "exceptions",
+    "orderInGroup": 31,
+    "globalOrder": 371
+  },
+  {
+    "id": 372,
+    "title": "Чого не варто робити в catch",
+    "description": "Не ігнорувати винятки (порожній catch), не приховувати помилки",
+    "groupId": "exceptions",
+    "orderInGroup": 32,
+    "globalOrder": 372
+  },
+  {
+    "id": 373,
+    "title": "Перетворення типів (type conversion)",
+    "description": "Зміна типу значення з одного типу даних на інший",
+    "groupId": "type_conversion",
+    "orderInGroup": 1,
+    "globalOrder": 373
+  },
+  {
+    "id": 374,
+    "title": "Неявне перетворення (implicit cast)",
+    "description": "Автоматичне перетворення типів з меншого в більший без втрати даних (наприклад, int → float)",
+    "groupId": "type_conversion",
+    "orderInGroup": 2,
+    "globalOrder": 374
+  },
+  {
+    "id": 375,
+    "title": "Явне перетворення (explicit cast)",
+    "description": "Примусове приведення типу з втратою точності або з потенційною помилкою (наприклад, double → int)",
+    "groupId": "type_conversion",
+    "orderInGroup": 3,
+    "globalOrder": 375
+  },
+  {
+    "id": 376,
+    "title": "Оператор приведення (тип)значення",
+    "description": "Синтаксис: (int)3.14 → 3",
+    "groupId": "type_conversion",
+    "orderInGroup": 4,
+    "globalOrder": 376
+  },
+  {
+    "id": 377,
+    "title": "Convert.ToInt32(), ToDouble(), ToString()",
+    "description": "Методи класу Convert для перетворення між базовими типами",
+    "groupId": "type_conversion",
+    "orderInGroup": 5,
+    "globalOrder": 377
+  },
+  {
+    "id": 378,
+    "title": "int.Parse()",
+    "description": "Перетворення рядка у число; викликає FormatException при неправильному форматі",
+    "groupId": "type_conversion",
+    "orderInGroup": 6,
+    "globalOrder": 378
+  },
+  {
+    "id": 379,
+    "title": "int.TryParse()",
+    "description": "Безпечне перетворення рядка в число; повертає true/false",
+    "groupId": "type_conversion",
+    "orderInGroup": 7,
+    "globalOrder": 379
+  },
+  {
+    "id": 380,
+    "title": "Boxing",
+    "description": "Неявне перетворення значимого типу (value type) у посилальний тип (object)",
+    "groupId": "type_conversion",
+    "orderInGroup": 8,
+    "globalOrder": 380
+  },
+  {
+    "id": 381,
+    "title": "Unboxing",
+    "description": "Явне перетворення з object назад у значимий тип",
+    "groupId": "type_conversion",
+    "orderInGroup": 9,
+    "globalOrder": 381
+  },
+  {
+    "id": 382,
+    "title": "as і is оператори",
+    "description": "Перевірка або приведення до посилального типу: x as Type, x is Type",
+    "groupId": "type_conversion",
+    "orderInGroup": 10,
+    "globalOrder": 382
+  },
+  {
+    "id": 383,
+    "title": "Перетворення між char і int",
+    "description": "Можна конвертувати символ у його ASCII-код і навпаки",
+    "groupId": "type_conversion",
+    "orderInGroup": 11,
+    "globalOrder": 383
+  },
+  {
+    "id": 384,
+    "title": "Перетворення bool у int",
+    "description": "bool не конвертується прямо в int — треба використати умовну конструкцію",
+    "groupId": "type_conversion",
+    "orderInGroup": 12,
+    "globalOrder": 384
+  },
+  {
+    "id": 385,
+    "title": "ToString() для обʼєктів",
+    "description": "Метод, який повертає текстове представлення обʼєкта",
+    "groupId": "type_conversion",
+    "orderInGroup": 13,
+    "globalOrder": 385
+  },
+  {
+    "id": 386,
+    "title": "ToString з форматуванням",
+    "description": "Наприклад: число.ToString(\"F2\") → округлення до 2 знаків після крапки",
+    "groupId": "type_conversion",
+    "orderInGroup": 14,
+    "globalOrder": 386
+  },
+  {
+    "id": 387,
+    "title": "Перетворення float у int",
+    "description": "Обрізає десяткову частину; потрібно явно вказати тип",
+    "groupId": "type_conversion",
+    "orderInGroup": 15,
+    "globalOrder": 387
+  },
+  {
+    "id": 388,
+    "title": "Помилки при перетворенні",
+    "description": "FormatException, InvalidCastException, OverflowException — типові проблеми",
+    "groupId": "type_conversion",
+    "orderInGroup": 16,
+    "globalOrder": 388
+  },
+  {
+    "id": 389,
+    "title": "Приведення користувацьких типів",
+    "description": "Можна реалізувати явні або неявні оператори cast у своїх класах",
+    "groupId": "type_conversion",
+    "orderInGroup": 17,
+    "globalOrder": 389
+  },
+  {
+    "id": 390,
+    "title": "Тип DateTime",
+    "description": "Вбудований тип для зберігання дати та часу",
+    "groupId": "datetime",
+    "orderInGroup": 1,
+    "globalOrder": 390
+  },
+  {
+    "id": 391,
+    "title": "Поточна дата і час",
+    "description": "DateTime.Now — отримання поточного локального часу",
+    "groupId": "datetime",
+    "orderInGroup": 2,
+    "globalOrder": 391
+  },
+  {
+    "id": 392,
+    "title": "Поточна UTC дата і час",
+    "description": "DateTime.UtcNow — отримання часу за Гринвічем",
+    "groupId": "datetime",
+    "orderInGroup": 3,
+    "globalOrder": 392
+  },
+  {
+    "id": 393,
+    "title": "Поточна лише дата",
+    "description": "DateTime.Today — поточна дата без часу (00:00:00)",
+    "groupId": "datetime",
+    "orderInGroup": 4,
+    "globalOrder": 393
+  },
+  {
+    "id": 394,
+    "title": "Створення обʼєкта DateTime вручну",
+    "description": "new DateTime(2025, 5, 31, 14, 30, 0) — конкретна дата і час",
+    "groupId": "datetime",
+    "orderInGroup": 5,
+    "globalOrder": 394
+  },
+  {
+    "id": 395,
+    "title": "Відображення дати у тексті",
+    "description": "Використання ToString() з форматами: \"dd.MM.yyyy\", \"yyyy-MM-dd HH:mm\"",
+    "groupId": "datetime",
+    "orderInGroup": 6,
+    "globalOrder": 395
+  },
+  {
+    "id": 396,
+    "title": "Форматоване виведення дати",
+    "description": "Наприклад: DateTime.Now.ToString(\"dd/MM/yyyy\")",
+    "groupId": "datetime",
+    "orderInGroup": 7,
+    "globalOrder": 396
+  },
+  {
+    "id": 397,
+    "title": "Парсинг дати з рядка",
+    "description": "DateTime.Parse(\"2024-05-01\") або DateTime.TryParse() для безпечного парсингу",
+    "groupId": "datetime",
+    "orderInGroup": 8,
+    "globalOrder": 397
+  },
+  {
+    "id": 398,
+    "title": "Вирахування тривалості (TimeSpan)",
+    "description": "Різниця між двома датами повертає TimeSpan",
+    "groupId": "datetime",
+    "orderInGroup": 9,
+    "globalOrder": 398
+  },
+  {
+    "id": 399,
+    "title": "Виведення тривалості (TimeSpan)",
+    "description": "timeSpan.Days, .Hours, .Minutes, .TotalSeconds — доступ до частин",
+    "groupId": "datetime",
+    "orderInGroup": 10,
+    "globalOrder": 399
+  },
+  {
+    "id": 400,
+    "title": "Додавання днів, годин, місяців",
+    "description": "Методи AddDays(), AddHours(), AddMonths(), AddYears()",
+    "groupId": "datetime",
+    "orderInGroup": 11,
+    "globalOrder": 400
+  },
+  {
+    "id": 401,
+    "title": "Віднімання дати",
+    "description": "Використання .Subtract() або просто - між двома датами",
+    "groupId": "datetime",
+    "orderInGroup": 12,
+    "globalOrder": 401
+  },
+  {
+    "id": 402,
+    "title": "Порівняння дат",
+    "description": "DateTime1 > DateTime2 — перевірка, яка дата пізніше",
+    "groupId": "datetime",
+    "orderInGroup": 13,
+    "globalOrder": 402
+  },
+  {
+    "id": 403,
+    "title": "DateTime.Kind",
+    "description": "Визначає, чи дата локальна, UTC чи невідома",
+    "groupId": "datetime",
+    "orderInGroup": 14,
+    "globalOrder": 403
+  },
+  {
+    "id": 404,
+    "title": "Затримка програми",
+    "description": "Thread.Sleep(1000) — пауза на 1 секунду",
+    "groupId": "datetime",
+    "orderInGroup": 15,
+    "globalOrder": 404
+  },
+  {
+    "id": 405,
+    "title": "Вимірювання часу виконання",
+    "description": "Stopwatch клас з Start(), Stop(), Elapsed",
+    "groupId": "datetime",
+    "orderInGroup": 16,
+    "globalOrder": 405
+  },
+  {
+    "id": 406,
+    "title": "Конвертація дати в Unix time",
+    "description": "DateTimeOffset.ToUnixTimeSeconds() — для роботи з epoch часом",
+    "groupId": "datetime",
+    "orderInGroup": 17,
+    "globalOrder": 406
+  },
+  {
+    "id": 407,
+    "title": "Поняття парсінгу",
+    "description": "Парсінг — це процес перетворення тексту в структуровані дані (наприклад, рядка в число)",
+    "groupId": "parsing",
+    "orderInGroup": 1,
+    "globalOrder": 407
+  },
+  {
+    "id": 408,
+    "title": "int.Parse()",
+    "description": "Перетворює рядок у ціле число; викликає виняток при неправильному форматі",
+    "groupId": "parsing",
+    "orderInGroup": 2,
+    "globalOrder": 408
+  },
+  {
+    "id": 409,
+    "title": "int.TryParse()",
+    "description": "Безпечне перетворення рядка в int без винятків; повертає true або false",
+    "groupId": "parsing",
+    "orderInGroup": 3,
+    "globalOrder": 409
+  },
+  {
+    "id": 410,
+    "title": "double.Parse() і double.TryParse()",
+    "description": "Парсинг десяткових чисел, враховує локаль (крапка або кома)",
+    "groupId": "parsing",
+    "orderInGroup": 4,
+    "globalOrder": 410
+  },
+  {
+    "id": 411,
+    "title": "bool.Parse() і bool.TryParse()",
+    "description": "Парсить 'true' або 'false' (нечутливо до регістру); може викликати помилку",
+    "groupId": "parsing",
+    "orderInGroup": 5,
+    "globalOrder": 411
+  },
+  {
+    "id": 412,
+    "title": "DateTime.Parse() і DateTime.TryParse()",
+    "description": "Парсинг дати з рядка у форматі 'yyyy-MM-dd' або іншому локальному форматі",
+    "groupId": "parsing",
+    "orderInGroup": 6,
+    "globalOrder": 412
+  },
+  {
+    "id": 413,
+    "title": "char.Parse()",
+    "description": "Перетворення рядка довжиною 1 у символ",
+    "groupId": "parsing",
+    "orderInGroup": 7,
+    "globalOrder": 413
+  },
+  {
+    "id": 414,
+    "title": "Enum.Parse()",
+    "description": "Парсинг рядка в значення перерахування (enum)",
+    "groupId": "parsing",
+    "orderInGroup": 8,
+    "globalOrder": 414
+  },
+  {
+    "id": 415,
+    "title": "Split() для парсингу списків",
+    "description": "Розбиття рядка за роздільником (наприклад, комою) для створення масиву",
+    "groupId": "parsing",
+    "orderInGroup": 9,
+    "globalOrder": 415
+  },
+  {
+    "id": 416,
+    "title": "Trim(), Replace(), Substring() перед парсингом",
+    "description": "Очищення або підготовка рядка перед розбором",
+    "groupId": "parsing",
+    "orderInGroup": 10,
+    "globalOrder": 416
+  },
+  {
+    "id": 417,
+    "title": "TryParseExact() для дат",
+    "description": "Чітка відповідність заданому формату дати (наприклад, 'dd.MM.yyyy')",
+    "groupId": "parsing",
+    "orderInGroup": 11,
+    "globalOrder": 417
+  },
+  {
+    "id": 418,
+    "title": "Обробка помилок при парсингу",
+    "description": "Використання TryParse або блоків try-catch для уникнення аварій",
+    "groupId": "parsing",
+    "orderInGroup": 12,
+    "globalOrder": 418
+  },
+  {
+    "id": 419,
+    "title": "Парсинг масиву чисел з рядка",
+    "description": "Split() + Select(int.Parse) для створення масиву з введеного рядка",
+    "groupId": "parsing",
+    "orderInGroup": 13,
+    "globalOrder": 419
+  },
+  {
+    "id": 420,
+    "title": "Культура і парсинг чисел",
+    "description": "CultureInfo може змінювати символ дробу (крапка/кома)",
+    "groupId": "parsing",
+    "orderInGroup": 14,
+    "globalOrder": 420
+  },
+  {
+    "id": 421,
+    "title": "Загальні помилки парсингу",
+    "description": "FormatException, OverflowException, неправильний формат вхідного рядка",
+    "groupId": "parsing",
+    "orderInGroup": 15,
+    "globalOrder": 421
+  },
+  {
+    "id": 422,
+    "title": "Поняття дебагінгу (відлагодження)",
+    "description": "Процес виявлення та виправлення помилок у програмі",
+    "groupId": "debugging",
+    "orderInGroup": 1,
+    "globalOrder": 422
+  },
+  {
+    "id": 423,
+    "title": "Точка зупину (breakpoint)",
+    "description": "Позначка в коді, на якій програма призупиняє виконання",
+    "groupId": "debugging",
+    "orderInGroup": 2,
+    "globalOrder": 423
+  },
+  {
+    "id": 424,
+    "title": "Крокове виконання (Step Over, Step Into)",
+    "description": "Пошагове проходження коду для аналізу його виконання",
+    "groupId": "debugging",
+    "orderInGroup": 3,
+    "globalOrder": 424
+  },
+  {
+    "id": 425,
+    "title": "Перевірка значень змінних",
+    "description": "Перегляд поточних значень змінних під час виконання в дебаг-режимі",
+    "groupId": "debugging",
+    "orderInGroup": 4,
+    "globalOrder": 425
+  },
+  {
+    "id": 426,
+    "title": "Автоспостереження (Watch)",
+    "description": "Інструмент для постійного відстеження значень певних змінних",
+    "groupId": "debugging",
+    "orderInGroup": 5,
+    "globalOrder": 426
+  },
+  {
+    "id": 427,
+    "title": "Вікно локальних змінних (Locals)",
+    "description": "Автоматичне відображення всіх змінних у поточному контексті",
+    "groupId": "debugging",
+    "orderInGroup": 6,
+    "globalOrder": 427
+  },
+  {
+    "id": 428,
+    "title": "Вікно стеку викликів (Call Stack)",
+    "description": "Показує шлях викликів методів до поточного місця виконання",
+    "groupId": "debugging",
+    "orderInGroup": 7,
+    "globalOrder": 428
+  },
+  {
+    "id": 429,
+    "title": "Обробка винятків під час дебагу",
+    "description": "Відображення місця, де відбулась помилка (exception), і її тип",
+    "groupId": "debugging",
+    "orderInGroup": 8,
+    "globalOrder": 429
+  },
+  {
+    "id": 430,
+    "title": "Інтерактивне виведення (Immediate Window)",
+    "description": "Виконання команд і перегляд значень під час паузи в дебагу",
+    "groupId": "debugging",
+    "orderInGroup": 9,
+    "globalOrder": 430
+  },
+  {
+    "id": 431,
+    "title": "Дебаг конфігурація",
+    "description": "Режим запуску програми з увімкненими інструментами для налагодження",
+    "groupId": "debugging",
+    "orderInGroup": 10,
+    "globalOrder": 431
+  },
+  {
+    "id": 432,
+    "title": "Різниця між Debug та Release",
+    "description": "Debug — для тестування (повільніше, з інструментами); Release — для продуктивного запуску",
+    "groupId": "debugging",
+    "orderInGroup": 11,
+    "globalOrder": 432
+  },
+  {
+    "id": 433,
+    "title": "Журнали (логування) та їх роль у відлагодженні",
+    "description": "Запис подій і помилок у консоль або файл для подальшого аналізу",
+    "groupId": "debugging",
+    "orderInGroup": 12,
+    "globalOrder": 433
+  },
+  {
+    "id": 434,
+    "title": "Найпоширеніші помилки, що виявляються під час дебагінгу",
+    "description": "NullReferenceException, IndexOutOfRangeException, помилки типів",
+    "groupId": "debugging",
+    "orderInGroup": 13,
+    "globalOrder": 434
+  },
+  {
+    "id": 435,
+    "title": "Тестові дані при дебагінгу",
+    "description": "Завдання контрольних вхідних даних для перевірки логіки програми",
+    "groupId": "debugging",
+    "orderInGroup": 14,
+    "globalOrder": 435
+  },
+  {
+    "id": 436,
+    "title": "Цілочисельне ділення",
+    "description": "Ділення цілих чисел повертає лише цілу частину результату (5 / 2 = 2)",
+    "groupId": "math_practice",
+    "orderInGroup": 1,
+    "globalOrder": 436
+  },
+  {
+    "id": 437,
+    "title": "Дійсне ділення",
+    "description": "Якщо хоча б один операнд — тип double або float, результат буде дробовим (5.0 / 2 = 2.5)",
+    "groupId": "math_practice",
+    "orderInGroup": 2,
+    "globalOrder": 437
+  },
+  {
+    "id": 438,
+    "title": "Оператор % (остача від ділення)",
+    "description": "Повертає залишок від ділення (5 % 2 = 1)",
+    "groupId": "math_practice",
+    "orderInGroup": 3,
+    "globalOrder": 438
+  },
+  {
+    "id": 439,
+    "title": "Модуль числа (Math.Abs)",
+    "description": "Повертає абсолютне значення (модуль) числа, наприклад: Math.Abs(-5) = 5",
+    "groupId": "math_practice",
+    "orderInGroup": 4,
+    "globalOrder": 439
+  },
+  {
+    "id": 440,
+    "title": "Округлення до цілого (Math.Round)",
+    "description": "Округлення до найближчого цілого: Math.Round(2.6) = 3",
+    "groupId": "math_practice",
+    "orderInGroup": 5,
+    "globalOrder": 440
+  },
+  {
+    "id": 441,
+    "title": "Округлення вниз (Math.Floor)",
+    "description": "Округлює число в менший бік: Math.Floor(2.9) = 2",
+    "groupId": "math_practice",
+    "orderInGroup": 6,
+    "globalOrder": 441
+  },
+  {
+    "id": 442,
+    "title": "Округлення вгору (Math.Ceiling)",
+    "description": "Округлює число в більший бік: Math.Ceiling(2.1) = 3",
+    "groupId": "math_practice",
+    "orderInGroup": 7,
+    "globalOrder": 442
+  },
+  {
+    "id": 443,
+    "title": "Піднесення до степеня (Math.Pow)",
+    "description": "Math.Pow(2, 3) = 8 — підносить число до заданого степеня",
+    "groupId": "math_practice",
+    "orderInGroup": 8,
+    "globalOrder": 443
+  },
+  {
+    "id": 444,
+    "title": "Квадратний корінь (Math.Sqrt)",
+    "description": "Math.Sqrt(9) = 3 — обчислює квадратний корінь",
+    "groupId": "math_practice",
+    "orderInGroup": 9,
+    "globalOrder": 444
+  },
+  {
+    "id": 445,
+    "title": "Мінімум і максимум (Math.Min, Math.Max)",
+    "description": "Повертає менше або більше з двох чисел: Math.Min(3, 5) = 3",
+    "groupId": "math_practice",
+    "orderInGroup": 10,
+    "globalOrder": 445
+  },
+  {
+    "id": 446,
+    "title": "Тригонометричні функції (Math.Sin, Math.Cos)",
+    "description": "Math.Sin(x) і Math.Cos(x) — обчислюють синус і косинус для заданого кута (в радіанах)",
+    "groupId": "math_practice",
+    "orderInGroup": 11,
+    "globalOrder": 446
+  },
+  {
+    "id": 447,
+    "title": "Генерація випадкових чисел (Random)",
+    "description": "Клас Random використовується для генерації псевдовипадкових чисел",
+    "groupId": "math_practice",
+    "orderInGroup": 12,
+    "globalOrder": 447
+  },
+  {
+    "id": 448,
+    "title": "random.Next()",
+    "description": "Повертає випадкове ціле число у заданому діапазоні: random.Next(1, 10)",
+    "groupId": "math_practice",
+    "orderInGroup": 13,
+    "globalOrder": 448
+  },
+  {
+    "id": 449,
+    "title": "random.NextDouble()",
+    "description": "Повертає випадкове число типу double від 0.0 до 1.0",
+    "groupId": "math_practice",
+    "orderInGroup": 14,
+    "globalOrder": 449
+  },
+  {
+    "id": 450,
+    "title": "Переповнення типів",
+    "description": "Коли число перевищує діапазон типу (наприклад, byte + 1 = 0), виникає переповнення",
+    "groupId": "math_practice",
+    "orderInGroup": 15,
+    "globalOrder": 450
+  },
+  {
+    "id": 451,
+    "title": "Оператор checked",
+    "description": "Застосовується для виявлення переповнення і генерації помилки: checked { byte x = 255 + 1; }",
+    "groupId": "math_practice",
+    "orderInGroup": 16,
+    "globalOrder": 451
+  },
+  {
+    "id": 452,
+    "title": "Оператор unchecked",
+    "description": "Ігнорує переповнення і не викликає помилку (за замовчуванням)",
+    "groupId": "math_practice",
+    "orderInGroup": 17,
+    "globalOrder": 452
+  },
+  {
+    "id": 453,
+    "title": "Математична константа π (Pi)",
+    "description": "Число Pi (π ≈ 3.14159) — відношення довжини кола до його діаметра. В C#: Math.PI",
+    "groupId": "math_practice",
+    "orderInGroup": 18,
+    "globalOrder": 453
+  },
+  {
+    "id": 454,
+    "title": "Використання Math.PI",
+    "description": "Math.PI застосовується для розрахунків у геометрії, тригонометрії та фізиці",
+    "groupId": "math_practice",
+    "orderInGroup": 19,
+    "globalOrder": 454
+  },
+  {
+    "id": 455,
+    "title": "Математична константа e",
+    "description": "Число e (≈ 2.71828) — основа натурального логарифма. В C#: Math.E",
+    "groupId": "math_practice",
+    "orderInGroup": 20,
+    "globalOrder": 455
+  },
+  {
+    "id": 456,
+    "title": "Використання Math.E",
+    "description": "Math.E застосовується у фінансових обчисленнях, експоненційному зростанні, моделюванні",
+    "groupId": "math_practice",
+    "orderInGroup": 21,
+    "globalOrder": 456
+  },
+  {
+    "id": 457,
+    "title": "Поняття логарифма",
+    "description": "Логарифм — обернена функція до експоненційної: log_b(x) — степінь, до якого треба піднести b, щоб отримати x",
+    "groupId": "math_practice",
+    "orderInGroup": 22,
+    "globalOrder": 457
+  },
+  {
+    "id": 458,
+    "title": "Натуральний логарифм (Math.Log)",
+    "description": "Math.Log(x) повертає натуральний логарифм (по основі e)",
+    "groupId": "math_practice",
+    "orderInGroup": 23,
+    "globalOrder": 458
+  },
+  {
+    "id": 459,
+    "title": "Логарифм за основою 10 (Math.Log10)",
+    "description": "Math.Log10(x) повертає десятковий логарифм (по основі 10)",
+    "groupId": "math_practice",
+    "orderInGroup": 24,
+    "globalOrder": 459
+  },
+  {
+    "id": 460,
+    "title": "Експоненційна функція (Math.Exp)",
+    "description": "Math.Exp(x) повертає e в степені x — експоненту: e^x",
+    "groupId": "math_practice",
+    "orderInGroup": 25,
+    "globalOrder": 460
+  },
+  {
+    "id": 461,
+    "title": "Практичне застосування логарифмів",
+    "description": "Логарифми використовують у складних обчисленнях, алгоритмах, фінансах, машинному навчанні",
+    "groupId": "math_practice",
+    "orderInGroup": 26,
+    "globalOrder": 461
+  },
+  {
+    "id": 462,
+    "title": "Обробка Math.Log(0) та Math.Log(відʼємне)",
+    "description": "Math.Log(0) повертає -Infinity, а Math.Log від відʼємного — NaN (не число)",
+    "groupId": "math_practice",
+    "orderInGroup": 27,
+    "globalOrder": 462
+  },
+  {
+    "id": 463,
+    "title": "Що таке структура даних",
+    "description": "Спосіб організації та зберігання даних для ефективного доступу та модифікації",
+    "groupId": "collections",
+    "orderInGroup": 1,
+    "globalOrder": 463
+  },
+  {
+    "id": 464,
+    "title": "Масиви (Array)",
+    "description": "Фіксована структура з однаковим типом елементів, оголошується через `type[]`",
+    "groupId": "collections",
+    "orderInGroup": 2,
+    "globalOrder": 464
+  },
+  {
+    "id": 465,
+    "title": "Динамічний список (List<T>)",
+    "description": "Колекція змінної довжини, яка підтримує додавання, видалення і сортування елементів",
+    "groupId": "collections",
+    "orderInGroup": 3,
+    "globalOrder": 465
+  },
+  {
+    "id": 466,
+    "title": "Ініціалізація List<T>",
+    "description": "List<int> numbers = new List<int> {1, 2, 3}; — створення та заповнення списку",
+    "groupId": "collections",
+    "orderInGroup": 4,
+    "globalOrder": 466
+  },
+  {
+    "id": 467,
+    "title": "Методи List<T>",
+    "description": "Add, Remove, Contains, Count, Sort — основні методи роботи зі списком",
+    "groupId": "collections",
+    "orderInGroup": 5,
+    "globalOrder": 467
+  },
+  {
+    "id": 468,
+    "title": "Черга (Queue<T>)",
+    "description": "Структура 'першим прийшов — першим обслужений' (FIFO). Методи: Enqueue, Dequeue",
+    "groupId": "collections",
+    "orderInGroup": 6,
+    "globalOrder": 468
+  },
+  {
+    "id": 469,
+    "title": "Стек (Stack<T>)",
+    "description": "Структура 'останній прийшов — перший обслужений' (LIFO). Методи: Push, Pop, Peek",
+    "groupId": "collections",
+    "orderInGroup": 7,
+    "globalOrder": 469
+  },
+  {
+    "id": 470,
+    "title": "Словник (Dictionary<TKey, TValue>)",
+    "description": "Колекція пар 'ключ-значення'. Швидкий доступ за ключем",
+    "groupId": "collections",
+    "orderInGroup": 8,
+    "globalOrder": 470
+  },
+  {
+    "id": 471,
+    "title": "Перевірка наявності ключа у Dictionary",
+    "description": "Метод ContainsKey дозволяє перевірити, чи існує заданий ключ",
+    "groupId": "collections",
+    "orderInGroup": 9,
+    "globalOrder": 471
+  },
+  {
+    "id": 472,
+    "title": "Коли використовувати масив, а коли список?",
+    "description": "Масив — для фіксованого обсягу, список — для змінної кількості елементів",
+    "groupId": "collections",
+    "orderInGroup": 10,
+    "globalOrder": 472
+  },
+  {
+    "id": 473,
+    "title": "Чим відрізняється Stack від Queue?",
+    "description": "Stack працює за принципом LIFO, Queue — FIFO",
+    "groupId": "collections",
+    "orderInGroup": 11,
+    "globalOrder": 473
+  },
+  {
+    "id": 474,
+    "title": "Перебір елементів колекцій",
+    "description": "foreach використовується для перебору всіх елементів у List, Queue, Stack або Dictionary",
+    "groupId": "collections",
+    "orderInGroup": 12,
+    "globalOrder": 474
+  },
+  {
+    "id": 475,
+    "title": "Очищення структури даних",
+    "description": "List.Clear(), Queue.Clear(), Stack.Clear(), Dictionary.Clear() — видаляють усі елементи",
+    "groupId": "collections",
+    "orderInGroup": 13,
+    "globalOrder": 475
+  },
+  {
+    "id": 476,
+    "title": "Константи (const)",
+    "description": "Змінні, значення яких не змінюється після оголошення. Присвоюється одразу. Приклад: const double Pi = 3.14;",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 1,
+    "globalOrder": 476
+  },
+  {
+    "id": 477,
+    "title": "Тільки для читання (readonly)",
+    "description": "Змінні, значення яких можна задати лише в конструкторі або при оголошенні. Приклад: readonly int id;",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 2,
+    "globalOrder": 477
+  },
+  {
+    "id": 478,
+    "title": "Значення за замовчуванням (default)",
+    "description": "Оператор default дозволяє отримати стандартне значення типу: default(int) → 0, default(bool) → false",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 3,
+    "globalOrder": 478
+  },
+  {
+    "id": 479,
+    "title": "Неявне оголошення змінної (var)",
+    "description": "Тип змінної визначається автоматично компілятором за значенням. var name = \"Test\" → string",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 4,
+    "globalOrder": 479
+  },
+  {
+    "id": 480,
+    "title": "Динамічний тип (dynamic)",
+    "description": "Тип змінної визначається лише під час виконання. Зручно, але менш безпечно",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 5,
+    "globalOrder": 480
+  },
+  {
+    "id": 481,
+    "title": "Отримання типу (typeof)",
+    "description": "typeof(string) повертає об’єкт типу Type, що описує тип string",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 6,
+    "globalOrder": 481
+  },
+  {
+    "id": 482,
+    "title": "Перелічення (enum)",
+    "description": "Тип, який задає набір іменованих констант. Приклад: enum Day { Monday, Tuesday }",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 7,
+    "globalOrder": 482
+  },
+  {
+    "id": 483,
+    "title": "Структура (struct)",
+    "description": "Створення власних простих типів значення з декількох полів. Приклад: struct Point { int x; int y; }",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 8,
+    "globalOrder": 483
+  },
+  {
+    "id": 484,
+    "title": "Простори імен (namespace)",
+    "description": "Групування пов’язаних класів. Дозволяє уникати конфліктів назв",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 9,
+    "globalOrder": 484
+  },
+  {
+    "id": 485,
+    "title": "Коментарі однорядкові (//)",
+    "description": "Коментар, що займає один рядок і починається з //",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 10,
+    "globalOrder": 485
+  },
+  {
+    "id": 486,
+    "title": "Коментарі багаторядкові (/* */)",
+    "description": "Охоплюють декілька рядків, наприклад: /* коментар */",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 11,
+    "globalOrder": 486
+  },
+  {
+    "id": 487,
+    "title": "XML-коментарі (///)",
+    "description": "Коментарі для автогенерації документації. /// <summary>Опис функції</summary>",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 12,
+    "globalOrder": 487
+  },
+  {
+    "id": 488,
+    "title": "Форматування коду",
+    "description": "Охайне розташування відступів, дужок, назв для зручності читання",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 13,
+    "globalOrder": 488
+  },
+  {
+    "id": 489,
+    "title": "Стиль назв (casing)",
+    "description": "camelCase для змінних і параметрів, PascalCase — для класів і методів",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 14,
+    "globalOrder": 489
+  },
+  {
+    "id": 490,
+    "title": "Читабельність коду",
+    "description": "Пояснювальні назви змінних, розбиття на функції, коментарі",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 15,
+    "globalOrder": 490
+  },
+  {
+    "id": 491,
+    "title": "Автодоповнення в Visual Studio",
+    "description": "Підказки IntelliSense дозволяють швидше писати код і уникати помилок",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 16,
+    "globalOrder": 491
+  },
+  {
+    "id": 492,
+    "title": "Гарячі клавіші VS / VS Code",
+    "description": "F5 — запуск, Ctrl+K+C — коментар, Ctrl+Shift+B — збірка",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 17,
+    "globalOrder": 492
+  },
+  {
+    "id": 493,
+    "title": "Налагодження (Debugging)",
+    "description": "Використання breakpoint, перегляд змінних, крокове виконання",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 18,
+    "globalOrder": 493
+  },
+  {
+    "id": 494,
+    "title": "Формування .exe-файлу",
+    "description": "C# компілюється у проміжну мову IL, яка запускається через CLR як .exe",
+    "groupId": "language_basics_and_code_style",
+    "orderInGroup": 19,
+    "globalOrder": 494
+  },
+  {
+    "id": 495,
+    "title": "Етапи виконання програми C#",
+    "description": "Код → компіляція в IL → JIT-компіляція → виконання .exe",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 1,
+    "globalOrder": 495
+  },
+  {
+    "id": 496,
+    "title": "Лінійний пошук у масиві",
+    "description": "Поелементна перевірка кожного елемента для пошуку значення",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 2,
+    "globalOrder": 496
+  },
+  {
+    "id": 497,
+    "title": "Бінарний пошук",
+    "description": "Пошук у відсортованому масиві методом ділення навпіл",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 3,
+    "globalOrder": 497
+  },
+  {
+    "id": 498,
+    "title": "Сортування методом обміну (bubble sort)",
+    "description": "Простий алгоритм сортування шляхом попарного обміну елементів",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 4,
+    "globalOrder": 498
+  },
+  {
+    "id": 499,
+    "title": "Сортування вставками",
+    "description": "Вставляння елементів у вже відсортовану частину масиву",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 5,
+    "globalOrder": 499
+  },
+  {
+    "id": 500,
+    "title": "Що таке вихідний код",
+    "description": "Програмний код, написаний людиною на мові програмування (наприклад, C#), який компілюється у виконуваний файл",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 6,
+    "globalOrder": 500
+  },
+  {
+    "id": 501,
+    "title": "Процес компіляції",
+    "description": "Перетворення вихідного коду у проміжний байткод (IL) за допомогою компілятора",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 7,
+    "globalOrder": 501
+  },
+  {
+    "id": 502,
+    "title": "Формування .exe-файлу",
+    "description": "Компільований C# код зберігається у .exe або .dll — це контейнер з IL-кодом",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 8,
+    "globalOrder": 502
+  },
+  {
+    "id": 503,
+    "title": "Що таке проміжна мова (IL)",
+    "description": "Intermediate Language — код, який створюється після компіляції C# і виконується CLR",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 9,
+    "globalOrder": 503
+  },
+  {
+    "id": 504,
+    "title": "Роль CLR (Common Language Runtime)",
+    "description": "Віртуальна машина, яка JIT-компілює IL у машинний код і виконує його",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 10,
+    "globalOrder": 504
+  },
+  {
+    "id": 505,
+    "title": "Етапи виконання C# програми",
+    "description": "Код → компіляція в IL → JIT → машинний код → виконання .exe",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 11,
+    "globalOrder": 505
+  },
+  {
+    "id": 506,
+    "title": "Різниця між компіляцією та інтерпретацією",
+    "description": "Компіляція — попереднє перетворення всього коду, інтерпретація — построкове виконання",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 12,
+    "globalOrder": 506
+  },
+  {
+    "id": 507,
+    "title": "Переваги компіляції",
+    "description": "Швидке виконання, виявлення помилок до запуску, генерація виконуваних файлів",
+    "groupId": "compilation_runtime",
+    "orderInGroup": 13,
+    "globalOrder": 507
+  },
+  {
+    "id": 508,
+    "title": "Булевий тип",
+    "description": "Тип даних, що приймає лише два значення: true або false.",
+    "groupId": "glossary",
+    "orderInGroup": 1,
+    "globalOrder": 508
+  },
+  {
+    "id": 509,
+    "title": "Диз'юнкція",
+    "description": "Логічна операція «АБО», яка повертає true, якщо хоча б один з операндів є true.",
+    "groupId": "glossary",
+    "orderInGroup": 2,
+    "globalOrder": 509
+  },
+  {
+    "id": 510,
+    "title": "Закон де Моргана",
+    "description": "Закони, що описують зв’язок між запереченням кон’юнкції та диз’юнкції.",
+    "groupId": "glossary",
+    "orderInGroup": 3,
+    "globalOrder": 510
+  },
+  {
+    "id": 511,
+    "title": "Заперечення",
+    "description": "Логічна операція, яка змінює значення булевого виразу на протилежне.",
+    "groupId": "glossary",
+    "orderInGroup": 4,
+    "globalOrder": 511
+  },
+  {
+    "id": 512,
+    "title": "Змінні",
+    "description": "Іменовані області пам’яті, що зберігають значення різних типів.",
+    "groupId": "glossary",
+    "orderInGroup": 5,
+    "globalOrder": 512
+  },
+  {
+    "id": 513,
+    "title": "Класи",
+    "description": "Шаблони для створення об’єктів, які інкапсулюють дані та методи.",
+    "groupId": "glossary",
+    "orderInGroup": 6,
+    "globalOrder": 513
+  },
+  {
+    "id": 514,
+    "title": "Кон'юнкція",
+    "description": "Логічна операція «І», яка повертає true лише тоді, коли обидва операнди є true.",
+    "groupId": "glossary",
+    "orderInGroup": 7,
+    "globalOrder": 514
+  },
+  {
+    "id": 515,
+    "title": "Конструкції розгалуження",
+    "description": "Оператори умовного виконання коду, такі як if, else, switch.",
+    "groupId": "glossary",
+    "orderInGroup": 8,
+    "globalOrder": 515
+  },
+  {
+    "id": 516,
+    "title": "Масиви",
+    "description": "Структура даних, яка дозволяє зберігати набір значень одного типу.",
+    "groupId": "glossary",
+    "orderInGroup": 9,
+    "globalOrder": 516
+  },
+  {
+    "id": 517,
+    "title": "Методи",
+    "description": "Функції, що належать до класів або об’єктів.",
+    "groupId": "glossary",
+    "orderInGroup": 10,
+    "globalOrder": 517
+  },
+  {
+    "id": 518,
+    "title": "Методи класу",
+    "description": "Функції, визначені в межах класу, що працюють з його даними.",
+    "groupId": "glossary",
+    "orderInGroup": 11,
+    "globalOrder": 518
+  },
+  {
+    "id": 519,
+    "title": "Обʼєкти",
+    "description": "Екземпляри класів, які містять дані та методи.",
+    "groupId": "glossary",
+    "orderInGroup": 12,
+    "globalOrder": 519
+  },
+  {
+    "id": 520,
+    "title": "Оголошення змінних",
+    "description": "Визначення нових змінних у програмі із зазначенням типу або без.",
+    "groupId": "glossary",
+    "orderInGroup": 13,
+    "globalOrder": 520
+  },
+  {
+    "id": 521,
+    "title": "Операції над булевими значеннями",
+    "description": "Дії, які можна виконувати над булевими значеннями (&&, ||, !).",
+    "groupId": "glossary",
+    "orderInGroup": 14,
+    "globalOrder": 521
+  },
+  {
+    "id": 522,
+    "title": "Операції порівняння",
+    "description": "Оператори, що порівнюють два значення, наприклад ==, !=, <, >.",
+    "groupId": "glossary",
+    "orderInGroup": 15,
+    "globalOrder": 522
+  },
+  {
+    "id": 523,
+    "title": "Операції з числами",
+    "description": "Арифметичні операції над цілими та дійсними числами.",
+    "groupId": "glossary",
+    "orderInGroup": 16,
+    "globalOrder": 523
+  },
+  {
+    "id": 524,
+    "title": "Оператори",
+    "description": "Символи або ключові слова для виконання операцій у виразах.",
+    "groupId": "glossary",
+    "orderInGroup": 17,
+    "globalOrder": 524
+  },
+  {
+    "id": 525,
+    "title": "Перевизначення методів",
+    "description": "Процес повторного визначення методу в похідному класі.",
+    "groupId": "glossary",
+    "orderInGroup": 18,
+    "globalOrder": 525
+  },
+  {
+    "id": 526,
+    "title": "Перетворення bool у int",
+    "description": "Автоматичне або явне приведення булевого значення до цілого.",
+    "groupId": "glossary",
+    "orderInGroup": 19,
+    "globalOrder": 526
+  },
+  {
+    "id": 527,
+    "title": "Рекурсія",
+    "description": "Метод, при якому функція викликає сама себе.",
+    "groupId": "glossary",
+    "orderInGroup": 20,
+    "globalOrder": 527
+  },
+  {
+    "id": 528,
+    "title": "Типи даних",
+    "description": "Категорії значень, що визначають, які операції можна з ними виконувати.",
+    "groupId": "glossary",
+    "orderInGroup": 21,
+    "globalOrder": 528
+  },
+  {
+    "id": 529,
+    "title": "Цикли",
+    "description": "Конструкції, що дозволяють повторювати виконання коду певну кількість разів.",
+    "groupId": "glossary",
+    "orderInGroup": 22,
+    "globalOrder": 529
+  },
+  {
+    "id": 530,
+    "title": "Цілі типи",
+    "description": "Типи даних для зберігання цілих чисел.",
+    "groupId": "glossary",
+    "orderInGroup": 23,
+    "globalOrder": 530
+  },
+  {
+    "id": 531,
+    "title": "Реальні типи",
+    "description": "Типи даних для зберігання чисел із плаваючою крапкою.",
+    "groupId": "glossary",
+    "orderInGroup": 24,
+    "globalOrder": 531
+  },
+  {
+    "id": 532,
+    "title": "ToString() для обʼєктів",
+    "description": "Метод для отримання строкового представлення обʼєкта.",
+    "groupId": "glossary",
+    "orderInGroup": 25,
+    "globalOrder": 532
+  },
+  {
+    "id": 533,
+    "title": "Факторіал",
+    "description": "Функція, яка обчислює добуток усіх натуральних чисел до заданого.",
+    "groupId": "glossary",
+    "orderInGroup": 26,
+    "globalOrder": 533
+  },
+  {
+    "id": 534,
+    "title": "Фібоначчі",
+    "description": "Послідовність, у якій кожне число дорівнює сумі двох попередніх.",
+    "groupId": "glossary",
+    "orderInGroup": 27,
+    "globalOrder": 534
+  }
+]

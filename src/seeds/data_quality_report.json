@@ -1,0 +1,2710 @@
+{
+  "source": {
+    "topicsCount": 534,
+    "rawConnectionsCount": 997
+  },
+  "generated": {
+    "groupsCount": 30,
+    "topicsWithGroupsCount": 534,
+    "cleanConnectionsCount": 981,
+    "groupConnectionsCount": 71
+  },
+  "duplicatesByTitle": [
+    {
+      "title": "Тип string",
+      "topicIds": [
+        15,
+        169
+      ]
+    },
+    {
+      "title": "Рекурсивна функція",
+      "topicIds": [
+        86,
+        198
+      ]
+    },
+    {
+      "title": "Багатовимірний масив",
+      "topicIds": [
+        112,
+        121
+      ]
+    },
+    {
+      "title": "Покажчики в C#",
+      "topicIds": [
+        138,
+        181
+      ]
+    },
+    {
+      "title": "Struct як тип значення",
+      "topicIds": [
+        157,
+        183
+      ]
+    },
+    {
+      "title": "Boxing",
+      "topicIds": [
+        179,
+        380
+      ]
+    },
+    {
+      "title": "Unboxing",
+      "topicIds": [
+        180,
+        381
+      ]
+    },
+    {
+      "title": "Регулярні вирази",
+      "topicIds": [
+        284,
+        285
+      ]
+    },
+    {
+      "title": "int.Parse()",
+      "topicIds": [
+        378,
+        408
+      ]
+    },
+    {
+      "title": "int.TryParse()",
+      "topicIds": [
+        379,
+        409
+      ]
+    },
+    {
+      "title": "Перетворення bool у int",
+      "topicIds": [
+        384,
+        526
+      ]
+    },
+    {
+      "title": "ToString() для обʼєктів",
+      "topicIds": [
+        385,
+        532
+      ]
+    },
+    {
+      "title": "Формування .exe-файлу",
+      "topicIds": [
+        494,
+        502
+      ]
+    }
+  ],
+  "missingConnections": [
+    {
+      "index": 198,
+      "from": "Види потоків у C#",
+      "to": "NetworkStream",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 282,
+      "from": "Округлення чисел",
+      "to": "Math.Round()",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 283,
+      "from": "Математичні функції",
+      "to": "Math.Round()",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 302,
+      "from": "Множення та переповнення",
+      "to": "checked",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 320,
+      "from": "Вимірювання часу виконання",
+      "to": "Stopwatch",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 369,
+      "from": "Queue<T>",
+      "to": "Чим відрізняється Stack від Queue?",
+      "missingFrom": true,
+      "missingTo": false
+    },
+    {
+      "index": 370,
+      "from": "Stack<T>",
+      "to": "Чим відрізняється Stack від Queue?",
+      "missingFrom": true,
+      "missingTo": false
+    },
+    {
+      "index": 372,
+      "from": "Перебір елементів колекцій",
+      "to": "foreach використовується для перебору всіх елементів",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 373,
+      "from": "Очищення структури даних",
+      "to": "List<T>",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 374,
+      "from": "Очищення структури даних",
+      "to": "Queue<T>",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 375,
+      "from": "Очищення структури даних",
+      "to": "Stack<T>",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 376,
+      "from": "Очищення структури даних",
+      "to": "Dictionary<TKey, TValue>",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 377,
+      "from": "Константи (const)",
+      "to": "Типи значення",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 378,
+      "from": "Значення за замовчуванням (default)",
+      "to": "Типи значення",
+      "missingFrom": false,
+      "missingTo": true
+    },
+    {
+      "index": 392,
+      "from": "Цілі типи",
+      "to": "Перетворення типів",
+      "missingFrom": false,
+      "missingTo": true
+    }
+  ],
+  "ambiguousConnectionsResolvedByFirstTopicId": [
+    {
+      "index": 10,
+      "from": "Тип char",
+      "to": "Тип string",
+      "fromCandidates": [
+        14
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 14,
+      "usedTo": 15
+    },
+    {
+      "index": 70,
+      "from": "Поняття рекурсії",
+      "to": "Рекурсивна функція",
+      "fromCandidates": [
+        85
+      ],
+      "toCandidates": [
+        86,
+        198
+      ],
+      "usedFrom": 85,
+      "usedTo": 86
+    },
+    {
+      "index": 71,
+      "from": "Рекурсивна функція",
+      "to": "Базовий випадок рекурсії",
+      "fromCandidates": [
+        86,
+        198
+      ],
+      "toCandidates": [
+        87
+      ],
+      "usedFrom": 86,
+      "usedTo": 87
+    },
+    {
+      "index": 95,
+      "from": "Масив булевих значень",
+      "to": "Багатовимірний масив",
+      "fromCandidates": [
+        111
+      ],
+      "toCandidates": [
+        112,
+        121
+      ],
+      "usedFrom": 111,
+      "usedTo": 112
+    },
+    {
+      "index": 96,
+      "from": "Багатовимірний масив",
+      "to": "Ступінчастий масив (jagged)",
+      "fromCandidates": [
+        112,
+        121
+      ],
+      "toCandidates": [
+        113
+      ],
+      "usedFrom": 112,
+      "usedTo": 113
+    },
+    {
+      "index": 104,
+      "from": "Розмір масиву в памʼяті",
+      "to": "Багатовимірний масив",
+      "fromCandidates": [
+        120
+      ],
+      "toCandidates": [
+        112,
+        121
+      ],
+      "usedFrom": 120,
+      "usedTo": 112
+    },
+    {
+      "index": 105,
+      "from": "Багатовимірний масив",
+      "to": "Зберігання багатовимірного масиву",
+      "fromCandidates": [
+        112,
+        121
+      ],
+      "toCandidates": [
+        122
+      ],
+      "usedFrom": 112,
+      "usedTo": 122
+    },
+    {
+      "index": 117,
+      "from": "Оператор dereference (*)",
+      "to": "Покажчики в C#",
+      "fromCandidates": [
+        136
+      ],
+      "toCandidates": [
+        138,
+        181
+      ],
+      "usedFrom": 136,
+      "usedTo": 138
+    },
+    {
+      "index": 118,
+      "from": "Покажчики в C#",
+      "to": "Стекова памʼять",
+      "fromCandidates": [
+        138,
+        181
+      ],
+      "toCandidates": [
+        139
+      ],
+      "usedFrom": 138,
+      "usedTo": 139
+    },
+    {
+      "index": 119,
+      "from": "Покажчики в C#",
+      "to": "Купа (heap)",
+      "fromCandidates": [
+        138,
+        181
+      ],
+      "toCandidates": [
+        140
+      ],
+      "usedFrom": 138,
+      "usedTo": 140
+    },
+    {
+      "index": 126,
+      "from": "Поняття структури",
+      "to": "Struct як тип значення",
+      "fromCandidates": [
+        151
+      ],
+      "toCandidates": [
+        157,
+        183
+      ],
+      "usedFrom": 151,
+      "usedTo": 157
+    },
+    {
+      "index": 129,
+      "from": "Struct як тип значення",
+      "to": "Struct і значення за замовчуванням",
+      "fromCandidates": [
+        157,
+        183
+      ],
+      "toCandidates": [
+        161
+      ],
+      "usedFrom": 157,
+      "usedTo": 161
+    },
+    {
+      "index": 130,
+      "from": "Struct як тип значення",
+      "to": "Копіювання структур",
+      "fromCandidates": [
+        157,
+        183
+      ],
+      "toCandidates": [
+        162
+      ],
+      "usedFrom": 157,
+      "usedTo": 162
+    },
+    {
+      "index": 132,
+      "from": "Struct і null",
+      "to": "Struct як тип значення",
+      "fromCandidates": [
+        165
+      ],
+      "toCandidates": [
+        157,
+        183
+      ],
+      "usedFrom": 165,
+      "usedTo": 157
+    },
+    {
+      "index": 137,
+      "from": "Тип значення",
+      "to": "Struct як тип значення",
+      "fromCandidates": [
+        167
+      ],
+      "toCandidates": [
+        157,
+        183
+      ],
+      "usedFrom": 167,
+      "usedTo": 157
+    },
+    {
+      "index": 140,
+      "from": "Тип посилання",
+      "to": "Покажчики в C#",
+      "fromCandidates": [
+        168
+      ],
+      "toCandidates": [
+        138,
+        181
+      ],
+      "usedFrom": 168,
+      "usedTo": 138
+    },
+    {
+      "index": 141,
+      "from": "Struct як тип значення",
+      "to": "Передача за значенням",
+      "fromCandidates": [
+        157,
+        183
+      ],
+      "toCandidates": [
+        173
+      ],
+      "usedFrom": 157,
+      "usedTo": 173
+    },
+    {
+      "index": 146,
+      "from": "Модифікатор ref",
+      "to": "Struct як тип значення",
+      "fromCandidates": [
+        175
+      ],
+      "toCandidates": [
+        157,
+        183
+      ],
+      "usedFrom": 175,
+      "usedTo": 157
+    },
+    {
+      "index": 150,
+      "from": "Покажчики в C#",
+      "to": "Struct як тип значення",
+      "fromCandidates": [
+        138,
+        181
+      ],
+      "toCandidates": [
+        157,
+        183
+      ],
+      "usedFrom": 138,
+      "usedTo": 157
+    },
+    {
+      "index": 167,
+      "from": "Поняття функції (методу)",
+      "to": "Рекурсивна функція",
+      "fromCandidates": [
+        184
+      ],
+      "toCandidates": [
+        86,
+        198
+      ],
+      "usedFrom": 184,
+      "usedTo": 86
+    },
+    {
+      "index": 237,
+      "from": "Пошук у рядку",
+      "to": "Регулярні вирази",
+      "fromCandidates": [
+        283
+      ],
+      "toCandidates": [
+        284,
+        285
+      ],
+      "usedFrom": 283,
+      "usedTo": 284
+    },
+    {
+      "index": 238,
+      "from": "Регулярні вирази",
+      "to": "Клас Regex у C#",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        286
+      ],
+      "usedFrom": 284,
+      "usedTo": 286
+    },
+    {
+      "index": 243,
+      "from": "Регулярні вирази",
+      "to": "Метасимвол . (крапка)",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        291
+      ],
+      "usedFrom": 284,
+      "usedTo": 291
+    },
+    {
+      "index": 244,
+      "from": "Регулярні вирази",
+      "to": "Квантифікатори *, +, ?",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        292
+      ],
+      "usedFrom": 284,
+      "usedTo": 292
+    },
+    {
+      "index": 245,
+      "from": "Регулярні вирази",
+      "to": "Фігурні дужки {n,m}",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        293
+      ],
+      "usedFrom": 284,
+      "usedTo": 293
+    },
+    {
+      "index": 246,
+      "from": "Регулярні вирази",
+      "to": "Класи символів [abc]",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        294
+      ],
+      "usedFrom": 284,
+      "usedTo": 294
+    },
+    {
+      "index": 247,
+      "from": "Регулярні вирази",
+      "to": "Діапазони [a-z]",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        295
+      ],
+      "usedFrom": 284,
+      "usedTo": 295
+    },
+    {
+      "index": 248,
+      "from": "Регулярні вирази",
+      "to": "Інверсія класу символів [^0-9]",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        296
+      ],
+      "usedFrom": 284,
+      "usedTo": 296
+    },
+    {
+      "index": 249,
+      "from": "Регулярні вирази",
+      "to": "Префікси \\d, \\w, \\s",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        297
+      ],
+      "usedFrom": 284,
+      "usedTo": 297
+    },
+    {
+      "index": 250,
+      "from": "Регулярні вирази",
+      "to": "Якір ^ і $",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        298
+      ],
+      "usedFrom": 284,
+      "usedTo": 298
+    },
+    {
+      "index": 251,
+      "from": "Регулярні вирази",
+      "to": "Групи ( ... )",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        299
+      ],
+      "usedFrom": 284,
+      "usedTo": 299
+    },
+    {
+      "index": 252,
+      "from": "Регулярні вирази",
+      "to": "Альтернація |",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        300
+      ],
+      "usedFrom": 284,
+      "usedTo": 300
+    },
+    {
+      "index": 253,
+      "from": "Регулярні вирази",
+      "to": "Екранування спеціальних символів",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        301
+      ],
+      "usedFrom": 284,
+      "usedTo": 301
+    },
+    {
+      "index": 254,
+      "from": "Регулярні вирази",
+      "to": "Приклади використання",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        302
+      ],
+      "usedFrom": 284,
+      "usedTo": 302
+    },
+    {
+      "index": 255,
+      "from": "Регулярні вирази",
+      "to": "RegexOptions",
+      "fromCandidates": [
+        284,
+        285
+      ],
+      "toCandidates": [
+        303
+      ],
+      "usedFrom": 284,
+      "usedTo": 303
+    },
+    {
+      "index": 381,
+      "from": "Структура (struct)",
+      "to": "Struct як тип значення",
+      "fromCandidates": [
+        483
+      ],
+      "toCandidates": [
+        157,
+        183
+      ],
+      "usedFrom": 483,
+      "usedTo": 157
+    },
+    {
+      "index": 393,
+      "from": "Булевий тип",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        508
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 508,
+      "usedTo": 384
+    },
+    {
+      "index": 394,
+      "from": "Перетворення bool у int",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        384,
+        526
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 384,
+      "usedTo": 385
+    },
+    {
+      "index": 397,
+      "from": "Методи класу",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        518
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 518,
+      "usedTo": 385
+    },
+    {
+      "index": 405,
+      "from": "Методи класу",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        518
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 518,
+      "usedTo": 385
+    },
+    {
+      "index": 410,
+      "from": "ToString() для обʼєктів",
+      "to": "Перевизначення методів",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        525
+      ],
+      "usedFrom": 385,
+      "usedTo": 525
+    },
+    {
+      "index": 426,
+      "from": "OverflowException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        366
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 366,
+      "usedTo": 379
+    },
+    {
+      "index": 440,
+      "from": "Boxing",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 179,
+      "usedTo": 379
+    },
+    {
+      "index": 441,
+      "from": "Boxing",
+      "to": "Перетворення між char і int",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        383
+      ],
+      "usedFrom": 179,
+      "usedTo": 383
+    },
+    {
+      "index": 442,
+      "from": "Boxing",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 179,
+      "usedTo": 378
+    },
+    {
+      "index": 443,
+      "from": "Boxing",
+      "to": "Перетворення float у int",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        387
+      ],
+      "usedFrom": 179,
+      "usedTo": 387
+    },
+    {
+      "index": 444,
+      "from": "Boxing",
+      "to": "Тип int",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        11
+      ],
+      "usedFrom": 179,
+      "usedTo": 11
+    },
+    {
+      "index": 445,
+      "from": "Boxing",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 179,
+      "usedTo": 384
+    },
+    {
+      "index": 446,
+      "from": "Boxing",
+      "to": "Крокове виконання (Step Over, Step Into)",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        424
+      ],
+      "usedFrom": 179,
+      "usedTo": 424
+    },
+    {
+      "index": 447,
+      "from": "Boxing",
+      "to": "Точка зупину (breakpoint)",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        423
+      ],
+      "usedFrom": 179,
+      "usedTo": 423
+    },
+    {
+      "index": 448,
+      "from": "Boxing",
+      "to": "Convert.ToInt32(), ToDouble(), ToString()",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        377
+      ],
+      "usedFrom": 179,
+      "usedTo": 377
+    },
+    {
+      "index": 449,
+      "from": "Boxing",
+      "to": "Тип object",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        170
+      ],
+      "usedFrom": 179,
+      "usedTo": 170
+    },
+    {
+      "index": 450,
+      "from": "Boxing",
+      "to": "Unboxing",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        180,
+        381
+      ],
+      "usedFrom": 179,
+      "usedTo": 180
+    },
+    {
+      "index": 451,
+      "from": "Boxing",
+      "to": "Покажчик (pointer)",
+      "fromCandidates": [
+        179,
+        380
+      ],
+      "toCandidates": [
+        134
+      ],
+      "usedFrom": 179,
+      "usedTo": 134
+    },
+    {
+      "index": 452,
+      "from": "int.TryParse()",
+      "to": "Тип double",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        12
+      ],
+      "usedFrom": 379,
+      "usedTo": 12
+    },
+    {
+      "index": 453,
+      "from": "int.TryParse()",
+      "to": "Перетворення між char і int",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        383
+      ],
+      "usedFrom": 379,
+      "usedTo": 383
+    },
+    {
+      "index": 454,
+      "from": "int.TryParse()",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 379,
+      "usedTo": 378
+    },
+    {
+      "index": 455,
+      "from": "int.TryParse()",
+      "to": "Перетворення float у int",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        387
+      ],
+      "usedFrom": 379,
+      "usedTo": 387
+    },
+    {
+      "index": 456,
+      "from": "int.TryParse()",
+      "to": "Немінливість string",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        265
+      ],
+      "usedFrom": 379,
+      "usedTo": 265
+    },
+    {
+      "index": 457,
+      "from": "int.TryParse()",
+      "to": "Тип DateTime",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        390
+      ],
+      "usedFrom": 379,
+      "usedTo": 390
+    },
+    {
+      "index": 458,
+      "from": "int.TryParse()",
+      "to": "Тип int",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        11
+      ],
+      "usedFrom": 379,
+      "usedTo": 11
+    },
+    {
+      "index": 459,
+      "from": "int.TryParse()",
+      "to": "DateTime.Kind",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        403
+      ],
+      "usedFrom": 379,
+      "usedTo": 403
+    },
+    {
+      "index": 460,
+      "from": "int.TryParse()",
+      "to": "double.Parse() і double.TryParse()",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        410
+      ],
+      "usedFrom": 379,
+      "usedTo": 410
+    },
+    {
+      "index": 461,
+      "from": "int.TryParse()",
+      "to": "StringBuilder",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        281
+      ],
+      "usedFrom": 379,
+      "usedTo": 281
+    },
+    {
+      "index": 462,
+      "from": "int.TryParse()",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 379,
+      "usedTo": 384
+    },
+    {
+      "index": 463,
+      "from": "int.TryParse()",
+      "to": "Trim(), Replace(), Substring() перед парсингом",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        416
+      ],
+      "usedFrom": 379,
+      "usedTo": 416
+    },
+    {
+      "index": 464,
+      "from": "int.TryParse()",
+      "to": "Крокове виконання (Step Over, Step Into)",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        424
+      ],
+      "usedFrom": 379,
+      "usedTo": 424
+    },
+    {
+      "index": 465,
+      "from": "int.TryParse()",
+      "to": "Тип string",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 379,
+      "usedTo": 15
+    },
+    {
+      "index": 466,
+      "from": "int.TryParse()",
+      "to": "Точка зупину (breakpoint)",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        423
+      ],
+      "usedFrom": 379,
+      "usedTo": 423
+    },
+    {
+      "index": 467,
+      "from": "int.TryParse()",
+      "to": "ToString з форматуванням",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        386
+      ],
+      "usedFrom": 379,
+      "usedTo": 386
+    },
+    {
+      "index": 468,
+      "from": "int.TryParse()",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 379,
+      "usedTo": 385
+    },
+    {
+      "index": 469,
+      "from": "int.TryParse()",
+      "to": "Метод Substring()",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        272
+      ],
+      "usedFrom": 379,
+      "usedTo": 272
+    },
+    {
+      "index": 470,
+      "from": "int.TryParse()",
+      "to": "Convert.ToInt32(), ToDouble(), ToString()",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        377
+      ],
+      "usedFrom": 379,
+      "usedTo": 377
+    },
+    {
+      "index": 471,
+      "from": "int.TryParse()",
+      "to": "random.NextDouble()",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        449
+      ],
+      "usedFrom": 379,
+      "usedTo": 449
+    },
+    {
+      "index": 472,
+      "from": "int.TryParse()",
+      "to": "Створення обʼєкта DateTime вручну",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        394
+      ],
+      "usedFrom": 379,
+      "usedTo": 394
+    },
+    {
+      "index": 473,
+      "from": "int.TryParse()",
+      "to": "Покажчик (pointer)",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        134
+      ],
+      "usedFrom": 379,
+      "usedTo": 134
+    },
+    {
+      "index": 474,
+      "from": "int.TryParse()",
+      "to": "DateTime.Parse() і DateTime.TryParse()",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        412
+      ],
+      "usedFrom": 379,
+      "usedTo": 412
+    },
+    {
+      "index": 475,
+      "from": "int.TryParse()",
+      "to": "Тип даних string",
+      "fromCandidates": [
+        379,
+        409
+      ],
+      "toCandidates": [
+        264
+      ],
+      "usedFrom": 379,
+      "usedTo": 264
+    },
+    {
+      "index": 486,
+      "from": "InvalidCastException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        367
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 367,
+      "usedTo": 379
+    },
+    {
+      "index": 500,
+      "from": "int.Parse()",
+      "to": "Тип double",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        12
+      ],
+      "usedFrom": 378,
+      "usedTo": 12
+    },
+    {
+      "index": 501,
+      "from": "int.Parse()",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 378,
+      "usedTo": 379
+    },
+    {
+      "index": 502,
+      "from": "int.Parse()",
+      "to": "Перетворення між char і int",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        383
+      ],
+      "usedFrom": 378,
+      "usedTo": 383
+    },
+    {
+      "index": 503,
+      "from": "int.Parse()",
+      "to": "Перетворення float у int",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        387
+      ],
+      "usedFrom": 378,
+      "usedTo": 387
+    },
+    {
+      "index": 504,
+      "from": "int.Parse()",
+      "to": "Немінливість string",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        265
+      ],
+      "usedFrom": 378,
+      "usedTo": 265
+    },
+    {
+      "index": 505,
+      "from": "int.Parse()",
+      "to": "Тип DateTime",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        390
+      ],
+      "usedFrom": 378,
+      "usedTo": 390
+    },
+    {
+      "index": 506,
+      "from": "int.Parse()",
+      "to": "Тип int",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        11
+      ],
+      "usedFrom": 378,
+      "usedTo": 11
+    },
+    {
+      "index": 507,
+      "from": "int.Parse()",
+      "to": "DateTime.Kind",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        403
+      ],
+      "usedFrom": 378,
+      "usedTo": 403
+    },
+    {
+      "index": 508,
+      "from": "int.Parse()",
+      "to": "double.Parse() і double.TryParse()",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        410
+      ],
+      "usedFrom": 378,
+      "usedTo": 410
+    },
+    {
+      "index": 509,
+      "from": "int.Parse()",
+      "to": "StringBuilder",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        281
+      ],
+      "usedFrom": 378,
+      "usedTo": 281
+    },
+    {
+      "index": 510,
+      "from": "int.Parse()",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 378,
+      "usedTo": 384
+    },
+    {
+      "index": 511,
+      "from": "int.Parse()",
+      "to": "Trim(), Replace(), Substring() перед парсингом",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        416
+      ],
+      "usedFrom": 378,
+      "usedTo": 416
+    },
+    {
+      "index": 512,
+      "from": "int.Parse()",
+      "to": "Крокове виконання (Step Over, Step Into)",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        424
+      ],
+      "usedFrom": 378,
+      "usedTo": 424
+    },
+    {
+      "index": 513,
+      "from": "int.Parse()",
+      "to": "Тип string",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 378,
+      "usedTo": 15
+    },
+    {
+      "index": 514,
+      "from": "int.Parse()",
+      "to": "Точка зупину (breakpoint)",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        423
+      ],
+      "usedFrom": 378,
+      "usedTo": 423
+    },
+    {
+      "index": 515,
+      "from": "int.Parse()",
+      "to": "ToString з форматуванням",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        386
+      ],
+      "usedFrom": 378,
+      "usedTo": 386
+    },
+    {
+      "index": 516,
+      "from": "int.Parse()",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 378,
+      "usedTo": 385
+    },
+    {
+      "index": 517,
+      "from": "int.Parse()",
+      "to": "Метод Substring()",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        272
+      ],
+      "usedFrom": 378,
+      "usedTo": 272
+    },
+    {
+      "index": 518,
+      "from": "int.Parse()",
+      "to": "Convert.ToInt32(), ToDouble(), ToString()",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        377
+      ],
+      "usedFrom": 378,
+      "usedTo": 377
+    },
+    {
+      "index": 519,
+      "from": "int.Parse()",
+      "to": "random.NextDouble()",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        449
+      ],
+      "usedFrom": 378,
+      "usedTo": 449
+    },
+    {
+      "index": 520,
+      "from": "int.Parse()",
+      "to": "Створення обʼєкта DateTime вручну",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        394
+      ],
+      "usedFrom": 378,
+      "usedTo": 394
+    },
+    {
+      "index": 521,
+      "from": "int.Parse()",
+      "to": "Покажчик (pointer)",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        134
+      ],
+      "usedFrom": 378,
+      "usedTo": 134
+    },
+    {
+      "index": 522,
+      "from": "int.Parse()",
+      "to": "DateTime.Parse() і DateTime.TryParse()",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        412
+      ],
+      "usedFrom": 378,
+      "usedTo": 412
+    },
+    {
+      "index": 523,
+      "from": "int.Parse()",
+      "to": "Тип даних string",
+      "fromCandidates": [
+        378,
+        408
+      ],
+      "toCandidates": [
+        264
+      ],
+      "usedFrom": 378,
+      "usedTo": 264
+    },
+    {
+      "index": 547,
+      "from": "DivideByZeroException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        358
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 358,
+      "usedTo": 379
+    },
+    {
+      "index": 562,
+      "from": "double.Parse() і double.TryParse()",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        410
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 410,
+      "usedTo": 379
+    },
+    {
+      "index": 564,
+      "from": "double.Parse() і double.TryParse()",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        410
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 410,
+      "usedTo": 378
+    },
+    {
+      "index": 571,
+      "from": "double.Parse() і double.TryParse()",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        410
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 410,
+      "usedTo": 384
+    },
+    {
+      "index": 574,
+      "from": "double.Parse() і double.TryParse()",
+      "to": "Тип string",
+      "fromCandidates": [
+        410
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 410,
+      "usedTo": 15
+    },
+    {
+      "index": 577,
+      "from": "double.Parse() і double.TryParse()",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        410
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 410,
+      "usedTo": 385
+    },
+    {
+      "index": 595,
+      "from": "FormatException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        359
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 359,
+      "usedTo": 379
+    },
+    {
+      "index": 610,
+      "from": "TryParseExact() для дат",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        417
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 417,
+      "usedTo": 379
+    },
+    {
+      "index": 612,
+      "from": "TryParseExact() для дат",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        417
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 417,
+      "usedTo": 378
+    },
+    {
+      "index": 620,
+      "from": "TryParseExact() для дат",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        417
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 417,
+      "usedTo": 384
+    },
+    {
+      "index": 623,
+      "from": "TryParseExact() для дат",
+      "to": "Тип string",
+      "fromCandidates": [
+        417
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 417,
+      "usedTo": 15
+    },
+    {
+      "index": 626,
+      "from": "TryParseExact() для дат",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        417
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 417,
+      "usedTo": 385
+    },
+    {
+      "index": 635,
+      "from": "StackOverflowException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        369
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 369,
+      "usedTo": 379
+    },
+    {
+      "index": 671,
+      "from": "ArgumentException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        362
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 362,
+      "usedTo": 379
+    },
+    {
+      "index": 696,
+      "from": "char.Parse()",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        413
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 413,
+      "usedTo": 379
+    },
+    {
+      "index": 698,
+      "from": "char.Parse()",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        413
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 413,
+      "usedTo": 378
+    },
+    {
+      "index": 706,
+      "from": "char.Parse()",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        413
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 413,
+      "usedTo": 384
+    },
+    {
+      "index": 709,
+      "from": "char.Parse()",
+      "to": "Тип string",
+      "fromCandidates": [
+        413
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 413,
+      "usedTo": 15
+    },
+    {
+      "index": 712,
+      "from": "char.Parse()",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        413
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 413,
+      "usedTo": 385
+    },
+    {
+      "index": 721,
+      "from": "bool.Parse() і bool.TryParse()",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        411
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 411,
+      "usedTo": 379
+    },
+    {
+      "index": 723,
+      "from": "bool.Parse() і bool.TryParse()",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        411
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 411,
+      "usedTo": 378
+    },
+    {
+      "index": 731,
+      "from": "bool.Parse() і bool.TryParse()",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        411
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 411,
+      "usedTo": 384
+    },
+    {
+      "index": 734,
+      "from": "bool.Parse() і bool.TryParse()",
+      "to": "Тип string",
+      "fromCandidates": [
+        411
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 411,
+      "usedTo": 15
+    },
+    {
+      "index": 737,
+      "from": "bool.Parse() і bool.TryParse()",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        411
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 411,
+      "usedTo": 385
+    },
+    {
+      "index": 751,
+      "from": "ToString з форматуванням",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        386
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 386,
+      "usedTo": 384
+    },
+    {
+      "index": 759,
+      "from": "ToString() для обʼєктів",
+      "to": "Явне перетворення (explicit cast)",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        375
+      ],
+      "usedFrom": 385,
+      "usedTo": 375
+    },
+    {
+      "index": 760,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення рядка в число",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        277
+      ],
+      "usedFrom": 385,
+      "usedTo": 277
+    },
+    {
+      "index": 761,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення між char і int",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        383
+      ],
+      "usedFrom": 385,
+      "usedTo": 383
+    },
+    {
+      "index": 762,
+      "from": "ToString() для обʼєктів",
+      "to": "Приклад: перетворення рядка в число",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        354
+      ],
+      "usedFrom": 385,
+      "usedTo": 354
+    },
+    {
+      "index": 763,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення float у int",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        387
+      ],
+      "usedFrom": 385,
+      "usedTo": 387
+    },
+    {
+      "index": 764,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення типів (type conversion)",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        373
+      ],
+      "usedFrom": 385,
+      "usedTo": 373
+    },
+    {
+      "index": 765,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 385,
+      "usedTo": 384
+    },
+    {
+      "index": 766,
+      "from": "ToString() для обʼєктів",
+      "to": "Відмінність struct від class",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        152
+      ],
+      "usedFrom": 385,
+      "usedTo": 152
+    },
+    {
+      "index": 767,
+      "from": "ToString() для обʼєктів",
+      "to": "Неявне перетворення (implicit cast)",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        374
+      ],
+      "usedFrom": 385,
+      "usedTo": 374
+    },
+    {
+      "index": 768,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення введеного тексту в число",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        251
+      ],
+      "usedFrom": 385,
+      "usedTo": 251
+    },
+    {
+      "index": 769,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення рваного масиву в звичайний",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        128
+      ],
+      "usedFrom": 385,
+      "usedTo": 128
+    },
+    {
+      "index": 770,
+      "from": "ToString() для обʼєктів",
+      "to": "Тип object",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        170
+      ],
+      "usedFrom": 385,
+      "usedTo": 170
+    },
+    {
+      "index": 771,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення типів (casting)",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        331
+      ],
+      "usedFrom": 385,
+      "usedTo": 331
+    },
+    {
+      "index": 772,
+      "from": "ToString() для обʼєктів",
+      "to": "Перетворення багатовимірного масиву на рваний",
+      "fromCandidates": [
+        385,
+        532
+      ],
+      "toCandidates": [
+        129
+      ],
+      "usedFrom": 385,
+      "usedTo": 129
+    },
+    {
+      "index": 774,
+      "from": "OutOfMemoryException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        368
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 368,
+      "usedTo": 379
+    },
+    {
+      "index": 789,
+      "from": "FileNotFoundException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        364
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 364,
+      "usedTo": 379
+    },
+    {
+      "index": 817,
+      "from": "Convert.ToInt32(), ToDouble(), ToString()",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        377
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 377,
+      "usedTo": 384
+    },
+    {
+      "index": 826,
+      "from": "Convert.ToInt32(), ToDouble(), ToString()",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        377
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 377,
+      "usedTo": 385
+    },
+    {
+      "index": 828,
+      "from": "IOException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        365
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 365,
+      "usedTo": 379
+    },
+    {
+      "index": 843,
+      "from": "ArgumentNullException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        363
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 363,
+      "usedTo": 379
+    },
+    {
+      "index": 857,
+      "from": "Перелічення (enum)",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        482
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 482,
+      "usedTo": 379
+    },
+    {
+      "index": 859,
+      "from": "Перелічення (enum)",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        482
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 482,
+      "usedTo": 378
+    },
+    {
+      "index": 863,
+      "from": "Перелічення (enum)",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        482
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 482,
+      "usedTo": 384
+    },
+    {
+      "index": 870,
+      "from": "Перелічення (enum)",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        482
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 482,
+      "usedTo": 385
+    },
+    {
+      "index": 875,
+      "from": "Unboxing",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 180,
+      "usedTo": 379
+    },
+    {
+      "index": 876,
+      "from": "Unboxing",
+      "to": "Перетворення між char і int",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        383
+      ],
+      "usedFrom": 180,
+      "usedTo": 383
+    },
+    {
+      "index": 877,
+      "from": "Unboxing",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 180,
+      "usedTo": 378
+    },
+    {
+      "index": 878,
+      "from": "Unboxing",
+      "to": "Перетворення float у int",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        387
+      ],
+      "usedFrom": 180,
+      "usedTo": 387
+    },
+    {
+      "index": 879,
+      "from": "Unboxing",
+      "to": "Тип int",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        11
+      ],
+      "usedFrom": 180,
+      "usedTo": 11
+    },
+    {
+      "index": 880,
+      "from": "Unboxing",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 180,
+      "usedTo": 384
+    },
+    {
+      "index": 881,
+      "from": "Unboxing",
+      "to": "Крокове виконання (Step Over, Step Into)",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        424
+      ],
+      "usedFrom": 180,
+      "usedTo": 424
+    },
+    {
+      "index": 882,
+      "from": "Unboxing",
+      "to": "Точка зупину (breakpoint)",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        423
+      ],
+      "usedFrom": 180,
+      "usedTo": 423
+    },
+    {
+      "index": 883,
+      "from": "Unboxing",
+      "to": "Convert.ToInt32(), ToDouble(), ToString()",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        377
+      ],
+      "usedFrom": 180,
+      "usedTo": 377
+    },
+    {
+      "index": 884,
+      "from": "Unboxing",
+      "to": "Тип object",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        170
+      ],
+      "usedFrom": 180,
+      "usedTo": 170
+    },
+    {
+      "index": 885,
+      "from": "Unboxing",
+      "to": "Покажчик (pointer)",
+      "fromCandidates": [
+        180,
+        381
+      ],
+      "toCandidates": [
+        134
+      ],
+      "usedFrom": 180,
+      "usedTo": 134
+    },
+    {
+      "index": 887,
+      "from": "Exception — базовий тип",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        370
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 370,
+      "usedTo": 379
+    },
+    {
+      "index": 902,
+      "from": "Enum.Parse()",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        414
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 414,
+      "usedTo": 379
+    },
+    {
+      "index": 904,
+      "from": "Enum.Parse()",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        414
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 414,
+      "usedTo": 378
+    },
+    {
+      "index": 912,
+      "from": "Enum.Parse()",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        414
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 414,
+      "usedTo": 384
+    },
+    {
+      "index": 915,
+      "from": "Enum.Parse()",
+      "to": "Тип string",
+      "fromCandidates": [
+        414
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 414,
+      "usedTo": 15
+    },
+    {
+      "index": 918,
+      "from": "Enum.Parse()",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        414
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 414,
+      "usedTo": 385
+    },
+    {
+      "index": 930,
+      "from": "DateTime.Parse() і DateTime.TryParse()",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        412
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 412,
+      "usedTo": 379
+    },
+    {
+      "index": 932,
+      "from": "DateTime.Parse() і DateTime.TryParse()",
+      "to": "int.Parse()",
+      "fromCandidates": [
+        412
+      ],
+      "toCandidates": [
+        378,
+        408
+      ],
+      "usedFrom": 412,
+      "usedTo": 378
+    },
+    {
+      "index": 940,
+      "from": "DateTime.Parse() і DateTime.TryParse()",
+      "to": "Перетворення bool у int",
+      "fromCandidates": [
+        412
+      ],
+      "toCandidates": [
+        384,
+        526
+      ],
+      "usedFrom": 412,
+      "usedTo": 384
+    },
+    {
+      "index": 943,
+      "from": "DateTime.Parse() і DateTime.TryParse()",
+      "to": "Тип string",
+      "fromCandidates": [
+        412
+      ],
+      "toCandidates": [
+        15,
+        169
+      ],
+      "usedFrom": 412,
+      "usedTo": 15
+    },
+    {
+      "index": 946,
+      "from": "DateTime.Parse() і DateTime.TryParse()",
+      "to": "ToString() для обʼєктів",
+      "fromCandidates": [
+        412
+      ],
+      "toCandidates": [
+        385,
+        532
+      ],
+      "usedFrom": 412,
+      "usedTo": 385
+    },
+    {
+      "index": 954,
+      "from": "IndexOutOfRangeException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        361
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 361,
+      "usedTo": 379
+    },
+    {
+      "index": 969,
+      "from": "NullReferenceException",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        360
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 360,
+      "usedTo": 379
+    },
+    {
+      "index": 984,
+      "from": "Властивості обʼєкта Exception",
+      "to": "int.TryParse()",
+      "fromCandidates": [
+        348
+      ],
+      "toCandidates": [
+        379,
+        409
+      ],
+      "usedFrom": 348,
+      "usedTo": 379
+    }
+  ]
+}
