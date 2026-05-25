@@ -73,10 +73,12 @@ export class UsersService {
     /**
      * 🔹 Отримати коротку інформацію про користувача за Firebase UID (для /me).
      */
-    async findByFirebaseUid(uid: string): Promise<Pick<User, 'email' | 'name' | 'role'> | null> {
+    async findByFirebaseUid(
+        uid: string,
+    ): Promise<Pick<User, 'id' | 'email' | 'name' | 'role' | 'avatarUrl' | 'createdAt'> | null> {
         const user = await this.usersRepository.findOne({
             where: { firebase_uid: uid },
-            select: ['email', 'name', 'role'],
+            select: ['id', 'email', 'name', 'role', 'avatarUrl', 'createdAt'],
         });
 
         if (!user) {

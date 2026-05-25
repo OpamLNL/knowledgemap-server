@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NodesController } from './nodes.controller';
 import { NodesService } from './nodes.service';
@@ -26,7 +26,7 @@ import { GraphModule } from '../common/graph/graph.module';
             KnowledgeGroup,
             GroupConnection,
         ]),
-        UsersModule,
+        forwardRef(() => UsersModule),
         AuthModule,
         GraphModule,
     ],

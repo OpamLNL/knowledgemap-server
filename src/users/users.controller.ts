@@ -10,6 +10,7 @@ import {
     Post, UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { UsersCabinetService } from './users-cabinet.service';
 // import { UpdateUserDto } from './dtos/update-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { Roles } from '../auth/roles.decorator';
@@ -23,7 +24,10 @@ import {Public} from "../auth/public.decorator";
 @ApiBearerAuth('access-token')
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly cabinetService: UsersCabinetService,
+    ) {}
 
 
 
@@ -93,12 +97,13 @@ export class UsersController {
             throw new UnauthorizedException('Користувача не знайдено');
         }
 
-        return {
-            email: user.email,
-            name: user.name,
-            role: user.role,
-        };
+        return user;
+    }
 
+    @Get('me/cabinet')
+    async getMyCabinet(@Req() req: Request) {
+        const { uid, role } = req.user as { uid: string; role: UserRole };
+        return this.cabinetService.getCabinet(uid, role);
     }
 
 
