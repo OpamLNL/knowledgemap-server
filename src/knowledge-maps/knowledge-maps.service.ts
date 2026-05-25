@@ -11,6 +11,8 @@ import { MapRevision } from './entities/map-revision.entity';
 import { Node } from '../nodes/entities/node.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
+import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
+import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { CreateKnowledgeMapDto, UpdateKnowledgeMapDto } from './dtos/create-knowledge-map.dto';
 import { BulkSaveGraphDto } from './dtos/bulk-save-graph.dto';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
@@ -152,14 +154,6 @@ export class KnowledgeMapsService {
             await this.mapRepo.save(map);
         }
 
-        const nodeIdsForValidation = dto.nodes.map((n, i) => n.id ?? -(i + 1));
-        const edgesForValidation = dto.edges.map((e) => ({
-            from: e.fromNodeId,
-            to: e.toNodeId,
-        }));
-
-        this.graphValidator.assertValid(nodeIdsForValidation, edgesForValidation);
-
         if (dto.createRevision) {
             await this.createRevision(mapId, userUid, dto.revisionComment ?? 'Знімок перед збереженням');
         }
@@ -169,6 +163,8 @@ export class KnowledgeMapsService {
         await queryRunner.startTransaction();
 
         try {
+            const idRemap = new Map<number, number>();
+
             if (dto.deletedEdgeIds?.length) {
                 await queryRunner.manager.delete(NodeConnection, {
                     id: In(dto.deletedEdgeIds),
@@ -199,7 +195,7 @@ export class KnowledgeMapsService {
                     }
                 }
 
-                if (nodeDto.id) {
+                if (nodeDto.id !== undefined && nodeDto.id > 0) {
                     const existing = await queryRunner.manager.findOne(Node, {
                         where: { id: nodeDto.id, mapId },
                     });
@@ -215,37 +211,55 @@ export class KnowledgeMapsService {
                     });
                     await queryRunner.manager.save(existing);
                 } else {
-                    const created = queryRunner.manager.create(Node, {
-                        title: nodeDto.title,
-                        topicId: nodeDto.topicId ?? null,
-                        mapId,
-                        x: nodeDto.x ?? null,
-                        y: nodeDto.y ?? null,
-                        color: nodeDto.color ?? null,
-                    });
-                    const saved = await queryRunner.manager.save(created);
-                    void saved;
+                    const tempKey = nodeDto.id;
+                    const created = await queryRunner.manager.save(
+                        queryRunner.manager.create(Node, {
+                            title: nodeDto.title,
+                            topicId: nodeDto.topicId ?? null,
+                            mapId,
+                            x: nodeDto.x ?? null,
+                            y: nodeDto.y ?? null,
+                            color: nodeDto.color ?? null,
+                        }),
+                    );
+                    if (tempKey !== undefined && tempKey < 0) {
+                        idRemap.set(tempKey, created.id);
+                    }
                 }
             }
+
+            const resolveNodeId = (id: number): number => {
+                if (id < 0) {
+                    const mapped = idRemap.get(id);
+                    if (!mapped) {
+                        throw new BadRequestException(`Тимчасовий id вузла ${id} не знайдено після створення`);
+                    }
+                    return mapped;
+                }
+                return id;
+            };
 
             const allNodes = await queryRunner.manager.find(Node, { where: { mapId } });
             const nodeIdSet = new Set(allNodes.map((n) => n.id));
 
             for (const edgeDto of dto.edges) {
-                if (!nodeIdSet.has(edgeDto.fromNodeId) || !nodeIdSet.has(edgeDto.toNodeId)) {
+                const fromNodeId = resolveNodeId(edgeDto.fromNodeId);
+                const toNodeId = resolveNodeId(edgeDto.toNodeId);
+
+                if (!nodeIdSet.has(fromNodeId) || !nodeIdSet.has(toNodeId)) {
                     throw new BadRequestException(
-                        `Ребро ${edgeDto.fromNodeId}→${edgeDto.toNodeId} посилається на неіснуючі вузли`,
+                        `Ребро ${fromNodeId}→${toNodeId} посилається на неіснуючі вузли`,
                     );
                 }
 
-                if (edgeDto.id) {
+                if (edgeDto.id && edgeDto.id > 0) {
                     const existing = await queryRunner.manager.findOne(NodeConnection, {
                         where: { id: edgeDto.id, mapId },
                     });
                     if (existing) {
                         Object.assign(existing, {
-                            fromNodeId: edgeDto.fromNodeId,
-                            toNodeId: edgeDto.toNodeId,
+                            fromNodeId,
+                            toNodeId,
                             type: edgeDto.type ?? null,
                         });
                         await queryRunner.manager.save(existing);
@@ -256,18 +270,71 @@ export class KnowledgeMapsService {
                 const duplicate = await queryRunner.manager.findOne(NodeConnection, {
                     where: {
                         mapId,
-                        fromNodeId: edgeDto.fromNodeId,
-                        toNodeId: edgeDto.toNodeId,
+                        fromNodeId,
+                        toNodeId,
                     },
                 });
                 if (!duplicate) {
-                    const created = queryRunner.manager.create(NodeConnection, {
-                        fromNodeId: edgeDto.fromNodeId,
-                        toNodeId: edgeDto.toNodeId,
-                        mapId,
-                        type: edgeDto.type ?? null,
+                    await queryRunner.manager.save(
+                        queryRunner.manager.create(NodeConnection, {
+                            fromNodeId,
+                            toNodeId,
+                            mapId,
+                            type: edgeDto.type ?? null,
+                        }),
+                    );
+                }
+            }
+
+            if (dto.deletedGroupEdgeIds?.length) {
+                await queryRunner.manager.delete(GroupConnection, {
+                    id: In(dto.deletedGroupEdgeIds),
+                });
+            }
+
+            if (dto.groupEdges?.length) {
+                const groupIds = new Set(
+                    (await queryRunner.manager.find(KnowledgeGroup)).map((g) => g.id),
+                );
+
+                for (const edgeDto of dto.groupEdges) {
+                    if (!groupIds.has(edgeDto.fromGroupId) || !groupIds.has(edgeDto.toGroupId)) {
+                        throw new BadRequestException(
+                            `Group edge ${edgeDto.fromGroupId}→${edgeDto.toGroupId} посилається на неіснуючі групи`,
+                        );
+                    }
+
+                    if (edgeDto.id && edgeDto.id > 0) {
+                        const existing = await queryRunner.manager.findOne(GroupConnection, {
+                            where: { id: edgeDto.id },
+                        });
+                        if (existing) {
+                            Object.assign(existing, {
+                                fromGroupId: edgeDto.fromGroupId,
+                                toGroupId: edgeDto.toGroupId,
+                                type: edgeDto.type ?? 'prerequisite',
+                            });
+                            await queryRunner.manager.save(existing);
+                            continue;
+                        }
+                    }
+
+                    const duplicate = await queryRunner.manager.findOne(GroupConnection, {
+                        where: {
+                            fromGroupId: edgeDto.fromGroupId,
+                            toGroupId: edgeDto.toGroupId,
+                        },
                     });
-                    await queryRunner.manager.save(created);
+                    if (!duplicate) {
+                        await queryRunner.manager.save(
+                            queryRunner.manager.create(GroupConnection, {
+                                fromGroupId: edgeDto.fromGroupId,
+                                toGroupId: edgeDto.toGroupId,
+                                type: edgeDto.type ?? 'prerequisite',
+                                source: 'editor',
+                            }),
+                        );
+                    }
                 }
             }
 

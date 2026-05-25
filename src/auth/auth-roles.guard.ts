@@ -10,7 +10,6 @@ import { ROLES_KEY } from './roles.decorator';
 import { IS_PUBLIC_KEY } from './public.decorator';
 import { admin } from '../config/firebase-admin';
 import { UsersService } from '../users/users.service';
-import { UserRole } from '../users/entities/user.entity';
 
 
 
@@ -41,18 +40,11 @@ export class AuthRolesGuard implements CanActivate {
         const token = authHeader.split(' ')[1];
         const decoded = await admin.auth().verifyIdToken(token);
 
-        let user = await this.usersService.findByFirebaseUid(decoded.uid);
-
-
-        if (!user) {
-            // Автоматичне створення користувача при першому вході
-            user = await this.usersService.create({
-                firebase_uid: decoded.uid,
-                email: decoded.email,
-                name: decoded.name ?? decoded.email?.split('@')[0] ?? 'No Name',
-                role: UserRole.STUDENT,
-            });
-        }
+        const user = await this.usersService.resolveUserFromAuth({
+            firebaseUid: decoded.uid,
+            email: decoded.email,
+            name: decoded.name ?? decoded.email?.split('@')[0] ?? 'No Name',
+        });
 
         request.user = {
             uid: decoded.uid,

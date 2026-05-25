@@ -7,6 +7,8 @@ import { MapRevision } from './entities/map-revision.entity';
 import { Node } from '../nodes/entities/node.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
+import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
+import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { GraphModule } from '../common/graph/graph.module';
 
 @Module({
@@ -17,6 +19,8 @@ import { GraphModule } from '../common/graph/graph.module';
             Node,
             NodeConnection,
             Topic,
+            KnowledgeGroup,
+            GroupConnection,
         ]),
         GraphModule,
     ],

@@ -52,6 +52,24 @@ export class BulkEdgeDto {
     type?: string | null;
 }
 
+export class BulkGroupEdgeDto {
+    @IsInt()
+    @IsOptional()
+    id?: number;
+
+    @IsString()
+    @IsNotEmpty()
+    fromGroupId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    toGroupId: string;
+
+    @IsString()
+    @IsOptional()
+    type?: string | null;
+}
+
 export class BulkSaveGraphDto {
     @IsArray()
     @ValidateNested({ each: true })
@@ -64,6 +82,12 @@ export class BulkSaveGraphDto {
     edges: BulkEdgeDto[];
 
     @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => BulkGroupEdgeDto)
+    @IsOptional()
+    groupEdges?: BulkGroupEdgeDto[];
+
+    @IsArray()
     @IsInt({ each: true })
     @IsOptional()
     deletedNodeIds?: number[];
@@ -72,6 +96,11 @@ export class BulkSaveGraphDto {
     @IsInt({ each: true })
     @IsOptional()
     deletedEdgeIds?: number[];
+
+    @IsArray()
+    @IsInt({ each: true })
+    @IsOptional()
+    deletedGroupEdgeIds?: number[];
 
     @IsBoolean()
     @IsOptional()

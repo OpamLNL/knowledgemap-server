@@ -79,9 +79,80 @@ export class UsersService {
             select: ['email', 'name', 'role'],
         });
 
-        if (!user) {console.log('Користувача не знайдено, створюємо'); return null;}
+        if (!user) {
+            return null;
+        }
 
-        return user ;
+        return user;
+    }
+
+    /**
+     * Знайти або створити користувача після Firebase-авторизації.
+     * Якщо в БД уже є запис з таким email (наприклад, admin без firebase_uid),
+     * прив'язуємо uid до нього замість створення нового student.
+     */
+    async resolveUserFromAuth(params: {
+        firebaseUid: string;
+        email?: string | null;
+        name?: string | null;
+        avatarUrl?: string | null;
+    }): Promise<Pick<User, 'email' | 'name' | 'role'>> {
+        const { firebaseUid, email, name, avatarUrl } = params;
+
+        const byUid = await this.usersRepository.findOne({
+            where: { firebase_uid: firebaseUid },
+        });
+
+        const byEmail =
+            email != null && email !== ''
+                ? await this.usersRepository.findOne({ where: { email } })
+                : null;
+
+        if (byUid && byEmail && byUid.id !== byEmail.id) {
+            byEmail.firebase_uid = firebaseUid;
+            if (name && !byEmail.name) {
+                byEmail.name = name;
+            }
+            if (avatarUrl && !byEmail.avatarUrl) {
+                byEmail.avatarUrl = avatarUrl;
+            }
+            await this.usersRepository.save(byEmail);
+            return { email: byEmail.email, name: byEmail.name, role: byEmail.role };
+        }
+
+        if (byUid) {
+            return { email: byUid.email, name: byUid.name, role: byUid.role };
+        }
+
+        if (byEmail) {
+            byEmail.firebase_uid = firebaseUid;
+            if (name && !byEmail.name) {
+                byEmail.name = name;
+            }
+            if (avatarUrl && !byEmail.avatarUrl) {
+                byEmail.avatarUrl = avatarUrl;
+            }
+            await this.usersRepository.save(byEmail);
+            return { email: byEmail.email, name: byEmail.name, role: byEmail.role };
+        }
+
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const role =
+            adminEmail && email && email.toLowerCase() === adminEmail.toLowerCase()
+                ? UserRole.ADMIN
+                : UserRole.STUDENT;
+
+        const created = await this.usersRepository.save(
+            this.usersRepository.create({
+                firebase_uid: firebaseUid,
+                email: email ?? `${firebaseUid}@unknown.local`,
+                name: name ?? email?.split('@')[0] ?? 'User',
+                avatarUrl: avatarUrl ?? undefined,
+                role,
+            }),
+        );
+
+        return { email: created.email, name: created.name, role: created.role };
     }
 
 

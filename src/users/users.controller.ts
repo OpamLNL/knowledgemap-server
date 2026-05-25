@@ -74,17 +74,11 @@ export class UsersController {
         const decoded = await admin.auth().verifyIdToken(token);
         const firebaseUid = decoded.uid;
 
-        const existingUser = await this.usersService.findByFirebaseUid(firebaseUid);
-
-            console.log("existingUser" + existingUser);
-        if (existingUser) return existingUser;
-
-        return this.usersService.create({
-            firebase_uid: firebaseUid,
+        return this.usersService.resolveUserFromAuth({
+            firebaseUid,
             email: body.email,
             name: body.name,
             avatarUrl: body.avatarUrl,
-            role: UserRole.STUDENT,
         });
     }
 
