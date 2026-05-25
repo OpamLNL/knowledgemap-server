@@ -15,6 +15,7 @@ import { KnowledgeMapsModule } from './knowledge-maps/knowledge-maps.module';
 import { GraphModule } from './common/graph/graph.module';
 import { AdminModule } from './admin/admin.module';
 import { ProgressModule } from './progress/progress.module';
+import { ProfileModule } from './profile/profile.module';
 import { AuthRolesGuard } from './auth/auth-roles.guard';
 
 @Module({
@@ -49,6 +50,7 @@ import { AuthRolesGuard } from './auth/auth-roles.guard';
         NodeConnectionsModule,
         KnowledgeMapsModule,
         ProgressModule,
+        ProfileModule,
         AdminModule,
     ],
     controllers: [AppController],

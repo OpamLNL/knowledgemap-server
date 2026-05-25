@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { User, UserRole } from './entities/user.entity';
-import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { User, UserRole } from '../users/entities/user.entity';
+import { MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
 import { Node } from '../nodes/entities/node.entity';
-import { UserTopicProgressService } from './user-topic-progress.service';
+import { UserTopicProgressService } from '../users/user-topic-progress.service';
 import { KnowledgeMapsService } from '../knowledge-maps/knowledge-maps.service';
 import { NodesService } from '../nodes/nodes.service';
 
@@ -17,7 +17,6 @@ export class UsersCabinetService {
         private readonly nodeRepo: Repository<Node>,
         private readonly progressService: UserTopicProgressService,
         private readonly mapsService: KnowledgeMapsService,
-        @Inject(forwardRef(() => NodesService))
         private readonly nodesService: NodesService,
     ) {}
 
