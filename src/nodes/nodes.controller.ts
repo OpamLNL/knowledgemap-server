@@ -23,6 +23,7 @@ import { UpdateNodeContentDto } from './dtos/node-content.dto';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
 import { nodeMediaMulterOptions } from './node-media.storage';
+import type { UploadedImageFile } from './types/uploaded-image-file';
 
 @ApiTags('nodes')
 @ApiBearerAuth('access-token')
@@ -135,7 +136,7 @@ export class NodesController {
     @UseInterceptors(FileInterceptor('file', nodeMediaMulterOptions))
     uploadNodeMedia(
         @Param('id', ParseIntPipe) id: number,
-        @UploadedFile() file: Express.Multer.File,
+        @UploadedFile() file: UploadedImageFile,
         @Body('caption') caption?: string,
     ) {
         return this.nodesService.addNodeMedia(id, file, caption);

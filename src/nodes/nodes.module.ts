@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NodesController } from './nodes.controller';
 import { NodesService } from './nodes.service';
 import { Node } from './entities/node.entity';
+import { NodeMedia } from './entities/node-media.entity';
 import { Topic } from '../topics/entities/topic.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
 import { UserTopicProgress } from '../users/entities/user-topic-progress.entity';
@@ -17,6 +18,7 @@ import { GraphModule } from '../common/graph/graph.module';
     imports: [
         TypeOrmModule.forFeature([
             Node,
+            NodeMedia,
             Topic,
             NodeConnection,
             UserTopicProgress,

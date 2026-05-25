@@ -1,14 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
+import express from 'express';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ensureNodeMediaUploadDir, NODE_MEDIA_UPLOAD_DIR } from './nodes/node-media.storage';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, { bodyParser: false });
 
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
+
+    ensureNodeMediaUploadDir();
+    app.use('/api/uploads/node-media', express.static(NODE_MEDIA_UPLOAD_DIR));
 
     app.setGlobalPrefix('api');
 

@@ -18,6 +18,7 @@ import {
     nodeMediaAbsolutePath,
     nodeMediaPublicUrl,
 } from './node-media.storage';
+import type { UploadedImageFile } from './types/uploaded-image-file';
 
 @Injectable()
 export class NodesService {
@@ -116,7 +117,7 @@ export class NodesService {
 
     async addNodeMedia(
         nodeId: number,
-        file: Express.Multer.File,
+        file: UploadedImageFile,
         caption?: string | null,
     ): Promise<NodeContentDto> {
         await this.findOne(nodeId);
