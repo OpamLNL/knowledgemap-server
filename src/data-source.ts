@@ -9,8 +9,11 @@ import { Node } from './nodes/entities/node.entity';
 import { NodeConnection } from './node-connections/entities/node-connection.entity';
 import { KnowledgeMap } from './knowledge-maps/entities/knowledge-map.entity';
 import { MapRevision } from './knowledge-maps/entities/map-revision.entity';
+import { KnowledgeGroup } from './topics/entities/knowledge-group.entity';
+import { GroupConnection } from './topics/entities/group-connection.entity';
 import { InitialSchema1730000000000 } from './migrations/1730000000000-InitialSchema';
 import { EditorFeatures1730000000001 } from './migrations/1730000000001-EditorFeatures';
+import { KnowledgeGroupsSchema1730000000002 } from './migrations/1730000000002-KnowledgeGroupsSchema';
 
 const useSsl = process.env.DB_SSL === 'true';
 const caPath = process.env.DB_CA_PATH;
@@ -30,8 +33,14 @@ export const AppDataSource = new DataSource({
         NodeConnection,
         KnowledgeMap,
         MapRevision,
+        KnowledgeGroup,
+        GroupConnection,
     ],
-    migrations: [InitialSchema1730000000000, EditorFeatures1730000000001],
+    migrations: [
+        InitialSchema1730000000000,
+        EditorFeatures1730000000001,
+        KnowledgeGroupsSchema1730000000002,
+    ],
     synchronize: false,
     logging: true,
     ssl: useSsl && caPath

@@ -57,7 +57,24 @@ export class NodesController {
             return await this.nodesService.getGraph(userUid, parsedMapId);
         } catch (error) {
             console.warn('⚠️ Помилка при побудові графа:', error);
-            return { mapId: parsedMapId ?? null, nodes: [], edges: [] };
+            return { mapId: parsedMapId ?? null, nodes: [], edges: [], groups: [], groupEdges: [] };
+        }
+    }
+
+    @Get('group-graph')
+    @ApiOperation({ summary: 'Групи знань та звʼязки між ними' })
+    @ApiQuery({ name: 'mapId', required: false, type: Number })
+    async getGroupGraph(
+        @Req() req: { user?: { uid: string } },
+        @Query('mapId') mapId?: string,
+    ) {
+        const userUid = req.user?.uid ?? '';
+        const parsedMapId = mapId ? parseInt(mapId, 10) : undefined;
+        try {
+            return await this.nodesService.getGroupGraph(userUid, parsedMapId);
+        } catch (error) {
+            console.warn('⚠️ Помилка при завантаженні груп:', error);
+            return { mapId: parsedMapId ?? null, groups: [], groupEdges: [] };
         }
     }
 

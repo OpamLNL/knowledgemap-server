@@ -1,26 +1,14 @@
-import { DataSource } from 'typeorm';
+/**
+ * @deprecated Використовуйте yarn db:seed (seed-all.ts + topics_with_groups_seed.json)
+ */
 import { AppDataSource } from '../data-source';
-import { Topic } from '../topics/entities/topic.entity';
-import * as fs from 'fs';
-import * as path from 'path';
+import { seedTopicsWithGroups } from './seed-knowledge-graph';
 
 async function seedTopics() {
     await AppDataSource.initialize();
-
-    const repo = AppDataSource.getRepository(Topic);
-
-    const filePath = path.join(__dirname, 'topics.json');
-    const rawData = fs.readFileSync(filePath, 'utf-8');
-    const topics = JSON.parse(rawData);
-
-    for (const data of topics) {
-        const exists = await repo.findOneBy({ title: data.title });
-        if (!exists) {
-            await repo.save(repo.create(data));
-        }
-    }
-
-    console.log('✅ Topics seeded');
+    await seedTopicsWithGroups();
+    console.log('✅ Topics seeded (topics_with_groups_seed.json)');
+    await AppDataSource.destroy();
     process.exit(0);
 }
 

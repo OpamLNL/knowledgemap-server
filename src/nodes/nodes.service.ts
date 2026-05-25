@@ -8,6 +8,8 @@ import { NodeConnection } from '../node-connections/entities/node-connection.ent
 import { Topic } from '../topics/entities/topic.entity';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
 import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
+import { GroupConnection } from '../topics/entities/group-connection.entity';
 
 @Injectable()
 export class NodesService {
@@ -22,6 +24,10 @@ export class NodesService {
         private readonly topicRepo: Repository<Topic>,
         @InjectRepository(KnowledgeMap)
         private readonly mapRepo: Repository<KnowledgeMap>,
+        @InjectRepository(KnowledgeGroup)
+        private readonly groupRepo: Repository<KnowledgeGroup>,
+        @InjectRepository(GroupConnection)
+        private readonly groupConnRepo: Repository<GroupConnection>,
         private readonly graphValidator: GraphValidatorService,
     ) {}
 
@@ -70,12 +76,28 @@ export class NodesService {
         await this.nodeRepo.remove(node);
     }
 
+    async getGroupGraph(userUid: string, mapId?: number) {
+        const resolvedMapId = mapId ?? (await this.getDefaultMapId());
+        const graph = await this.getGraph(userUid, resolvedMapId);
+        return {
+            mapId: resolvedMapId,
+            groups: graph.groups,
+            groupEdges: graph.groupEdges,
+        };
+    }
+
     async getGraph(userUid: string, mapId?: number) {
         const resolvedMapId = mapId ?? (await this.getDefaultMapId());
 
         const nodes = await this.nodeRepo.find({ where: { mapId: resolvedMapId } });
         const connections = await this.connectionRepo.find({ where: { mapId: resolvedMapId } });
         const progresses = await this.progressRepo.find({ where: { userUid } });
+        const topics = await this.topicRepo.find();
+        const groups = await this.groupRepo.find({ order: { sortOrder: 'ASC' } });
+        const groupConnections = await this.groupConnRepo.find();
+
+        const topicById = new Map(topics.map((t) => [t.id, t]));
+        const groupLevelById = new Map(groups.map((g) => [g.id, g.level]));
 
         const progressMap = new Map<number, UserTopicProgress>();
         const completedTopicIds = new Set<number>();
@@ -143,12 +165,13 @@ export class NodesService {
             }
         }
 
-        return {
-            mapId: resolvedMapId,
-            nodes: nodes.map((node) => {
+        const graphNodes = nodes.map((node) => {
                 const topicId = Number(node.topicId);
                 const progress = progressMap.get(topicId);
-                const level = levels.get(node.id) ?? 0;
+                const topic = topicById.get(topicId);
+                const groupLevel =
+                    topic?.groupId != null ? groupLevelById.get(topic.groupId) : undefined;
+                const level = groupLevel ?? levels.get(node.id) ?? 0;
 
                 let progressStatus: 'completed' | 'available' | 'locked' = 'locked';
                 if (completedTopicIds.has(topicId)) {
@@ -166,15 +189,60 @@ export class NodesService {
                     y: node.y,
                     color: node.color,
                     level,
+                    groupId: topic?.groupId ?? null,
+                    orderInGroup: topic?.orderInGroup ?? 0,
+                    globalOrder: topic?.globalOrder ?? null,
                     progress: progress?.progress ?? 0,
                     status: progressStatus,
                 };
-            }),
+            });
+
+        const groupStats = new Map<
+            string,
+            { total: number; completed: number; available: number }
+        >();
+        for (const g of groups) {
+            groupStats.set(g.id, { total: 0, completed: 0, available: 0 });
+        }
+        for (const n of graphNodes) {
+            if (!n.groupId) continue;
+            const st = groupStats.get(n.groupId);
+            if (!st) continue;
+            st.total++;
+            if (n.status === 'completed') st.completed++;
+            if (n.status === 'available') st.available++;
+        }
+
+        return {
+            mapId: resolvedMapId,
+            nodes: graphNodes,
             edges: connections.map((c) => ({
                 id: c.id,
                 from: c.fromNodeId,
                 to: c.toNodeId,
                 label: c.type ?? '',
+                type: c.type ?? '',
+            })),
+            groups: groups.map((g) => {
+                const st = groupStats.get(g.id) ?? { total: 0, completed: 0, available: 0 };
+                const pct = st.total > 0 ? Math.round((st.completed / st.total) * 100) : 0;
+                return {
+                    id: g.id,
+                    title: g.title,
+                    description: g.description,
+                    level: g.level,
+                    sortOrder: g.sortOrder,
+                    topicCount: st.total,
+                    completedCount: st.completed,
+                    availableCount: st.available,
+                    progressPercent: pct,
+                };
+            }),
+            groupEdges: groupConnections.map((e) => ({
+                id: e.id,
+                from: e.fromGroupId,
+                to: e.toGroupId,
+                type: e.type,
             })),
         };
     }

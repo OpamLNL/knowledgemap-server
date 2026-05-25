@@ -26,6 +26,8 @@
     "migration:run": "yarn typeorm migration:run -d src/data-source.ts",
     "migration:revert": "yarn typeorm migration:revert -d src/data-source.ts",
     "db:seed": "npx ts-node src/database/seed-all.ts",
+    "db:verify": "npx ts-node src/database/verify-seed.ts",
+    "db:reset": "npx ts-node src/database/reset-database.ts",
     "db:init": "npx ts-node src/database/init-database.ts"
   },
   "dependencies": {
