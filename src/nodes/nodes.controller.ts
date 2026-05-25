@@ -3,6 +3,7 @@ import {
     Get,
     Post,
     Put,
+    Patch,
     Delete,
     Param,
     Body,
@@ -10,12 +11,18 @@ import {
     Req,
     Query,
     ParseIntPipe,
+    Header,
+    UploadedFile,
+    UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiQuery, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { NodesService } from './nodes.service';
 import { CreateNodeDto, UpdateNodeDto } from './dtos/create-node.dto';
+import { UpdateNodeContentDto } from './dtos/node-content.dto';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
+import { nodeMediaMulterOptions } from './node-media.storage';
 
 @ApiTags('nodes')
 @ApiBearerAuth('access-token')
@@ -45,6 +52,7 @@ export class NodesController {
     }
 
     @Get('graph')
+    @Header('Cache-Control', 'no-store')
     @ApiOperation({ summary: 'Граф для навчання (з прогресом користувача)' })
     @ApiQuery({ name: 'mapId', required: false, type: Number })
     async getGraph(
@@ -62,6 +70,7 @@ export class NodesController {
     }
 
     @Get('group-graph')
+    @Header('Cache-Control', 'no-store')
     @ApiOperation({ summary: 'Групи знань та звʼязки між ними' })
     @ApiQuery({ name: 'mapId', required: false, type: Number })
     async getGroupGraph(
@@ -91,6 +100,55 @@ export class NodesController {
     findAll(@Query('mapId') mapId?: string) {
         const parsed = mapId ? parseInt(mapId, 10) : undefined;
         return this.nodesService.findAll(parsed);
+    }
+
+    @Get(':id/content')
+    @Header('Cache-Control', 'no-store')
+    @ApiOperation({ summary: 'Теорія та зображення вузла' })
+    getNodeContent(@Param('id', ParseIntPipe) id: number) {
+        return this.nodesService.getNodeContent(id);
+    }
+
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
+    @Patch(':id/content')
+    @ApiOperation({ summary: 'Оновити теорію вузла' })
+    updateNodeContent(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: UpdateNodeContentDto,
+    ) {
+        return this.nodesService.updateNodeContent(id, dto);
+    }
+
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
+    @Post(':id/media')
+    @ApiOperation({ summary: 'Додати зображення до вузла' })
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                file: { type: 'string', format: 'binary' },
+                caption: { type: 'string' },
+            },
+        },
+    })
+    @UseInterceptors(FileInterceptor('file', nodeMediaMulterOptions))
+    uploadNodeMedia(
+        @Param('id', ParseIntPipe) id: number,
+        @UploadedFile() file: Express.Multer.File,
+        @Body('caption') caption?: string,
+    ) {
+        return this.nodesService.addNodeMedia(id, file, caption);
+    }
+
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
+    @Delete(':id/media/:mediaId')
+    @ApiOperation({ summary: 'Видалити зображення вузла' })
+    removeNodeMedia(
+        @Param('id', ParseIntPipe) id: number,
+        @Param('mediaId', ParseIntPipe) mediaId: number,
+    ) {
+        return this.nodesService.removeNodeMedia(id, mediaId);
     }
 
     @Get(':id')

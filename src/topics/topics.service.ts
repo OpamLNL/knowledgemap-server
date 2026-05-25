@@ -22,8 +22,39 @@ export class TopicsService {
         return topic;
     }
 
-    create(dto: CreateTopicDto) {
-        const topic = this.topicRepository.create(dto);
+    async create(dto: CreateTopicDto) {
+        if (dto.groupId) {
+            return this.createForGroup(dto.title, dto.groupId, dto.description);
+        }
+        const topic = this.topicRepository.create({
+            title: dto.title,
+            description: dto.description,
+        });
+        return this.topicRepository.save(topic);
+    }
+
+    async createForGroup(title: string, groupId: string, description?: string) {
+        const trimmedTitle = title.trim() || 'Новий вузол';
+        const trimmedDescription = (description ?? trimmedTitle).trim() || trimmedTitle;
+
+        const maxOrder = await this.topicRepository
+            .createQueryBuilder('t')
+            .select('MAX(t.order_in_group)', 'maxOrder')
+            .where('t.group_id = :groupId', { groupId })
+            .getRawOne<{ maxOrder: string | null }>();
+
+        const maxGlobal = await this.topicRepository
+            .createQueryBuilder('t')
+            .select('MAX(t.global_order)', 'maxGlobal')
+            .getRawOne<{ maxGlobal: string | null }>();
+
+        const topic = this.topicRepository.create({
+            title: trimmedTitle,
+            description: trimmedDescription,
+            groupId,
+            orderInGroup: (Number(maxOrder?.maxOrder) || 0) + 1,
+            globalOrder: (Number(maxGlobal?.maxGlobal) || 0) + 1,
+        });
         return this.topicRepository.save(topic);
     }
 

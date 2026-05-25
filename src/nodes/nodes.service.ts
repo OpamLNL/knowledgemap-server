@@ -1,8 +1,11 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { unlink } from 'fs/promises';
 import { Node } from './entities/node.entity';
+import { NodeMedia } from './entities/node-media.entity';
 import { CreateNodeDto, UpdateNodeDto } from './dtos/create-node.dto';
+import { UpdateNodeContentDto, NodeContentDto } from './dtos/node-content.dto';
 import { UserTopicProgress } from '../users/entities/user-topic-progress.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
@@ -10,12 +13,19 @@ import { GraphValidatorService } from '../common/graph/graph-validator.service';
 import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
 import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
 import { GroupConnection } from '../topics/entities/group-connection.entity';
+import {
+    filenameFromPublicUrl,
+    nodeMediaAbsolutePath,
+    nodeMediaPublicUrl,
+} from './node-media.storage';
 
 @Injectable()
 export class NodesService {
     constructor(
         @InjectRepository(Node)
         private readonly nodeRepo: Repository<Node>,
+        @InjectRepository(NodeMedia)
+        private readonly nodeMediaRepo: Repository<NodeMedia>,
         @InjectRepository(UserTopicProgress)
         private progressRepo: Repository<UserTopicProgress>,
         @InjectRepository(NodeConnection)
@@ -71,9 +81,95 @@ export class NodesService {
 
     async remove(id: number): Promise<void> {
         const node = await this.findOne(id);
+        await this.deleteAllMediaForNode(id);
         await this.connectionRepo.delete({ fromNodeId: id });
         await this.connectionRepo.delete({ toNodeId: id });
         await this.nodeRepo.remove(node);
+    }
+
+    async getNodeContent(nodeId: number): Promise<NodeContentDto> {
+        const node = await this.findOne(nodeId);
+        const media = await this.nodeMediaRepo.find({
+            where: { nodeId },
+            order: { sortOrder: 'ASC', id: 'ASC' },
+        });
+        return {
+            nodeId: node.id,
+            theoryMd: node.theoryMd,
+            media: media.map((m) => ({
+                id: m.id,
+                url: m.url,
+                caption: m.caption,
+                sortOrder: m.sortOrder,
+            })),
+        };
+    }
+
+    async updateNodeContent(nodeId: number, dto: UpdateNodeContentDto): Promise<NodeContentDto> {
+        const node = await this.findOne(nodeId);
+        if (dto.theoryMd !== undefined) {
+            node.theoryMd = dto.theoryMd;
+            await this.nodeRepo.save(node);
+        }
+        return this.getNodeContent(nodeId);
+    }
+
+    async addNodeMedia(
+        nodeId: number,
+        file: Express.Multer.File,
+        caption?: string | null,
+    ): Promise<NodeContentDto> {
+        await this.findOne(nodeId);
+        if (!file) {
+            throw new BadRequestException('Файл зображення не передано');
+        }
+
+        const maxOrder = await this.nodeMediaRepo
+            .createQueryBuilder('m')
+            .select('MAX(m.sort_order)', 'maxOrder')
+            .where('m.node_id = :nodeId', { nodeId })
+            .getRawOne<{ maxOrder: string | null }>();
+
+        await this.nodeMediaRepo.save(
+            this.nodeMediaRepo.create({
+                nodeId,
+                url: nodeMediaPublicUrl(file.filename),
+                caption: caption?.trim() || null,
+                sortOrder: (Number(maxOrder?.maxOrder) || 0) + 1,
+            }),
+        );
+
+        return this.getNodeContent(nodeId);
+    }
+
+    async removeNodeMedia(nodeId: number, mediaId: number): Promise<NodeContentDto> {
+        const media = await this.nodeMediaRepo.findOne({ where: { id: mediaId, nodeId } });
+        if (!media) {
+            throw new NotFoundException(`Зображення id=${mediaId} не знайдено для вузла ${nodeId}`);
+        }
+        await this.deleteMediaFile(media.url);
+        await this.nodeMediaRepo.remove(media);
+        return this.getNodeContent(nodeId);
+    }
+
+    private async deleteAllMediaForNode(nodeId: number): Promise<void> {
+        const media = await this.nodeMediaRepo.find({ where: { nodeId } });
+        for (const item of media) {
+            await this.deleteMediaFile(item.url);
+        }
+        if (media.length > 0) {
+            await this.nodeMediaRepo.remove(media);
+        }
+    }
+
+    private async deleteMediaFile(publicUrl: string): Promise<void> {
+        const filename = filenameFromPublicUrl(publicUrl);
+        if (!filename) return;
+        try {
+            await unlink(nodeMediaAbsolutePath(filename));
+        } catch {
+            /* файл могло бути вже видалено */
+        }
     }
 
     async getGroupGraph(userUid: string, mapId?: number) {
@@ -153,30 +249,39 @@ export class NodesService {
 
         const availableTopicIds = new Set<number>();
         for (const node of nodes) {
+            const topicId = node.topicId;
+            if (topicId == null) continue;
+
             const parents = parentMap.get(node.id) || [];
-            const isCompleted = completedTopicIds.has(Number(node.topicId));
+            const isCompleted = completedTopicIds.has(topicId);
             const hasNoParents = parents.length === 0;
 
             const allParentsCompleted = parents.every((parentId) => {
                 const parentNode = nodes.find((n) => n.id === parentId);
-                return parentNode && completedTopicIds.has(Number(parentNode.topicId));
+                if (!parentNode?.topicId) return true;
+                return completedTopicIds.has(parentNode.topicId);
             });
 
             if (!isCompleted && (hasNoParents || allParentsCompleted)) {
-                availableTopicIds.add(Number(node.topicId));
+                availableTopicIds.add(topicId);
             }
         }
 
         const graphNodes = nodes.map((node) => {
-                const topicId = Number(node.topicId);
-                const progress = progressMap.get(topicId);
-                const topic = topicById.get(topicId);
+                const topicId = node.topicId ?? null;
+                const topic = topicId != null ? topicById.get(topicId) : undefined;
+                const progress = topicId != null ? progressMap.get(topicId) : undefined;
+                const resolvedGroupId = node.groupId ?? topic?.groupId ?? null;
                 const groupLevel =
-                    topic?.groupId != null ? groupLevelById.get(topic.groupId) : undefined;
+                    resolvedGroupId != null
+                        ? groupLevelById.get(resolvedGroupId)
+                        : undefined;
                 const level = groupLevel ?? levels.get(node.id) ?? 0;
 
                 let progressStatus: 'completed' | 'available' | 'locked' = 'locked';
-                if (completedTopicIds.has(topicId)) {
+                if (topicId == null) {
+                    progressStatus = 'available';
+                } else if (completedTopicIds.has(topicId)) {
                     progressStatus = 'completed';
                 } else if (availableTopicIds.has(topicId)) {
                     progressStatus = 'available';
@@ -191,7 +296,7 @@ export class NodesService {
                     y: node.y,
                     color: node.color,
                     level,
-                    groupId: topic?.groupId ?? null,
+                    groupId: resolvedGroupId,
                     orderInGroup: topic?.orderInGroup ?? 0,
                     globalOrder: topic?.globalOrder ?? null,
                     progress: progress?.progress ?? 0,

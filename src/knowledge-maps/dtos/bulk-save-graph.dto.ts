@@ -23,6 +23,10 @@ export class BulkNodeDto {
     @IsOptional()
     topicId?: number | null;
 
+    @IsString()
+    @IsOptional()
+    groupId?: string | null;
+
     @IsNumber()
     @IsOptional()
     x?: number | null;

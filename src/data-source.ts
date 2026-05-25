@@ -15,6 +15,8 @@ import { InitialSchema1730000000000 } from './migrations/1730000000000-InitialSc
 import { EditorFeatures1730000000001 } from './migrations/1730000000001-EditorFeatures';
 import { KnowledgeGroupsSchema1730000000002 } from './migrations/1730000000002-KnowledgeGroupsSchema';
 import { MapGroupLayout1730000000003 } from './migrations/1730000000003-MapGroupLayout';
+import { NodeGroupId1730000000004 } from './migrations/1730000000004-NodeGroupId';
+import { NodeContent1730000000005 } from './migrations/1730000000005-NodeContent';
 
 const useSsl = process.env.DB_SSL === 'true';
 const caPath = process.env.DB_CA_PATH;
@@ -42,6 +44,8 @@ export const AppDataSource = new DataSource({
         EditorFeatures1730000000001,
         KnowledgeGroupsSchema1730000000002,
         MapGroupLayout1730000000003,
+        NodeGroupId1730000000004,
+        NodeContent1730000000005,
     ],
     synchronize: false,
     logging: true,

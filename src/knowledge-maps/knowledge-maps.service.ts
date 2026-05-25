@@ -5,7 +5,7 @@ import {
     ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, In } from 'typeorm';
+import { Repository, DataSource, In, QueryRunner } from 'typeorm';
 import { KnowledgeMap, MapStatus } from './entities/knowledge-map.entity';
 import { MapRevision } from './entities/map-revision.entity';
 import { Node } from '../nodes/entities/node.entity';
@@ -14,7 +14,7 @@ import { Topic } from '../topics/entities/topic.entity';
 import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
 import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { CreateKnowledgeMapDto, UpdateKnowledgeMapDto } from './dtos/create-knowledge-map.dto';
-import { BulkSaveGraphDto } from './dtos/bulk-save-graph.dto';
+import { BulkSaveGraphDto, BulkNodeDto, CreateRevisionDto } from './dtos/bulk-save-graph.dto';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
 import { UserRole } from '../users/entities/user.entity';
 
@@ -118,6 +118,7 @@ export class KnowledgeMapsService {
                 id: n.id,
                 title: n.title,
                 topicId: n.topicId,
+                groupId: n.groupId,
                 x: n.x,
                 y: n.y,
                 color: n.color,
@@ -188,25 +189,67 @@ export class KnowledgeMapsService {
             }
 
             for (const nodeDto of dto.nodes) {
+                let topic: Topic | null = null;
                 if (nodeDto.topicId) {
-                    const topic = await this.topicRepo.findOne({ where: { id: nodeDto.topicId } });
+                    topic = await queryRunner.manager.findOne(Topic, {
+                        where: { id: nodeDto.topicId },
+                    });
                     if (!topic) {
                         throw new BadRequestException(`Topic id=${nodeDto.topicId} не існує`);
                     }
                 }
 
+                let existing: Node | null = null;
                 if (nodeDto.id !== undefined && nodeDto.id > 0) {
-                    const existing = await queryRunner.manager.findOne(Node, {
+                    existing = await queryRunner.manager.findOne(Node, {
                         where: { id: nodeDto.id, mapId },
                     });
                     if (!existing) {
-                        throw new NotFoundException(`Node id=${nodeDto.id} не знайдено на карті ${mapId}`);
+                        throw new NotFoundException(
+                            `Node id=${nodeDto.id} не знайдено на карті ${mapId}`,
+                        );
                     }
+                }
+
+                const groupIdForSave = this.resolveNodeGroupIdForSave(nodeDto, topic);
+                const effectiveGroupId =
+                    groupIdForSave ?? topic?.groupId ?? existing?.groupId ?? null;
+
+                let topicIdForSave = nodeDto.topicId ?? existing?.topicId ?? null;
+
+                if (!topicIdForSave && effectiveGroupId) {
+                    topic = await this.createTopicForNodeInTransaction(
+                        queryRunner,
+                        nodeDto.title,
+                        effectiveGroupId,
+                    );
+                    topicIdForSave = topic.id;
+                } else if (topic) {
+                    const trimmedTitle = nodeDto.title.trim() || 'Новий вузол';
+                    let topicDirty = false;
+                    if (topic.title !== trimmedTitle) {
+                        topic.title = trimmedTitle;
+                        topic.description = trimmedTitle;
+                        topicDirty = true;
+                    }
+                    if (effectiveGroupId && topic.groupId !== effectiveGroupId) {
+                        topic.groupId = effectiveGroupId;
+                        topicDirty = true;
+                    }
+                    if (topicDirty) {
+                        await queryRunner.manager.save(topic);
+                    }
+                }
+
+                if (existing) {
                     Object.assign(existing, {
                         title: nodeDto.title,
-                        topicId: nodeDto.topicId ?? null,
+                        topicId: topicIdForSave,
                         color: nodeDto.color ?? null,
                     });
+                    if (groupIdForSave !== undefined) {
+                        existing.groupId = groupIdForSave;
+                    }
                     if (nodeDto.x !== undefined) existing.x = nodeDto.x;
                     if (nodeDto.y !== undefined) existing.y = nodeDto.y;
                     await queryRunner.manager.save(existing);
@@ -215,7 +258,8 @@ export class KnowledgeMapsService {
                     const created = await queryRunner.manager.save(
                         queryRunner.manager.create(Node, {
                             title: nodeDto.title,
-                            topicId: nodeDto.topicId ?? null,
+                            topicId: topicIdForSave,
+                            groupId: groupIdForSave ?? effectiveGroupId ?? null,
                             mapId,
                             x: nodeDto.x ?? null,
                             y: nodeDto.y ?? null,
@@ -468,5 +512,48 @@ export class KnowledgeMapsService {
             if (!map.ownerUid || map.ownerUid === userUid) return;
         }
         throw new ForbiddenException('Недостатньо прав для редагування цієї карти');
+    }
+
+    /** groupId з payload або з теми; undefined = не змінювати (partial update) */
+    private resolveNodeGroupIdForSave(
+        nodeDto: BulkNodeDto,
+        topic: Topic | null,
+    ): string | null | undefined {
+        if (nodeDto.groupId !== undefined) {
+            return nodeDto.groupId;
+        }
+        if (nodeDto.topicId !== undefined && nodeDto.topicId != null && topic) {
+            return topic.groupId ?? null;
+        }
+        return undefined;
+    }
+
+    private async createTopicForNodeInTransaction(
+        queryRunner: QueryRunner,
+        title: string,
+        groupId: string,
+    ): Promise<Topic> {
+        const trimmedTitle = title.trim() || 'Новий вузол';
+
+        const maxOrder = await queryRunner.manager
+            .createQueryBuilder(Topic, 't')
+            .select('MAX(t.order_in_group)', 'maxOrder')
+            .where('t.group_id = :groupId', { groupId })
+            .getRawOne<{ maxOrder: string | null }>();
+
+        const maxGlobal = await queryRunner.manager
+            .createQueryBuilder(Topic, 't')
+            .select('MAX(t.global_order)', 'maxGlobal')
+            .getRawOne<{ maxGlobal: string | null }>();
+
+        return queryRunner.manager.save(
+            queryRunner.manager.create(Topic, {
+                title: trimmedTitle,
+                description: trimmedTitle,
+                groupId,
+                orderInGroup: (Number(maxOrder?.maxOrder) || 0) + 1,
+                globalOrder: (Number(maxGlobal?.maxGlobal) || 0) + 1,
+            }),
+        );
     }
 }
