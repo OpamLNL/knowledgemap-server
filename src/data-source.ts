@@ -18,6 +18,7 @@ import { MapGroupLayout1730000000003 } from './migrations/1730000000003-MapGroup
 import { NodeGroupId1730000000004 } from './migrations/1730000000004-NodeGroupId';
 import { NodeContent1730000000005 } from './migrations/1730000000005-NodeContent';
 import { GroupMapId1730000000006 } from './migrations/1730000000006-GroupMapId';
+import { GraphValidated1730000000007 } from './migrations/1730000000007-GraphValidated';
 
 const useSsl = process.env.DB_SSL === 'true';
 const caPath = process.env.DB_CA_PATH;
@@ -48,6 +49,7 @@ export const AppDataSource = new DataSource({
         NodeGroupId1730000000004,
         NodeContent1730000000005,
         GroupMapId1730000000006,
+        GraphValidated1730000000007,
     ],
     synchronize: false,
     logging: true,

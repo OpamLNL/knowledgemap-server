@@ -135,16 +135,13 @@ export class KnowledgeMapsService {
         const map = await this.findOne(id);
         this.assertCanEdit(map, userUid, userRole);
 
-        const graph = await this.getEditorGraph(id);
-        this.graphValidator.assertValid(
-            graph.nodes.map((n) => n.id),
-            graph.edges.map((e) => ({ from: e.fromNodeId, to: e.toNodeId, id: e.id })),
-        );
+        const validation = await this.validateGraph(id);
 
         await this.createRevision(id, userUid, 'Авто-знімок перед публікацією');
 
         map.status = MapStatus.PUBLISHED;
         map.publishedAt = new Date();
+        map.graphValidated = validation.valid;
         return this.mapRepo.save(map);
     }
 
