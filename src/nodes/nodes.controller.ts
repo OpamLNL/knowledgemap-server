@@ -52,6 +52,48 @@ export class NodesController {
         return this.nodesService.remove(id);
     }
 
+    @Get('map/:mapId/overview')
+    @Header('Cache-Control', 'no-store')
+    @ApiOperation({ summary: 'Огляд карти: групи, прогрес, індекс тем (без вузлів)' })
+    async getMapOverview(
+        @Req() req: { user?: { uid: string } },
+        @Param('mapId', ParseIntPipe) mapId: number,
+    ) {
+        const userUid = req.user?.uid ?? '';
+        try {
+            return await this.nodesService.getMapOverview(userUid, mapId);
+        } catch (error) {
+            console.warn('⚠️ Помилка при завантаженні огляду карти:', error);
+            return {
+                mapId,
+                groups: [],
+                groupEdges: [],
+                groupLayout: {},
+                progress: {
+                    mapId,
+                    total: 0,
+                    completed: 0,
+                    available: 0,
+                    locked: 0,
+                    percent: 0,
+                },
+                nodesIndex: [],
+            };
+        }
+    }
+
+    @Get('map/:mapId/groups/:groupId/nodes')
+    @Header('Cache-Control', 'no-store')
+    @ApiOperation({ summary: 'Вузли та ребра однієї групи знань' })
+    async getGroupNodes(
+        @Req() req: { user?: { uid: string } },
+        @Param('mapId', ParseIntPipe) mapId: number,
+        @Param('groupId') groupId: string,
+    ) {
+        const userUid = req.user?.uid ?? '';
+        return this.nodesService.getGroupNodes(userUid, mapId, groupId);
+    }
+
     @Get('graph')
     @Header('Cache-Control', 'no-store')
     @ApiOperation({ summary: 'Граф для навчання (з прогресом користувача)' })

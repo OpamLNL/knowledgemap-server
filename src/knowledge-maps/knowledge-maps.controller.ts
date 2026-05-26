@@ -17,6 +17,7 @@ import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { KnowledgeMapsService } from './knowledge-maps.service';
 import { CreateKnowledgeMapDto, UpdateKnowledgeMapDto } from './dtos/create-knowledge-map.dto';
 import { BulkSaveGraphDto, CreateRevisionDto } from './dtos/bulk-save-graph.dto';
+import { ValidateGraphDto } from './dtos/validate-graph.dto';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
 
@@ -103,9 +104,19 @@ export class KnowledgeMapsController {
     }
 
     @Get(':id/validate')
-    @ApiOperation({ summary: 'Валідація графа (цикли, дублікати, ізоляція)' })
-    validateGraph(@Param('id', ParseIntPipe) id: number) {
+    @ApiOperation({ summary: 'Валідація збереженого графа (legacy GET)' })
+    validateGraphSaved(@Param('id', ParseIntPipe) id: number) {
         return this.service.validateGraph(id);
+    }
+
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
+    @Post(':id/validate')
+    @ApiOperation({ summary: 'Валідація поточного графа редактора (nodes + edges з тіла запиту)' })
+    validateGraph(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: ValidateGraphDto,
+    ) {
+        return this.service.validateGraphDraft(id, dto);
     }
 
     @Get(':id/export')

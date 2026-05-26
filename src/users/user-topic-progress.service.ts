@@ -134,4 +134,20 @@ export class UserTopicProgressService {
             .getRawOne();
         return Number(result?.cnt ?? 0);
     }
+
+    /** Користувачі, у яких є запис прогресу по темах цієї карти (будь-яка роль). */
+    async findLearnerUidsForMap(mapId: number, excludeUid?: string): Promise<string[]> {
+        const qb = this.repo
+            .createQueryBuilder('p')
+            .innerJoin(Node, 'n', 'n.topic_id = p.topic_id')
+            .select('DISTINCT p.user_uid', 'userUid')
+            .where('n.map_id = :mapId', { mapId });
+
+        if (excludeUid) {
+            qb.andWhere('p.user_uid != :excludeUid', { excludeUid });
+        }
+
+        const rows = await qb.getRawMany<{ userUid: string }>();
+        return rows.map((r) => r.userUid).filter(Boolean);
+    }
 }

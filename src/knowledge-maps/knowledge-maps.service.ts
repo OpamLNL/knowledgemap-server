@@ -16,6 +16,7 @@ import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { UserTopicProgress } from '../users/entities/user-topic-progress.entity';
 import { CreateKnowledgeMapDto, UpdateKnowledgeMapDto } from './dtos/create-knowledge-map.dto';
 import { BulkSaveGraphDto, BulkNodeDto, CreateRevisionDto } from './dtos/bulk-save-graph.dto';
+import { ValidateGraphDto } from './dtos/validate-graph.dto';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
 import { UserRole } from '../users/entities/user.entity';
 
@@ -183,6 +184,33 @@ export class KnowledgeMapsService {
     async validateGraph(mapId: number) {
         const graph = await this.getEditorGraph(mapId);
         return this.validateMapGraphStrict(mapId, graph);
+    }
+
+    /** Валідація чернетки з редактора (може містити незбережені зміни). */
+    async validateGraphDraft(mapId: number, dto: ValidateGraphDto) {
+        await this.findOne(mapId);
+
+        const dbGroups = await this.groupRepo.find({ where: { mapId } });
+        const groupTitleById: Record<string, string> = Object.fromEntries(
+            dbGroups.map((g) => [g.id, g.title]),
+        );
+        for (const g of dto.groups ?? []) {
+            groupTitleById[g.id] = g.title;
+        }
+
+        return this.graphValidator.validate(
+            dto.nodes.map((n) => ({
+                id: n.id,
+                title: n.title,
+                groupId: n.groupId ?? null,
+            })),
+            dto.edges.map((e) => ({ from: e.from, to: e.to })),
+            {
+                strictCycles: true,
+                strictIsolation: true,
+                groupTitleById,
+            },
+        );
     }
 
     /** Сувора валідація для UI «Валідувати» та публікації. */

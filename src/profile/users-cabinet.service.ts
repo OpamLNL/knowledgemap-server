@@ -69,23 +69,20 @@ export class UsersCabinetService {
         let percentSum = 0;
         let mapsWithProgress = 0;
 
-        const isTeacher = role === UserRole.TEACHER;
-        const students = isTeacher
-            ? await this.userRepo.find({
-                  where: { role: UserRole.STUDENT },
-                  select: ['firebase_uid', 'email', 'name'],
-              })
-            : [];
+        const isEditor = role === UserRole.TEACHER || role === UserRole.ADMIN;
 
         const teachingByMapId = new Map<number, MapTeachingStats>();
 
-        if (isTeacher) {
+        if (isEditor) {
             for (const map of maps) {
                 const isMapOwner = !map.ownerUid || map.ownerUid === firebaseUid;
                 if (!isMapOwner || map.status !== MapStatus.PUBLISHED) {
                     continue;
                 }
-                teachingByMapId.set(map.id, await this.buildMapTeachingStats(map.id, students));
+                teachingByMapId.set(
+                    map.id,
+                    await this.buildMapTeachingStats(map.id, firebaseUid),
+                );
             }
         }
 
@@ -125,7 +122,7 @@ export class UsersCabinetService {
         }
 
         const teachingMaps = mapItems.filter((m) => m.teachingStats);
-        const teachingStats = isTeacher ? this.buildTeachingSummary(teachingMaps) : null;
+        const teachingStats = isEditor ? this.buildTeachingSummary(teachingMaps) : null;
 
         const recentCompleted = progressRecords
             .filter((r) => r.status === 'completed' && r.completed_at)
@@ -174,9 +171,29 @@ export class UsersCabinetService {
 
     private async buildMapTeachingStats(
         mapId: number,
-        students: Pick<User, 'firebase_uid' | 'email' | 'name'>[],
+        ownerUid: string,
     ): Promise<MapTeachingStats> {
         const nodeCount = await this.nodeRepo.count({ where: { mapId } });
+        if (nodeCount === 0) {
+            return {
+                nodeCount: 0,
+                studentsTotal: 0,
+                studentsActive: 0,
+                averagePercent: 0,
+                completionDistribution: { notStarted: 0, inProgress: 0, completed: 0 },
+                topStudents: [],
+            };
+        }
+
+        const learnerUids = await this.progressService.findLearnerUidsForMap(mapId, ownerUid);
+        const users =
+            learnerUids.length > 0
+                ? await this.userRepo.find({
+                      where: { firebase_uid: In(learnerUids) },
+                      select: ['firebase_uid', 'email', 'name', 'role'],
+                  })
+                : [];
+        const userByUid = new Map(users.map((u) => [u.firebase_uid, u]));
 
         const userStats: {
             name: string;
@@ -186,32 +203,27 @@ export class UsersCabinetService {
             percent: number;
         }[] = [];
 
-        for (const student of students) {
-            const uid = student.firebase_uid;
-            if (!uid) continue;
-
+        for (const uid of learnerUids) {
             const summary = await this.nodesService.getProgressSummary(uid, mapId);
+            const profile = userByUid.get(uid);
             userStats.push({
-                name: student.name ?? student.email,
-                email: student.email,
+                name: profile?.name ?? profile?.email ?? `Користувач ${uid.slice(0, 8)}…`,
+                email: profile?.email ?? '',
                 completed: summary.completed,
                 total: summary.total,
                 percent: summary.percent,
             });
         }
 
-        userStats.sort((a, b) => b.percent - a.percent);
+        userStats.sort((a, b) => b.percent - a.percent || b.completed - a.completed);
 
-        const studentsWithNodes = userStats.filter((u) => u.total > 0);
-        const studentsTotal = studentsWithNodes.length;
-        const studentsActive = studentsWithNodes.filter(
+        const studentsTotal = userStats.length;
+        const studentsActive = userStats.filter(
             (u) => u.completed > 0 || u.percent > 0,
         ).length;
         const averagePercent =
             studentsTotal > 0
-                ? Math.round(
-                      studentsWithNodes.reduce((sum, u) => sum + u.percent, 0) / studentsTotal,
-                  )
+                ? Math.round(userStats.reduce((sum, u) => sum + u.percent, 0) / studentsTotal)
                 : 0;
 
         return {
@@ -220,12 +232,11 @@ export class UsersCabinetService {
             studentsActive,
             averagePercent,
             completionDistribution: {
-                notStarted: studentsWithNodes.filter((u) => u.completed === 0).length,
-                inProgress: studentsWithNodes.filter((u) => u.completed > 0 && u.percent < 100)
-                    .length,
-                completed: studentsWithNodes.filter((u) => u.percent === 100).length,
+                notStarted: userStats.filter((u) => u.percent === 0 && u.completed === 0).length,
+                inProgress: userStats.filter((u) => u.percent > 0 && u.percent < 100).length,
+                completed: userStats.filter((u) => u.percent >= 100).length,
             },
-            topStudents: userStats.filter((u) => u.completed > 0).slice(0, 5),
+            topStudents: userStats.slice(0, 10),
         };
     }
 

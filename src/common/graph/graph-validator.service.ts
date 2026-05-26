@@ -106,7 +106,11 @@ export class GraphValidatorService {
             edgeKeys.add(key);
         }
 
-        const cycleNodeIds = this.findCycleNodeIds(nodeIds, edges);
+        const edgesForStructure = edges.filter(
+            (e) => nodeIdSet.has(e.from) && nodeIdSet.has(e.to),
+        );
+
+        const cycleNodeIds = this.findCycleNodeIds(nodeIds, edgesForStructure);
         if (cycleNodeIds.size > 0) {
             const cycleMsg = 'Граф містить цикл — карта не є DAG';
             if (options.strictCycles) {
@@ -129,7 +133,7 @@ export class GraphValidatorService {
         }
 
         const connected = new Set<number>();
-        for (const e of edges) {
+        for (const e of edgesForStructure) {
             connected.add(e.from);
             connected.add(e.to);
         }
