@@ -5,7 +5,7 @@ import {
     ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, In, QueryRunner, IsNull } from 'typeorm';
+import { Repository, DataSource, In, QueryRunner, QueryFailedError } from 'typeorm';
 import { KnowledgeMap, MapStatus } from './entities/knowledge-map.entity';
 import { MapRevision } from './entities/map-revision.entity';
 import { Node } from '../nodes/entities/node.entity';
@@ -13,6 +13,7 @@ import { NodeConnection } from '../node-connections/entities/node-connection.ent
 import { Topic } from '../topics/entities/topic.entity';
 import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
 import { GroupConnection } from '../topics/entities/group-connection.entity';
+import { UserTopicProgress } from '../users/entities/user-topic-progress.entity';
 import { CreateKnowledgeMapDto, UpdateKnowledgeMapDto } from './dtos/create-knowledge-map.dto';
 import { BulkSaveGraphDto, BulkNodeDto, CreateRevisionDto } from './dtos/bulk-save-graph.dto';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
@@ -33,24 +34,63 @@ export class KnowledgeMapsService {
         private readonly topicRepo: Repository<Topic>,
         @InjectRepository(KnowledgeGroup)
         private readonly groupRepo: Repository<KnowledgeGroup>,
+        @InjectRepository(UserTopicProgress)
+        private readonly progressRepo: Repository<UserTopicProgress>,
         private readonly graphValidator: GraphValidatorService,
         private readonly dataSource: DataSource,
     ) {}
 
-    async findAll(userRole: UserRole, ownerUid?: string): Promise<KnowledgeMap[]> {
-        if (userRole === UserRole.ADMIN) {
-            return this.mapRepo.find({ order: { updatedAt: 'DESC' } });
-        }
-        if (userRole === UserRole.TEACHER && ownerUid) {
-            return this.mapRepo.find({
-                where: [{ ownerUid }, { ownerUid: IsNull() }],
-                order: { updatedAt: 'DESC' },
-            });
-        }
+    /** Каталог: усі опубліковані карти (меню «Карти», головна). */
+    async findPublished(): Promise<KnowledgeMap[]> {
         return this.mapRepo.find({
             where: { status: MapStatus.PUBLISHED },
             order: { updatedAt: 'DESC' },
         });
+    }
+
+    /** @deprecated Використовуйте findPublished або findMine */
+    async findAll(_userRole?: UserRole, _ownerUid?: string): Promise<KnowledgeMap[]> {
+        return this.findPublished();
+    }
+
+    /** Мої карти: створені користувачем + ті, що проходить/проходив. */
+    async findMine(userUid: string): Promise<KnowledgeMap[]> {
+        const owned = await this.mapRepo.find({
+            where: { ownerUid: userUid },
+            order: { updatedAt: 'DESC' },
+        });
+        const ownedIds = new Set(owned.map((m) => m.id));
+
+        const progressRows = await this.nodeRepo
+            .createQueryBuilder('n')
+            .innerJoin(
+                UserTopicProgress,
+                'p',
+                'p.topic_id = n.topic_id AND p.user_uid = :uid',
+                { uid: userUid },
+            )
+            .where('n.map_id IS NOT NULL')
+            .andWhere("(p.status = 'completed' OR p.progress > 0)")
+            .select('DISTINCT n.map_id', 'mapId')
+            .getRawMany<{ mapId: number }>();
+
+        const extraIds = progressRows
+            .map((r) => Number(r.mapId))
+            .filter((id) => id && !ownedIds.has(id));
+
+        let fromProgress: KnowledgeMap[] = [];
+        if (extraIds.length > 0) {
+            fromProgress = await this.mapRepo.find({
+                where: { id: In(extraIds) },
+                order: { updatedAt: 'DESC' },
+            });
+        }
+
+        const merged = [...owned, ...fromProgress];
+        merged.sort(
+            (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+        );
+        return merged;
     }
 
     async findOne(id: number): Promise<KnowledgeMap> {
@@ -188,6 +228,89 @@ export class KnowledgeMapsService {
                     id: In(dto.deletedNodeIds),
                     mapId,
                 });
+            }
+
+            if (dto.deletedGroupEdgeIds?.length) {
+                await queryRunner.manager.delete(GroupConnection, {
+                    id: In(dto.deletedGroupEdgeIds),
+                    mapId,
+                });
+            }
+
+            if (dto.deletedGroupIds?.length) {
+                const validDelete = dto.deletedGroupIds.filter(Boolean);
+                if (validDelete.length > 0) {
+                    const nodesInGroups = await queryRunner.manager.find(Node, {
+                        where: { mapId, groupId: In(validDelete) },
+                    });
+                    const nodeIds = nodesInGroups.map((n) => n.id);
+                    if (nodeIds.length > 0) {
+                        await queryRunner.manager.delete(NodeConnection, {
+                            mapId,
+                            fromNodeId: In(nodeIds),
+                        });
+                        await queryRunner.manager.delete(NodeConnection, {
+                            mapId,
+                            toNodeId: In(nodeIds),
+                        });
+                        await queryRunner.manager.delete(Node, {
+                            id: In(nodeIds),
+                            mapId,
+                        });
+                    }
+                    await queryRunner.manager
+                        .createQueryBuilder()
+                        .delete()
+                        .from(GroupConnection)
+                        .where('map_id = :mapId', { mapId })
+                        .andWhere(
+                            '(from_group_id IN (:...ids) OR to_group_id IN (:...ids))',
+                            { ids: validDelete },
+                        )
+                        .execute();
+                    await queryRunner.manager.delete(KnowledgeGroup, {
+                        id: In(validDelete),
+                        mapId,
+                    });
+                }
+            }
+
+            if (dto.groups?.length) {
+                for (const groupDto of dto.groups) {
+                    const existing = await queryRunner.manager.findOne(KnowledgeGroup, {
+                        where: { id: groupDto.id },
+                    });
+                    if (existing) {
+                        if (existing.mapId !== mapId) {
+                            throw new BadRequestException(
+                                `Група ${groupDto.id} належить іншій карті`,
+                            );
+                        }
+                        Object.assign(existing, {
+                            title: groupDto.title,
+                            description: groupDto.description ?? null,
+                            level: groupDto.level ?? existing.level,
+                            sortOrder: groupDto.sortOrder ?? existing.sortOrder,
+                            parentId:
+                                groupDto.parentId !== undefined
+                                    ? groupDto.parentId
+                                    : existing.parentId,
+                        });
+                        await queryRunner.manager.save(existing);
+                    } else {
+                        await queryRunner.manager.save(
+                            queryRunner.manager.create(KnowledgeGroup, {
+                                id: groupDto.id,
+                                mapId,
+                                title: groupDto.title,
+                                description: groupDto.description ?? null,
+                                level: groupDto.level ?? 0,
+                                sortOrder: groupDto.sortOrder ?? 0,
+                                parentId: groupDto.parentId ?? null,
+                            }),
+                        );
+                    }
+                }
             }
 
             for (const nodeDto of dto.nodes) {
@@ -332,89 +455,6 @@ export class KnowledgeMapsService {
                 }
             }
 
-            if (dto.deletedGroupEdgeIds?.length) {
-                await queryRunner.manager.delete(GroupConnection, {
-                    id: In(dto.deletedGroupEdgeIds),
-                    mapId,
-                });
-            }
-
-            if (dto.groups?.length) {
-                for (const groupDto of dto.groups) {
-                    const existing = await queryRunner.manager.findOne(KnowledgeGroup, {
-                        where: { id: groupDto.id },
-                    });
-                    if (existing) {
-                        if (existing.mapId !== mapId) {
-                            throw new BadRequestException(
-                                `Група ${groupDto.id} належить іншій карті`,
-                            );
-                        }
-                        Object.assign(existing, {
-                            title: groupDto.title,
-                            description: groupDto.description ?? null,
-                            level: groupDto.level ?? existing.level,
-                            sortOrder: groupDto.sortOrder ?? existing.sortOrder,
-                            parentId:
-                                groupDto.parentId !== undefined
-                                    ? groupDto.parentId
-                                    : existing.parentId,
-                        });
-                        await queryRunner.manager.save(existing);
-                    } else {
-                        await queryRunner.manager.save(
-                            queryRunner.manager.create(KnowledgeGroup, {
-                                id: groupDto.id,
-                                mapId,
-                                title: groupDto.title,
-                                description: groupDto.description ?? null,
-                                level: groupDto.level ?? 0,
-                                sortOrder: groupDto.sortOrder ?? 0,
-                                parentId: groupDto.parentId ?? null,
-                            }),
-                        );
-                    }
-                }
-            }
-
-            if (dto.deletedGroupIds?.length) {
-                const validDelete = dto.deletedGroupIds.filter(Boolean);
-                if (validDelete.length > 0) {
-                    const nodesInGroups = await queryRunner.manager.find(Node, {
-                        where: { mapId, groupId: In(validDelete) },
-                    });
-                    const nodeIds = nodesInGroups.map((n) => n.id);
-                    if (nodeIds.length > 0) {
-                        await queryRunner.manager.delete(NodeConnection, {
-                            mapId,
-                            fromNodeId: In(nodeIds),
-                        });
-                        await queryRunner.manager.delete(NodeConnection, {
-                            mapId,
-                            toNodeId: In(nodeIds),
-                        });
-                        await queryRunner.manager.delete(Node, {
-                            id: In(nodeIds),
-                            mapId,
-                        });
-                    }
-                    await queryRunner.manager
-                        .createQueryBuilder()
-                        .delete()
-                        .from(GroupConnection)
-                        .where('map_id = :mapId', { mapId })
-                        .andWhere(
-                            '(from_group_id IN (:...ids) OR to_group_id IN (:...ids))',
-                            { ids: validDelete },
-                        )
-                        .execute();
-                    await queryRunner.manager.delete(KnowledgeGroup, {
-                        id: In(validDelete),
-                        mapId,
-                    });
-                }
-            }
-
             if (dto.groupEdges?.length) {
                 const groupIds = new Set(
                     (await queryRunner.manager.find(KnowledgeGroup, { where: { mapId } })).map(
@@ -489,6 +529,9 @@ export class KnowledgeMapsService {
             await queryRunner.commitTransaction();
         } catch (err) {
             await queryRunner.rollbackTransaction();
+            if (err instanceof QueryFailedError) {
+                throw new BadRequestException(`Помилка збереження графа: ${err.message}`);
+            }
             throw err;
         } finally {
             await queryRunner.release();
@@ -604,7 +647,7 @@ export class KnowledgeMapsService {
             .where('m.id != :mapId', { mapId });
 
         if (userRole !== UserRole.ADMIN) {
-            qb.andWhere('(m.owner_uid = :uid OR m.owner_uid IS NULL)', { uid: userUid });
+            qb.andWhere('m.owner_uid = :uid', { uid: userUid });
         }
         if (sourceMapId != null && !Number.isNaN(sourceMapId)) {
             qb.andWhere('m.id = :sourceMapId', { sourceMapId });
@@ -706,13 +749,13 @@ export class KnowledgeMapsService {
 
         const maxOrder = await queryRunner.manager
             .createQueryBuilder(Topic, 't')
-            .select('MAX(t.order_in_group)', 'maxOrder')
-            .where('t.group_id = :groupId', { groupId })
+            .select('MAX(t.orderInGroup)', 'maxOrder')
+            .where('t.groupId = :groupId', { groupId })
             .getRawOne<{ maxOrder: string | null }>();
 
         const maxGlobal = await queryRunner.manager
             .createQueryBuilder(Topic, 't')
-            .select('MAX(t.global_order)', 'maxGlobal')
+            .select('MAX(t.globalOrder)', 'maxGlobal')
             .getRawOne<{ maxGlobal: string | null }>();
 
         return queryRunner.manager.save(

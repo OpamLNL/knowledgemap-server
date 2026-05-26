@@ -9,6 +9,7 @@ import { NodeConnection } from '../node-connections/entities/node-connection.ent
 import { Topic } from '../topics/entities/topic.entity';
 import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
 import { GroupConnection } from '../topics/entities/group-connection.entity';
+import { UserTopicProgress } from '../users/entities/user-topic-progress.entity';
 import { GraphModule } from '../common/graph/graph.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { GraphModule } from '../common/graph/graph.module';
             Topic,
             KnowledgeGroup,
             GroupConnection,
+            UserTopicProgress,
         ]),
         GraphModule,
     ],

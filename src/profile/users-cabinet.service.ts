@@ -45,7 +45,7 @@ export class UsersCabinetService {
             throw new NotFoundException('Користувача не знайдено');
         }
 
-        const maps = await this.mapsService.findAll(role, firebaseUid);
+        const maps = await this.mapsService.findMine(firebaseUid);
         const progressRecords = await this.progressService.findByUser(firebaseUid);
         const totalCompletedTopics = progressRecords.filter((r) => r.status === 'completed').length;
 

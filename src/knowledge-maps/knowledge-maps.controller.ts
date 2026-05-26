@@ -25,9 +25,15 @@ export class KnowledgeMapsController {
     constructor(private readonly service: KnowledgeMapsService) {}
 
     @Get()
-    @ApiOperation({ summary: 'Список карт знань' })
-    findAll(@Req() req: { user: { uid: string; role: UserRole } }) {
-        return this.service.findAll(req.user.role, req.user.uid);
+    @ApiOperation({ summary: 'Каталог опублікованих карт знань' })
+    findPublished() {
+        return this.service.findPublished();
+    }
+
+    @Get('mine')
+    @ApiOperation({ summary: 'Мої карти (розроблені + з прогресом проходження)' })
+    findMine(@Req() req: { user: { uid: string } }) {
+        return this.service.findMine(req.user.uid);
     }
 
     @Get(':id')
