@@ -19,6 +19,7 @@ import { userAvatarMulterOptions } from './user-avatar.storage';
 import type { UploadedImageFile } from '../nodes/types/uploaded-image-file';
 // import { UpdateUserDto } from './dtos/update-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { GrantTeacherDto } from './dtos/grant-teacher.dto';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from './entities/user.entity';
 import { ApiBearerAuth, ApiConsumes, ApiBody, ApiOperation } from '@nestjs/swagger';
@@ -41,6 +42,13 @@ export class UsersController {
         @Body('role') role: string,
     ) {
         return this.usersService.updateRole(id, role);
+    }
+
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
+    @Post('grant-teacher')
+    @ApiOperation({ summary: 'Надати роль викладача користувачу за email' })
+    grantTeacherRole(@Body() dto: GrantTeacherDto) {
+        return this.usersService.grantTeacherRoleByEmail(dto.email);
     }
 
 

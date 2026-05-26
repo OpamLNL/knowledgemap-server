@@ -198,6 +198,50 @@ export class UsersService {
         return this.usersRepository.save(user);
     }
 
+    /** Надати роль teacher користувачу за email (доступно teacher/admin). */
+    async grantTeacherRoleByEmail(email: string) {
+        const normalized = email.trim().toLowerCase();
+        if (!normalized) {
+            throw new BadRequestException('Email обов\'язковий');
+        }
+
+        const user = await this.usersRepository
+            .createQueryBuilder('u')
+            .where('LOWER(u.email) = :email', { email: normalized })
+            .getOne();
+
+        if (!user) {
+            throw new NotFoundException(
+                'Користувача з таким email не знайдено. Спочатку він має увійти в систему.',
+            );
+        }
+
+        if (user.role === UserRole.ADMIN) {
+            throw new BadRequestException('Неможливо змінити роль адміністратора');
+        }
+
+        if (user.role === UserRole.TEACHER) {
+            return {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+                message: 'Користувач уже має роль викладача',
+            };
+        }
+
+        user.role = UserRole.TEACHER;
+        const saved = await this.usersRepository.save(user);
+
+        return {
+            id: saved.id,
+            email: saved.email,
+            name: saved.name,
+            role: saved.role,
+            message: 'Роль викладача успішно надано',
+        };
+    }
+
 
 
     /**
