@@ -38,7 +38,17 @@ export class KnowledgeMap {
     publishedAt: Date | null;
 
     /** Результат валідації DAG на момент останньої публікації (null — ще не перевірялось). */
-    @Column({ name: 'graph_validated', type: 'boolean', nullable: true })
+    @Column({
+        name: 'graph_validated',
+        type: 'tinyint',
+        width: 1,
+        nullable: true,
+        transformer: {
+            to: (value: boolean | null) => (value === null ? null : value ? 1 : 0),
+            from: (value: number | null) =>
+                value === null || value === undefined ? null : value === 1,
+        },
+    })
     graphValidated: boolean | null;
 
     @Column({ name: 'group_layout_json', type: 'json', nullable: true })

@@ -90,14 +90,20 @@ export class NodeConnectionsService {
     ): Promise<void> {
         const connections = await this.repo.find({ where: { mapId } });
         const nodes = await this.nodeRepo.find({ where: { mapId } });
-        const nodeIds = nodes.map((n) => n.id);
 
         const edges = connections
             .filter((c) => c.id !== excludeEdgeId)
             .map((c) => ({ from: c.fromNodeId, to: c.toNodeId }));
         edges.push({ from: fromNodeId, to: toNodeId });
 
-        const result = this.graphValidator.validate(nodeIds, edges);
+        const result = this.graphValidator.validate(
+            nodes.map((n) => ({
+                id: n.id,
+                title: n.title,
+                groupId: n.groupId ?? null,
+            })),
+            edges,
+        );
         const blocking = result.errors.filter(
             (e) => !e.includes('цикл') && !e.includes('DAG'),
         );

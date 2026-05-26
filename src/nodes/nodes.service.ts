@@ -393,7 +393,11 @@ export class NodesService {
         const nodes = await this.nodeRepo.find({ where: { mapId } });
         const connections = await this.connectionRepo.find({ where: { mapId } });
         return this.graphValidator.validate(
-            nodes.map((n) => n.id),
+            nodes.map((n) => ({
+                id: n.id,
+                title: n.title,
+                groupId: n.groupId ?? null,
+            })),
             connections.map((c) => ({ from: c.fromNodeId, to: c.toNodeId, id: c.id })),
         );
     }

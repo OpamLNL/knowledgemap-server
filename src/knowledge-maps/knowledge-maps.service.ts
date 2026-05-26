@@ -128,14 +128,23 @@ export class KnowledgeMapsService {
     async remove(id: number, userUid: string, userRole: UserRole): Promise<void> {
         const map = await this.findOne(id);
         this.assertCanEdit(map, userUid, userRole);
-        await this.mapRepo.remove(map);
+
+        await this.dataSource.transaction(async (manager) => {
+            await manager.delete(NodeConnection, { mapId: id });
+            await manager.delete(Node, { mapId: id });
+            await manager.delete(GroupConnection, { mapId: id });
+            await manager.delete(KnowledgeGroup, { mapId: id });
+            await manager.delete(MapRevision, { mapId: id });
+            await manager.delete(KnowledgeMap, { id });
+        });
     }
 
     async publish(id: number, userUid: string, userRole: UserRole): Promise<KnowledgeMap> {
         const map = await this.findOne(id);
         this.assertCanEdit(map, userUid, userRole);
 
-        const validation = await this.validateGraph(id);
+        const graph = await this.getEditorGraph(id);
+        const validation = await this.validateMapGraphStrict(id, graph);
 
         await this.createRevision(id, userUid, 'Авто-знімок перед публікацією');
 
@@ -173,9 +182,35 @@ export class KnowledgeMapsService {
 
     async validateGraph(mapId: number) {
         const graph = await this.getEditorGraph(mapId);
+        return this.validateMapGraphStrict(mapId, graph);
+    }
+
+    /** Сувора валідація для UI «Валідувати» та публікації. */
+    private async validateMapGraphStrict(
+        mapId: number,
+        graph: Awaited<ReturnType<KnowledgeMapsService['getEditorGraph']>>,
+    ) {
+        const knowledgeGroups = await this.groupRepo.find({ where: { mapId } });
+        const groupTitleById = Object.fromEntries(
+            knowledgeGroups.map((g) => [g.id, g.title]),
+        ) as Record<string, string>;
+
         return this.graphValidator.validate(
-            graph.nodes.map((n) => n.id),
-            graph.edges.map((e) => ({ from: e.fromNodeId, to: e.toNodeId, id: e.id })),
+            graph.nodes.map((n) => ({
+                id: n.id,
+                title: n.title,
+                groupId: n.groupId ?? null,
+            })),
+            graph.edges.map((e) => ({
+                from: e.fromNodeId,
+                to: e.toNodeId,
+                id: e.id,
+            })),
+            {
+                strictCycles: true,
+                strictIsolation: true,
+                groupTitleById,
+            },
         );
     }
 

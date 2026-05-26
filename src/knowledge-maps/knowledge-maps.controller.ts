@@ -10,6 +10,8 @@ import {
     Req,
     Query,
     ParseIntPipe,
+    HttpCode,
+    HttpStatus,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { KnowledgeMapsService } from './knowledge-maps.service';
@@ -65,6 +67,7 @@ export class KnowledgeMapsController {
 
     @Roles(UserRole.ADMIN, UserRole.TEACHER)
     @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Видалити карту' })
     remove(
         @Param('id', ParseIntPipe) id: number,
