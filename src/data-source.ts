@@ -17,6 +17,7 @@ import { KnowledgeGroupsSchema1730000000002 } from './migrations/1730000000002-K
 import { MapGroupLayout1730000000003 } from './migrations/1730000000003-MapGroupLayout';
 import { NodeGroupId1730000000004 } from './migrations/1730000000004-NodeGroupId';
 import { NodeContent1730000000005 } from './migrations/1730000000005-NodeContent';
+import { GroupMapId1730000000006 } from './migrations/1730000000006-GroupMapId';
 
 const useSsl = process.env.DB_SSL === 'true';
 const caPath = process.env.DB_CA_PATH;
@@ -46,6 +47,7 @@ export const AppDataSource = new DataSource({
         MapGroupLayout1730000000003,
         NodeGroupId1730000000004,
         NodeContent1730000000005,
+        GroupMapId1730000000006,
     ],
     synchronize: false,
     logging: true,

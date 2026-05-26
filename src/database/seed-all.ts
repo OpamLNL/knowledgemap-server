@@ -15,10 +15,10 @@ async function seedAll() {
     AppDataSource.setOptions({ logging: false });
     console.log('✅ DataSource initialized\n');
 
-    await seedKnowledgeGroups();
-    await seedGroupConnections();
-    const topicsBySeedId = await seedTopicsWithGroups();
     const map = await ensurePublishedMap();
+    await seedKnowledgeGroups(map.id);
+    await seedGroupConnections(map.id);
+    const topicsBySeedId = await seedTopicsWithGroups();
     await seedNodesForMap(map, topicsBySeedId);
     await seedNodeConnectionsFromCleanSeed(map, topicsBySeedId);
 

@@ -7,14 +7,21 @@ import {
     Patch,
     Req,
     Body,
-    Post, UnauthorizedException,
+    Post,
+    UnauthorizedException,
+    UseInterceptors,
+    UploadedFile,
+    BadRequestException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
+import { userAvatarMulterOptions } from './user-avatar.storage';
+import type { UploadedImageFile } from '../nodes/types/uploaded-image-file';
 // import { UpdateUserDto } from './dtos/update-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from './entities/user.entity';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { Request } from 'express';
 // import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import {admin} from "../config/firebase-admin";
@@ -94,6 +101,31 @@ export class UsersController {
         }
 
         return user;
+    }
+
+    @Post('me/avatar')
+    @ApiOperation({ summary: 'Завантажити аватар профілю' })
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: { file: { type: 'string', format: 'binary' } },
+        },
+    })
+    @UseInterceptors(FileInterceptor('file', userAvatarMulterOptions))
+    uploadAvatar(@Req() req: Request, @UploadedFile() file: UploadedImageFile) {
+        if (!file) {
+            throw new BadRequestException('Файл не передано');
+        }
+        const firebaseUid = (req.user as { uid: string }).uid;
+        return this.usersService.updateAvatar(firebaseUid, file.filename);
+    }
+
+    @Delete('me/avatar')
+    @ApiOperation({ summary: 'Скинути завантажений аватар' })
+    removeAvatar(@Req() req: Request) {
+        const firebaseUid = (req.user as { uid: string }).uid;
+        return this.usersService.clearAvatar(firebaseUid);
     }
 
 

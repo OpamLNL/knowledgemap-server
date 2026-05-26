@@ -8,6 +8,7 @@ import {
     Param,
     Body,
     Req,
+    Query,
     ParseIntPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -70,6 +71,26 @@ export class KnowledgeMapsController {
     @ApiOperation({ summary: 'Граф для редактора (без прогресу)' })
     getEditorGraph(@Param('id', ParseIntPipe) id: number) {
         return this.service.getEditorGraph(id);
+    }
+
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
+    @Get(':id/import-library')
+    @ApiOperation({ summary: 'Бібліотека груп і вузлів з інших карт користувача' })
+    getImportLibrary(
+        @Param('id', ParseIntPipe) id: number,
+        @Query('search') search: string | undefined,
+        @Query('sourceMapId') sourceMapId: string | undefined,
+        @Req() req: { user: { uid: string; role: UserRole } },
+    ) {
+        const parsedSource =
+            sourceMapId != null && sourceMapId !== '' ? Number(sourceMapId) : undefined;
+        return this.service.getImportLibrary(
+            id,
+            req.user.uid,
+            req.user.role,
+            search,
+            parsedSource != null && !Number.isNaN(parsedSource) ? parsedSource : undefined,
+        );
     }
 
     @Get(':id/validate')

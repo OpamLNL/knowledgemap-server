@@ -5,7 +5,7 @@ import {
     ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, In, QueryRunner } from 'typeorm';
+import { Repository, DataSource, In, QueryRunner, IsNull } from 'typeorm';
 import { KnowledgeMap, MapStatus } from './entities/knowledge-map.entity';
 import { MapRevision } from './entities/map-revision.entity';
 import { Node } from '../nodes/entities/node.entity';
@@ -31,6 +31,8 @@ export class KnowledgeMapsService {
         private readonly connectionRepo: Repository<NodeConnection>,
         @InjectRepository(Topic)
         private readonly topicRepo: Repository<Topic>,
+        @InjectRepository(KnowledgeGroup)
+        private readonly groupRepo: Repository<KnowledgeGroup>,
         private readonly graphValidator: GraphValidatorService,
         private readonly dataSource: DataSource,
     ) {}
@@ -41,7 +43,7 @@ export class KnowledgeMapsService {
         }
         if (userRole === UserRole.TEACHER && ownerUid) {
             return this.mapRepo.find({
-                where: { ownerUid },
+                where: [{ ownerUid }, { ownerUid: IsNull() }],
                 order: { updatedAt: 'DESC' },
             });
         }
@@ -333,12 +335,91 @@ export class KnowledgeMapsService {
             if (dto.deletedGroupEdgeIds?.length) {
                 await queryRunner.manager.delete(GroupConnection, {
                     id: In(dto.deletedGroupEdgeIds),
+                    mapId,
                 });
+            }
+
+            if (dto.groups?.length) {
+                for (const groupDto of dto.groups) {
+                    const existing = await queryRunner.manager.findOne(KnowledgeGroup, {
+                        where: { id: groupDto.id },
+                    });
+                    if (existing) {
+                        if (existing.mapId !== mapId) {
+                            throw new BadRequestException(
+                                `Група ${groupDto.id} належить іншій карті`,
+                            );
+                        }
+                        Object.assign(existing, {
+                            title: groupDto.title,
+                            description: groupDto.description ?? null,
+                            level: groupDto.level ?? existing.level,
+                            sortOrder: groupDto.sortOrder ?? existing.sortOrder,
+                            parentId:
+                                groupDto.parentId !== undefined
+                                    ? groupDto.parentId
+                                    : existing.parentId,
+                        });
+                        await queryRunner.manager.save(existing);
+                    } else {
+                        await queryRunner.manager.save(
+                            queryRunner.manager.create(KnowledgeGroup, {
+                                id: groupDto.id,
+                                mapId,
+                                title: groupDto.title,
+                                description: groupDto.description ?? null,
+                                level: groupDto.level ?? 0,
+                                sortOrder: groupDto.sortOrder ?? 0,
+                                parentId: groupDto.parentId ?? null,
+                            }),
+                        );
+                    }
+                }
+            }
+
+            if (dto.deletedGroupIds?.length) {
+                const validDelete = dto.deletedGroupIds.filter(Boolean);
+                if (validDelete.length > 0) {
+                    const nodesInGroups = await queryRunner.manager.find(Node, {
+                        where: { mapId, groupId: In(validDelete) },
+                    });
+                    const nodeIds = nodesInGroups.map((n) => n.id);
+                    if (nodeIds.length > 0) {
+                        await queryRunner.manager.delete(NodeConnection, {
+                            mapId,
+                            fromNodeId: In(nodeIds),
+                        });
+                        await queryRunner.manager.delete(NodeConnection, {
+                            mapId,
+                            toNodeId: In(nodeIds),
+                        });
+                        await queryRunner.manager.delete(Node, {
+                            id: In(nodeIds),
+                            mapId,
+                        });
+                    }
+                    await queryRunner.manager
+                        .createQueryBuilder()
+                        .delete()
+                        .from(GroupConnection)
+                        .where('map_id = :mapId', { mapId })
+                        .andWhere(
+                            '(from_group_id IN (:...ids) OR to_group_id IN (:...ids))',
+                            { ids: validDelete },
+                        )
+                        .execute();
+                    await queryRunner.manager.delete(KnowledgeGroup, {
+                        id: In(validDelete),
+                        mapId,
+                    });
+                }
             }
 
             if (dto.groupEdges?.length) {
                 const groupIds = new Set(
-                    (await queryRunner.manager.find(KnowledgeGroup)).map((g) => g.id),
+                    (await queryRunner.manager.find(KnowledgeGroup, { where: { mapId } })).map(
+                        (g) => g.id,
+                    ),
                 );
 
                 for (const edgeDto of dto.groupEdges) {
@@ -350,7 +431,7 @@ export class KnowledgeMapsService {
 
                     if (edgeDto.id && edgeDto.id > 0) {
                         const existing = await queryRunner.manager.findOne(GroupConnection, {
-                            where: { id: edgeDto.id },
+                            where: { id: edgeDto.id, mapId },
                         });
                         if (existing) {
                             Object.assign(existing, {
@@ -365,6 +446,7 @@ export class KnowledgeMapsService {
 
                     const duplicate = await queryRunner.manager.findOne(GroupConnection, {
                         where: {
+                            mapId,
                             fromGroupId: edgeDto.fromGroupId,
                             toGroupId: edgeDto.toGroupId,
                         },
@@ -372,6 +454,7 @@ export class KnowledgeMapsService {
                     if (!duplicate) {
                         await queryRunner.manager.save(
                             queryRunner.manager.create(GroupConnection, {
+                                mapId,
                                 fromGroupId: edgeDto.fromGroupId,
                                 toGroupId: edgeDto.toGroupId,
                                 type: edgeDto.type ?? 'prerequisite',
@@ -503,6 +586,92 @@ export class KnowledgeMapsService {
             },
             ...graph,
             exportedAt: new Date().toISOString(),
+        };
+    }
+
+    async getImportLibrary(
+        mapId: number,
+        userUid: string,
+        userRole: UserRole,
+        search?: string,
+        sourceMapId?: number,
+    ) {
+        const map = await this.findOne(mapId);
+        this.assertCanEdit(map, userUid, userRole);
+
+        const qb = this.mapRepo
+            .createQueryBuilder('m')
+            .where('m.id != :mapId', { mapId });
+
+        if (userRole !== UserRole.ADMIN) {
+            qb.andWhere('(m.owner_uid = :uid OR m.owner_uid IS NULL)', { uid: userUid });
+        }
+        if (sourceMapId != null && !Number.isNaN(sourceMapId)) {
+            qb.andWhere('m.id = :sourceMapId', { sourceMapId });
+        }
+
+        const maps = await qb.orderBy('m.updated_at', 'DESC').getMany();
+        if (maps.length === 0) {
+            return { maps: [], groups: [], nodes: [] };
+        }
+
+        const mapIds = maps.map((m) => m.id);
+        const mapTitleById = new Map(maps.map((m) => [m.id, m.title]));
+        const q = search?.trim();
+
+        let groupsQuery = this.groupRepo
+            .createQueryBuilder('g')
+            .where('g.map_id IN (:...mapIds)', { mapIds });
+        if (q) {
+            groupsQuery = groupsQuery.andWhere(
+                '(g.title LIKE :search OR g.description LIKE :search)',
+                { search: `%${q}%` },
+            );
+        }
+        const groups = await groupsQuery.orderBy('g.sort_order', 'ASC').getMany();
+
+        let nodesQuery = this.nodeRepo
+            .createQueryBuilder('n')
+            .where('n.map_id IN (:...mapIds)', { mapIds });
+        if (q) {
+            nodesQuery = nodesQuery.andWhere('n.title LIKE :search', { search: `%${q}%` });
+        }
+        const nodes = await nodesQuery.getMany();
+
+        const nodeCountByGroup = new Map<string, number>();
+        for (const n of nodes) {
+            if (!n.groupId) continue;
+            const key = `${n.mapId}:${n.groupId}`;
+            nodeCountByGroup.set(key, (nodeCountByGroup.get(key) ?? 0) + 1);
+        }
+
+        const groupTitleById = new Map(groups.map((g) => [g.id, g.title]));
+
+        return {
+            maps: maps.map((m) => ({
+                id: m.id,
+                title: m.title,
+                status: m.status,
+            })),
+            groups: groups.map((g) => ({
+                id: g.id,
+                title: g.title,
+                description: g.description,
+                level: g.level,
+                sortOrder: g.sortOrder,
+                mapId: g.mapId,
+                mapTitle: mapTitleById.get(g.mapId) ?? '',
+                nodeCount: nodeCountByGroup.get(`${g.mapId}:${g.id}`) ?? 0,
+            })),
+            nodes: nodes.map((n) => ({
+                id: n.id,
+                title: n.title,
+                mapId: n.mapId!,
+                mapTitle: n.mapId != null ? (mapTitleById.get(n.mapId) ?? '') : '',
+                groupId: n.groupId,
+                groupTitle: n.groupId ? (groupTitleById.get(n.groupId) ?? null) : null,
+                topicId: n.topicId,
+            })),
         };
     }
 

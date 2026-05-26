@@ -81,7 +81,8 @@ export class UsersCabinetService {
 
         if (isTeacher) {
             for (const map of maps) {
-                if (map.ownerUid !== firebaseUid || map.status !== MapStatus.PUBLISHED) {
+                const isMapOwner = !map.ownerUid || map.ownerUid === firebaseUid;
+                if (!isMapOwner || map.status !== MapStatus.PUBLISHED) {
                     continue;
                 }
                 teachingByMapId.set(map.id, await this.buildMapTeachingStats(map.id, students));

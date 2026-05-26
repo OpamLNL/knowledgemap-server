@@ -1,9 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { KnowledgeMap } from '../../knowledge-maps/entities/knowledge-map.entity';
 
 @Entity('group_connections')
 export class GroupConnection {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({ name: 'map_id', type: 'int' })
+    mapId: number;
+
+    @ManyToOne(() => KnowledgeMap, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'map_id' })
+    map: KnowledgeMap;
 
     @Column({ name: 'from_group_id', type: 'varchar', length: 64 })
     fromGroupId: string;

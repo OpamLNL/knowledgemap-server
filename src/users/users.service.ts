@@ -5,9 +5,15 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike } from 'typeorm';
+import { unlink } from 'fs/promises';
 import {User, UserRole} from './entities/user.entity';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
+import {
+    filenameFromAvatarUrl,
+    userAvatarAbsolutePath,
+    userAvatarPublicUrl,
+} from './user-avatar.storage';
 
 @Injectable()
 export class UsersService {
@@ -241,5 +247,40 @@ export class UsersService {
             page,
             limit,
         };
+    }
+
+    async updateAvatar(firebaseUid: string, filename: string) {
+        const user = await this.usersRepository.findOne({ where: { firebase_uid: firebaseUid } });
+        if (!user) {
+            throw new NotFoundException('Користувача не знайдено');
+        }
+
+        await this.removeUploadedAvatarFile(user.avatarUrl);
+        user.avatarUrl = userAvatarPublicUrl(filename);
+        await this.usersRepository.save(user);
+        return this.findByFirebaseUid(firebaseUid);
+    }
+
+    async clearAvatar(firebaseUid: string) {
+        const user = await this.usersRepository.findOne({ where: { firebase_uid: firebaseUid } });
+        if (!user) {
+            throw new NotFoundException('Користувача не знайдено');
+        }
+
+        await this.removeUploadedAvatarFile(user.avatarUrl);
+        user.avatarUrl = undefined;
+        await this.usersRepository.save(user);
+        return this.findByFirebaseUid(firebaseUid);
+    }
+
+    private async removeUploadedAvatarFile(avatarUrl?: string | null) {
+        if (!avatarUrl) return;
+        const filename = filenameFromAvatarUrl(avatarUrl);
+        if (!filename) return;
+        try {
+            await unlink(userAvatarAbsolutePath(filename));
+        } catch {
+            /* файл уже видалено */
+        }
     }
 }

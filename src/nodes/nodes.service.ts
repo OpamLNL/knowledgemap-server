@@ -192,8 +192,13 @@ export class NodesService {
         const connections = await this.connectionRepo.find({ where: { mapId: resolvedMapId } });
         const progresses = await this.progressRepo.find({ where: { userUid } });
         const topics = await this.topicRepo.find();
-        const groups = await this.groupRepo.find({ order: { sortOrder: 'ASC' } });
-        const groupConnections = await this.groupConnRepo.find();
+        const groups = await this.groupRepo.find({
+            where: { mapId: resolvedMapId },
+            order: { sortOrder: 'ASC' },
+        });
+        const groupConnections = await this.groupConnRepo.find({
+            where: { mapId: resolvedMapId },
+        });
 
         const topicById = new Map(topics.map((t) => [t.id, t]));
         const groupLevelById = new Map(groups.map((g) => [g.id, g.level]));

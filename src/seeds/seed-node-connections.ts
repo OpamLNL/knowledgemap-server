@@ -22,8 +22,9 @@ export async function seedNodeConnections() {
 if (require.main === module) {
     (async () => {
         await AppDataSource.initialize();
-        await seedKnowledgeGroups();
-        await seedGroupConnections();
+        const map = await ensurePublishedMap();
+        await seedKnowledgeGroups(map.id);
+        await seedGroupConnections(map.id);
         await seedNodeConnections();
         await AppDataSource.destroy();
     })().catch(console.error);

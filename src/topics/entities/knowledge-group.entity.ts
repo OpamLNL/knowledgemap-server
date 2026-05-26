@@ -1,9 +1,17 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { KnowledgeMap } from '../../knowledge-maps/entities/knowledge-map.entity';
 
 @Entity('knowledge_groups')
 export class KnowledgeGroup {
     @PrimaryColumn({ type: 'varchar', length: 64 })
     id: string;
+
+    @Column({ name: 'map_id', type: 'int' })
+    mapId: number;
+
+    @ManyToOne(() => KnowledgeMap, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'map_id' })
+    map: KnowledgeMap;
 
     @Column({ length: 255 })
     title: string;

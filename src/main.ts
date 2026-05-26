@@ -5,6 +5,7 @@ import express from 'express';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ensureNodeMediaUploadDir, NODE_MEDIA_UPLOAD_DIR } from './nodes/node-media.storage';
+import { ensureUserAvatarUploadDir, USER_AVATAR_UPLOAD_DIR } from './users/user-avatar.storage';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, { bodyParser: false });
@@ -13,7 +14,9 @@ async function bootstrap() {
     app.use(urlencoded({ extended: true, limit: '50mb' }));
 
     ensureNodeMediaUploadDir();
+    ensureUserAvatarUploadDir();
     app.use('/api/uploads/node-media', express.static(NODE_MEDIA_UPLOAD_DIR));
+    app.use('/api/uploads/avatars', express.static(USER_AVATAR_UPLOAD_DIR));
 
     app.setGlobalPrefix('api');
 

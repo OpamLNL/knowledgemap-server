@@ -29,7 +29,7 @@ async function insertInBatches<T extends object>(
     return rows.length;
 }
 
-export async function seedKnowledgeGroups(): Promise<number> {
+export async function seedKnowledgeGroups(mapId: number): Promise<number> {
     const data = readJson<
         {
             id: string;
@@ -42,15 +42,16 @@ export async function seedKnowledgeGroups(): Promise<number> {
     >('knowledge_groups_seed.json');
 
     const repo = AppDataSource.getRepository(KnowledgeGroup);
-    const existing = await repo.count();
+    const existing = await repo.count({ where: { mapId } });
     if (existing > 0) {
-        console.log(`📂 Knowledge groups: пропуск (${existing} вже в БД)`);
+        console.log(`📂 Knowledge groups: пропуск (${existing} вже на карті ${mapId})`);
         return existing;
     }
 
     await repo.insert(
         data.map((g) => ({
             id: g.id,
+            mapId,
             title: g.title,
             description: g.description,
             level: g.level,
@@ -59,11 +60,11 @@ export async function seedKnowledgeGroups(): Promise<number> {
         })),
     );
 
-    console.log(`📂 Knowledge groups: ${data.length} записів`);
+    console.log(`📂 Knowledge groups: ${data.length} записів для карти ${mapId}`);
     return data.length;
 }
 
-export async function seedGroupConnections(): Promise<number> {
+export async function seedGroupConnections(mapId: number): Promise<number> {
     const data = readJson<
         {
             fromGroupId: string;
@@ -74,14 +75,15 @@ export async function seedGroupConnections(): Promise<number> {
     >('group_connections_seed.json');
 
     const repo = AppDataSource.getRepository(GroupConnection);
-    const existing = await repo.count();
+    const existing = await repo.count({ where: { mapId } });
     if (existing > 0) {
-        console.log(`🔗 Group connections: пропуск (${existing} вже в БД)`);
+        console.log(`🔗 Group connections: пропуск (${existing} вже на карті ${mapId})`);
         return existing;
     }
 
     await repo.insert(
         data.map((edge) => ({
+            mapId,
             fromGroupId: edge.fromGroupId,
             toGroupId: edge.toGroupId,
             type: edge.type,
@@ -89,7 +91,7 @@ export async function seedGroupConnections(): Promise<number> {
         })),
     );
 
-    console.log(`🔗 Group connections: ${data.length} записів`);
+    console.log(`🔗 Group connections: ${data.length} записів для карти ${mapId}`);
     return data.length;
 }
 
