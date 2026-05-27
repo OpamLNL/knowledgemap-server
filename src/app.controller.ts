@@ -14,8 +14,16 @@ export class AppController {
 
     @Public()
     @Get()
+    @ApiOperation({ summary: 'Вітальний текст (legacy)' })
     getHello(): string {
         return this.appService.getHello();
+    }
+
+    @Public()
+    @Get('health')
+    @ApiOperation({ summary: 'Перевірка, що сервер працює (без авторизації)' })
+    getHealth() {
+        return this.appService.getHealth();
     }
 
     @Public()
