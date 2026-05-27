@@ -153,7 +153,7 @@ export class UsersController {
 
 
 
-    // @UseGuards(FirebaseAuthGuard)
+    @Roles(UserRole.ADMIN)
     @Get('search')
     search(
         @Query('name') name?: string,

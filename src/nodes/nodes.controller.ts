@@ -130,11 +130,15 @@ export class NodesController {
         }
     }
 
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
     @Get('validate')
     @ApiOperation({ summary: 'Валідація графа за mapId' })
     @ApiQuery({ name: 'mapId', required: true, type: Number })
-    validateGraph(@Query('mapId', ParseIntPipe) mapId: number) {
-        return this.nodesService.validateMapGraph(mapId);
+    validateGraph(
+        @Query('mapId', ParseIntPipe) mapId: number,
+        @Req() req: { user: { uid: string; role: UserRole } },
+    ) {
+        return this.nodesService.validateMapGraph(mapId, req.user.uid, req.user.role);
     }
 
     @Get()

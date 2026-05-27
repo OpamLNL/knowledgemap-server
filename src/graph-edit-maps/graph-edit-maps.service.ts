@@ -123,9 +123,12 @@ export class GraphEditMapsService {
         return merged;
     }
 
-    async findOne(id: number): Promise<GraphEditMap> {
+    async findOne(id: number, userUid?: string, userRole?: UserRole): Promise<GraphEditMap> {
         const map = await this.mapRepo.findOne({ where: { id } });
         if (!map) throw new NotFoundException(`Карту з id=${id} не знайдено`);
+        if (userUid !== undefined && userRole !== undefined) {
+            this.assertCanViewMap(map, userUid, userRole);
+        }
         return map;
     }
 
@@ -173,10 +176,10 @@ export class GraphEditMapsService {
         const map = await this.findOne(id);
         this.assertCanEdit(map, userUid, userRole);
 
-        const graph = await this.getEditorGraph(id);
+        const graph = await this.buildEditorGraphData(id);
         const validation = await this.validateMapGraphStrict(id, graph);
 
-        await this.createRevision(id, userUid, 'Авто-знімок перед публікацією');
+        await this.createRevision(id, userUid, userRole, 'Авто-знімок перед публікацією');
 
         map.status = MapStatus.PUBLISHED;
         map.publishedAt = new Date();
@@ -184,9 +187,13 @@ export class GraphEditMapsService {
         return this.mapRepo.save(map);
     }
 
-    async getEditorGraph(mapId: number) {
-        await this.findOne(mapId);
+    async getEditorGraph(mapId: number, userUid: string, userRole: UserRole) {
+        const map = await this.findOne(mapId);
+        this.assertCanEdit(map, userUid, userRole);
+        return this.buildEditorGraphData(mapId);
+    }
 
+    private async buildEditorGraphData(mapId: number) {
         const nodes = await this.nodeRepo.find({ where: { mapId } });
         const edges = await this.connectionRepo.find({ where: { mapId } });
 
@@ -210,14 +217,22 @@ export class GraphEditMapsService {
         };
     }
 
-    async validateGraph(mapId: number) {
-        const graph = await this.getEditorGraph(mapId);
+    async validateGraph(mapId: number, userUid: string, userRole: UserRole) {
+        const map = await this.findOne(mapId);
+        this.assertCanEdit(map, userUid, userRole);
+        const graph = await this.buildEditorGraphData(mapId);
         return this.validateMapGraphStrict(mapId, graph);
     }
 
     /** Валідація чернетки з редактора (може містити незбережені зміни). */
-    async validateGraphDraft(mapId: number, dto: ValidateGraphDto) {
-        await this.findOne(mapId);
+    async validateGraphDraft(
+        mapId: number,
+        dto: ValidateGraphDto,
+        userUid: string,
+        userRole: UserRole,
+    ) {
+        const map = await this.findOne(mapId);
+        this.assertCanEdit(map, userUid, userRole);
 
         const dbGroups = await this.groupRepo.find({ where: { mapId } });
         const groupTitleById: Record<string, string> = Object.fromEntries(
@@ -245,7 +260,7 @@ export class GraphEditMapsService {
     /** Сувора валідація для UI «Валідувати» та публікації. */
     private async validateMapGraphStrict(
         mapId: number,
-        graph: Awaited<ReturnType<GraphEditMapsService['getEditorGraph']>>,
+        graph: Awaited<ReturnType<GraphEditMapsService['buildEditorGraphData']>>,
     ) {
         const knowledgeGroups = await this.groupRepo.find({ where: { mapId } });
         const groupTitleById = Object.fromEntries(
@@ -281,13 +296,23 @@ export class GraphEditMapsService {
         this.assertCanEdit(map, userUid, userRole);
 
         if (map.status === MapStatus.PUBLISHED) {
-            await this.createRevision(mapId, userUid, 'Auto-snapshot перед редагуванням опублікованої карти');
+            await this.createRevision(
+                mapId,
+                userUid,
+                userRole,
+                'Auto-snapshot перед редагуванням опублікованої карти',
+            );
             map.status = MapStatus.DRAFT;
             await this.mapRepo.save(map);
         }
 
         if (dto.createRevision) {
-            await this.createRevision(mapId, userUid, dto.revisionComment ?? 'Знімок перед збереженням');
+            await this.createRevision(
+                mapId,
+                userUid,
+                userRole,
+                dto.revisionComment ?? 'Знімок перед збереженням',
+            );
         }
 
         const queryRunner = this.dataSource.createQueryRunner();
@@ -629,11 +654,18 @@ export class GraphEditMapsService {
         map.updatedAt = new Date();
         await this.mapRepo.save(map);
 
-        return this.getEditorGraph(mapId);
+        return this.buildEditorGraphData(mapId);
     }
 
-    async createRevision(mapId: number, userUid: string, comment?: string): Promise<MapRevision> {
-        const graph = await this.getEditorGraph(mapId);
+    async createRevision(
+        mapId: number,
+        userUid: string,
+        userRole: UserRole,
+        comment?: string,
+    ): Promise<MapRevision> {
+        const map = await this.findOne(mapId);
+        this.assertCanEdit(map, userUid, userRole);
+        const graph = await this.buildEditorGraphData(mapId);
         const revision = this.revisionRepo.create({
             mapId,
             snapshotJson: {
@@ -646,8 +678,13 @@ export class GraphEditMapsService {
         return this.revisionRepo.save(revision);
     }
 
-    async listRevisions(mapId: number): Promise<MapRevision[]> {
-        await this.findOne(mapId);
+    async listRevisions(
+        mapId: number,
+        userUid: string,
+        userRole: UserRole,
+    ): Promise<MapRevision[]> {
+        const map = await this.findOne(mapId);
+        this.assertCanEdit(map, userUid, userRole);
         return this.revisionRepo.find({
             where: { mapId },
             order: { createdAt: 'DESC' },
@@ -1014,7 +1051,7 @@ export class GraphEditMapsService {
             importMode: mode,
             importedNodes: dto.nodes.length,
             importedEdges: dto.edges?.length ?? 0,
-            graph: await this.getEditorGraph(mapId),
+            graph: await this.buildEditorGraphData(mapId),
         };
     }
 
@@ -1161,6 +1198,11 @@ export class GraphEditMapsService {
                 topicId: n.topicId,
             })),
         };
+    }
+
+    private assertCanViewMap(map: GraphEditMap, userUid: string, userRole: UserRole): void {
+        if (map.status === MapStatus.PUBLISHED) return;
+        this.assertCanEdit(map, userUid, userRole);
     }
 
     private assertCanEdit(map: GraphEditMap, userUid: string, userRole: UserRole): void {

@@ -42,8 +42,11 @@ export class GraphEditMapsController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Отримати карту за id' })
-    findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.service.findOne(id);
+    findOne(
+        @Param('id', ParseIntPipe) id: number,
+        @Req() req: { user: { uid: string; role: UserRole } },
+    ) {
+        return this.service.findOne(id, req.user.uid, req.user.role);
     }
 
     @Roles(UserRole.ADMIN, UserRole.TEACHER)
@@ -78,10 +81,14 @@ export class GraphEditMapsController {
         return this.service.remove(id, req.user.uid, req.user.role);
     }
 
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
     @Get(':id/graph')
     @ApiOperation({ summary: 'Граф для редактора (без прогресу)' })
-    getEditorGraph(@Param('id', ParseIntPipe) id: number) {
-        return this.service.getEditorGraph(id);
+    getEditorGraph(
+        @Param('id', ParseIntPipe) id: number,
+        @Req() req: { user: { uid: string; role: UserRole } },
+    ) {
+        return this.service.getEditorGraph(id, req.user.uid, req.user.role);
     }
 
     @Roles(UserRole.ADMIN, UserRole.TEACHER)
@@ -104,10 +111,14 @@ export class GraphEditMapsController {
         );
     }
 
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
     @Get(':id/validate')
     @ApiOperation({ summary: 'Валідація збереженого графа (legacy GET)' })
-    validateGraphSaved(@Param('id', ParseIntPipe) id: number) {
-        return this.service.validateGraph(id);
+    validateGraphSaved(
+        @Param('id', ParseIntPipe) id: number,
+        @Req() req: { user: { uid: string; role: UserRole } },
+    ) {
+        return this.service.validateGraph(id, req.user.uid, req.user.role);
     }
 
     @Roles(UserRole.ADMIN, UserRole.TEACHER)
@@ -116,8 +127,9 @@ export class GraphEditMapsController {
     validateGraph(
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: ValidateGraphDto,
+        @Req() req: { user: { uid: string; role: UserRole } },
     ) {
-        return this.service.validateGraphDraft(id, dto);
+        return this.service.validateGraphDraft(id, dto, req.user.uid, req.user.role);
     }
 
     @Roles(UserRole.ADMIN, UserRole.TEACHER)
@@ -162,10 +174,14 @@ export class GraphEditMapsController {
         return this.service.publish(id, req.user.uid, req.user.role);
     }
 
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
     @Get(':id/revisions')
     @ApiOperation({ summary: 'Історія версій карти' })
-    listRevisions(@Param('id', ParseIntPipe) id: number) {
-        return this.service.listRevisions(id);
+    listRevisions(
+        @Param('id', ParseIntPipe) id: number,
+        @Req() req: { user: { uid: string; role: UserRole } },
+    ) {
+        return this.service.listRevisions(id, req.user.uid, req.user.role);
     }
 
     @Roles(UserRole.ADMIN, UserRole.TEACHER)
@@ -174,9 +190,9 @@ export class GraphEditMapsController {
     createRevision(
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: CreateRevisionDto,
-        @Req() req: { user: { uid: string } },
+        @Req() req: { user: { uid: string; role: UserRole } },
     ) {
-        return this.service.createRevision(id, req.user.uid, dto.comment);
+        return this.service.createRevision(id, req.user.uid, req.user.role, dto.comment);
     }
 
     @Roles(UserRole.ADMIN, UserRole.TEACHER)

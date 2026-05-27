@@ -15,6 +15,8 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { Request } from 'express';
 import {Public} from "./public.decorator";
 import {FirebaseAuthGuard} from "./firebase-auth.guard";
+import { Roles } from './roles.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 
 
@@ -35,7 +37,8 @@ export class AuthController {
 
 
 
-    // Тестова реєстрація адміна через Swagger
+    // Bootstrap адміна (лише для існуючого admin; перший admin — через seed / db:init)
+    @Roles(UserRole.ADMIN)
     @Post('register-admin')
     async registerAdmin() {
         return this.authService.createAdmin();
@@ -55,7 +58,8 @@ export class AuthController {
         };
     }
 
-    // ✅ Опційна ручна реєстрація користувача (через email)
+    // Ручна реєстрація користувача (лише admin; основний шлях — POST /users/save після Google)
+    @Roles(UserRole.ADMIN)
     @Post('register')
     async register(@Body() createUserDto: CreateUserDto) {
         const existingUser = await this.usersService.findByEmail(createUserDto.email);

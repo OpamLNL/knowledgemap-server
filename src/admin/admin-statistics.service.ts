@@ -8,6 +8,7 @@ import { Node } from '../nodes/entities/node.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
 import { GraphEditMap, MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
+import { MapRevision } from '../graph-edit-maps/entities/map-revision.entity';
 import { NodesService } from '../nodes/nodes.service';
 
 @Injectable()
@@ -25,9 +26,76 @@ export class AdminStatisticsService {
         private readonly topicRepo: Repository<Topic>,
         @InjectRepository(GraphEditMap)
         private readonly mapRepo: Repository<GraphEditMap>,
+        @InjectRepository(MapRevision)
+        private readonly revisionRepo: Repository<MapRevision>,
         private readonly progressService: UserTopicProgressService,
         private readonly nodesService: NodesService,
     ) {}
+
+    /** Публічна агрегована статистика для landing (без персональних даних). */
+    async getPlatformStats() {
+        const [
+            totalTopics,
+            totalNodes,
+            totalEdges,
+            revisionCount,
+            publishedMaps,
+            activeStudents,
+            completedRecords,
+            students,
+        ] = await Promise.all([
+            this.topicRepo.count(),
+            this.nodeRepo.count(),
+            this.connectionRepo.count(),
+            this.revisionRepo.count(),
+            this.mapRepo.count({ where: { status: MapStatus.PUBLISHED } }),
+            this.progressService.countDistinctUsers(),
+            this.progressService.countByStatus('completed'),
+            this.userRepo.count({ where: { role: UserRole.STUDENT } }),
+        ]);
+
+        const defaultMap = await this.mapRepo.findOne({
+            where: { status: MapStatus.PUBLISHED },
+            order: { id: 'ASC' },
+        });
+
+        let averageCompletionPercent = 0;
+        if (defaultMap && students > 0) {
+            const nodesOnMap = await this.nodeRepo.count({ where: { mapId: defaultMap.id } });
+            if (nodesOnMap > 0) {
+                const completedByUser = await this.progressService.getCompletedCountByUsers();
+                const studentUsers = await this.userRepo.find({
+                    where: { role: UserRole.STUDENT },
+                    select: ['firebase_uid'],
+                });
+                const studentUids = new Set(
+                    studentUsers.map((u) => u.firebase_uid).filter(Boolean),
+                );
+
+                let sumPercent = 0;
+                let counted = 0;
+                for (const uid of studentUids) {
+                    if (!uid) continue;
+                    const entry = completedByUser.find((c) => c.userUid === uid);
+                    const completed = entry?.completed ?? 0;
+                    sumPercent += Math.round((completed / nodesOnMap) * 100);
+                    counted++;
+                }
+                averageCompletionPercent = counted > 0 ? Math.round(sumPercent / counted) : 0;
+            }
+        }
+
+        return {
+            topics: totalTopics,
+            nodes: totalNodes,
+            edges: totalEdges,
+            revisions: revisionCount,
+            publishedMaps,
+            studentsWithProgress: activeStudents,
+            completedTopicRecords: completedRecords,
+            averageCompletionPercent,
+        };
+    }
 
     async getDashboard() {
         const [

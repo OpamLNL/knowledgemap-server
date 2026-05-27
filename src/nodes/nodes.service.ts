@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { unlink } from 'fs/promises';
@@ -19,6 +19,7 @@ import {
     nodeMediaPublicUrl,
 } from './node-media.storage';
 import type { UploadedImageFile } from './types/uploaded-image-file';
+import { UserRole } from '../users/entities/user.entity';
 
 type GraphNodeDto = {
     id: number;
@@ -625,7 +626,11 @@ export class NodesService {
         return edges;
     }
 
-    async validateMapGraph(mapId: number) {
+    async validateMapGraph(mapId: number, userUid: string, userRole: UserRole) {
+        const map = await this.mapRepo.findOne({ where: { id: mapId } });
+        if (!map) throw new NotFoundException(`Карту з id=${mapId} не знайдено`);
+        this.assertCanEditMap(map, userUid, userRole);
+
         const nodes = await this.nodeRepo.find({ where: { mapId } });
         const connections = await this.connectionRepo.find({ where: { mapId } });
         return this.graphValidator.validate(
@@ -636,6 +641,14 @@ export class NodesService {
             })),
             connections.map((c) => ({ from: c.fromNodeId, to: c.toNodeId, id: c.id })),
         );
+    }
+
+    private assertCanEditMap(map: GraphEditMap, userUid: string, userRole: UserRole): void {
+        if (userRole === UserRole.ADMIN) return;
+        if (userRole === UserRole.TEACHER) {
+            if (!map.ownerUid || map.ownerUid === userUid) return;
+        }
+        throw new ForbiddenException('Недостатньо прав для редагування цієї карти');
     }
 
     private async getDefaultMapId(): Promise<number> {
