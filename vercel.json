@@ -1,16 +1,11 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "dist/vercel.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 60,
-        "includeFiles": "dist/**"
-      }
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }],
+  "functions": {
+    "api/index.ts": {
+      "maxDuration": 60,
+      "includeFiles": "dist/**"
     }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "dist/vercel.js" }
-  ]
+  }
 }
