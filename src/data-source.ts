@@ -19,6 +19,9 @@ import { NodeGroupId1730000000004 } from './migrations/1730000000004-NodeGroupId
 import { NodeContent1730000000005 } from './migrations/1730000000005-NodeContent';
 import { GroupMapId1730000000006 } from './migrations/1730000000006-GroupMapId';
 import { GraphValidated1730000000007 } from './migrations/1730000000007-GraphValidated';
+import { MapFavoritesAndRatings1730000000008 } from './migrations/1730000000008-MapFavoritesAndRatings';
+import { UserMapFavorite } from './graph-edit-maps/entities/user-map-favorite.entity';
+import { UserMapRating } from './graph-edit-maps/entities/user-map-rating.entity';
 
 const useSsl = process.env.DB_SSL === 'true';
 const caPath = process.env.DB_CA_PATH;
@@ -40,6 +43,8 @@ export const AppDataSource = new DataSource({
         MapRevision,
         KnowledgeGroup,
         GroupConnection,
+        UserMapFavorite,
+        UserMapRating,
     ],
     migrations: [
         InitialSchema1730000000000,
@@ -50,6 +55,7 @@ export const AppDataSource = new DataSource({
         NodeContent1730000000005,
         GroupMapId1730000000006,
         GraphValidated1730000000007,
+        MapFavoritesAndRatings1730000000008,
     ],
     synchronize: false,
     logging: true,

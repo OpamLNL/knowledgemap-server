@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike } from 'typeorm';
 import { unlink } from 'fs/promises';
 import {User, UserRole} from './entities/user.entity';
+import { GraphEditMap, MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import {
@@ -20,6 +21,8 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly usersRepository: Repository<User>,
+        @InjectRepository(GraphEditMap)
+        private readonly mapRepository: Repository<GraphEditMap>,
     ) {}
 
     /**
@@ -333,6 +336,42 @@ export class UsersService {
         user.avatarUrl = undefined;
         await this.usersRepository.save(user);
         return this.findByFirebaseUid(firebaseUid);
+    }
+
+    async getPublicProfileById(userId: number) {
+        const user = await this.usersRepository.findOne({
+            where: { id: userId },
+            select: ['id', 'firebase_uid', 'name', 'email', 'role', 'avatarUrl', 'createdAt'],
+        });
+
+        if (!user?.firebase_uid) {
+            throw new NotFoundException('Користувача не знайдено');
+        }
+
+        const ownerUid = user.firebase_uid.trim();
+        const publishedMaps = await this.mapRepository.find({
+            where: { ownerUid, status: MapStatus.PUBLISHED },
+            order: { updatedAt: 'DESC' },
+            select: ['id', 'title', 'description', 'updatedAt', 'publishedAt'],
+        });
+
+        return {
+            id: user.id,
+            name: user.name?.trim() || user.email?.split('@')[0]?.trim() || 'Користувач',
+            role: user.role,
+            avatarUrl: user.avatarUrl ?? null,
+            createdAt: user.createdAt,
+            publishedMaps: publishedMaps.map((map) => ({
+                id: map.id,
+                title: map.title,
+                description: map.description,
+                updatedAt: map.updatedAt,
+                publishedAt: map.publishedAt,
+            })),
+            stats: {
+                publishedMapsCount: publishedMaps.length,
+            },
+        };
     }
 
     private async removeUploadedAvatarFile(avatarUrl?: string | null) {

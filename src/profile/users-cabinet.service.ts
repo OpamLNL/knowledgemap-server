@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { User, UserRole } from '../users/entities/user.entity';
-import { MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
+import { MapStatus, GraphEditMap } from '../graph-edit-maps/entities/graph-edit-map.entity';
 import type { MapListItemDto } from '../graph-edit-maps/dtos/map-list-item.dto';
 import { Node } from '../nodes/entities/node.entity';
 import { UserTopicProgressService } from '../users/user-topic-progress.service';
@@ -57,6 +57,8 @@ export class UsersCabinetService {
         private readonly userRepo: Repository<User>,
         @InjectRepository(Node)
         private readonly nodeRepo: Repository<Node>,
+        @InjectRepository(GraphEditMap)
+        private readonly mapRepo: Repository<GraphEditMap>,
         private readonly progressService: UserTopicProgressService,
         private readonly mapsService: GraphEditMapsService,
         private readonly nodesService: NodesService,

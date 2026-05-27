@@ -9,10 +9,20 @@ export type MapListProgressDto = {
 };
 
 export type MapListAuthorDto = {
+    id: number | null;
     uid: string;
     name: string | null;
     email: string | null;
     displayName: string;
+};
+
+export type MapListEngagementDto = {
+    averageRating: number | null;
+    ratingsCount: number;
+    favoritesCount: number;
+    myRating: number | null;
+    isFavorite: boolean;
+    favoritedAt: Date | null;
 };
 
 export type MapListItemDto = {
@@ -27,4 +37,5 @@ export type MapListItemDto = {
     publishedAt: Date | null;
     author: MapListAuthorDto;
     myProgress: MapListProgressDto | null;
+    engagement: MapListEngagementDto;
 };

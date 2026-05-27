@@ -12,6 +12,7 @@ import {
     UseInterceptors,
     UploadedFile,
     BadRequestException,
+    ParseIntPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
@@ -109,6 +110,12 @@ export class UsersController {
         }
 
         return user;
+    }
+
+    @Get(':id/profile')
+    @ApiOperation({ summary: 'Публічний профіль користувача за id з БД' })
+    getPublicProfile(@Param('id', ParseIntPipe) id: number) {
+        return this.usersService.getPublicProfileById(id);
     }
 
     @Post('me/avatar')

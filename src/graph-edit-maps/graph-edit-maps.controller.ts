@@ -19,6 +19,8 @@ import { CreateGraphEditMapDto, UpdateGraphEditMapDto } from './dtos/create-grap
 import { BulkSaveGraphDto, CreateRevisionDto } from './dtos/bulk-save-graph.dto';
 import { ValidateGraphDto } from './dtos/validate-graph.dto';
 import { ImportMapJsonDto } from './dtos/map-json.dto';
+import { parseMapCatalogQuery } from './dtos/map-catalog-query.dto';
+import type { SetMapFavoriteDto, SetMapRatingDto } from './dtos/set-map-engagement.dto';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
 
@@ -30,22 +32,70 @@ export class GraphEditMapsController {
 
     @Get()
     @ApiOperation({ summary: 'Каталог опублікованих карт знань' })
-    findPublished(@Req() req: { user: { uid: string; name?: string; email?: string } }) {
-        return this.service.findPublished({
-            uid: req.user.uid,
-            name: req.user.name,
-            email: req.user.email,
-        });
+    findPublished(
+        @Req() req: { user: { uid: string; name?: string; email?: string } },
+        @Query() query: Record<string, string | undefined>,
+    ) {
+        return this.service.findPublished(
+            {
+                uid: req.user.uid,
+                name: req.user.name,
+                email: req.user.email,
+            },
+            parseMapCatalogQuery(query),
+        );
     }
 
     @Get('mine')
     @ApiOperation({ summary: 'Мої карти (розроблені + з прогресом проходження)' })
-    findMine(@Req() req: { user: { uid: string; name?: string; email?: string } }) {
-        return this.service.findMine({
-            uid: req.user.uid,
-            name: req.user.name,
-            email: req.user.email,
-        });
+    findMine(
+        @Req() req: { user: { uid: string; name?: string; email?: string } },
+        @Query() query: Record<string, string | undefined>,
+    ) {
+        return this.service.findMine(
+            {
+                uid: req.user.uid,
+                name: req.user.name,
+                email: req.user.email,
+            },
+            parseMapCatalogQuery(query),
+        );
+    }
+
+    @Get('favorites')
+    @ApiOperation({ summary: 'Улюблені опубліковані карти' })
+    findFavorites(
+        @Req() req: { user: { uid: string; name?: string; email?: string } },
+        @Query() query: Record<string, string | undefined>,
+    ) {
+        return this.service.findFavorites(
+            {
+                uid: req.user.uid,
+                name: req.user.name,
+                email: req.user.email,
+            },
+            parseMapCatalogQuery(query),
+        );
+    }
+
+    @Put(':id/favorite')
+    @ApiOperation({ summary: 'Додати або прибрати карту з улюблених' })
+    setFavorite(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: SetMapFavoriteDto,
+        @Req() req: { user: { uid: string } },
+    ) {
+        return this.service.setFavorite(id, req.user.uid, dto.favorite);
+    }
+
+    @Put(':id/rating')
+    @ApiOperation({ summary: 'Поставити або скасувати оцінку карти (1–5)' })
+    setRating(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: SetMapRatingDto,
+        @Req() req: { user: { uid: string } },
+    ) {
+        return this.service.setRating(id, req.user.uid, dto.rating);
     }
 
     @Get(':id')

@@ -12,6 +12,8 @@ import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
 import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { UserTopicProgress } from '../users/entities/user-topic-progress.entity';
 import { User } from '../users/entities/user.entity';
+import { UserMapFavorite } from './entities/user-map-favorite.entity';
+import { UserMapRating } from './entities/user-map-rating.entity';
 import { GraphModule } from '../common/graph/graph.module';
 import { NodesModule } from '../nodes/nodes.module';
 import { UsersModule } from '../users/users.module';
@@ -29,6 +31,8 @@ import { UsersModule } from '../users/users.module';
             GroupConnection,
             UserTopicProgress,
             User,
+            UserMapFavorite,
+            UserMapRating,
         ]),
         GraphModule,
         NodesModule,

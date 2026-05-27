@@ -27,7 +27,10 @@ import { UserRole } from '../users/entities/user.entity';
 import { User } from '../users/entities/user.entity';
 import { NodesService } from '../nodes/nodes.service';
 import { UsersService } from '../users/users.service';
-import type { MapListAuthorDto, MapListItemDto } from './dtos/map-list-item.dto';
+import type { MapListAuthorDto, MapListEngagementDto, MapListItemDto } from './dtos/map-list-item.dto';
+import type { MapCatalogQueryDto, MapCatalogSortBy } from './dtos/map-catalog-query.dto';
+import { UserMapFavorite } from './entities/user-map-favorite.entity';
+import { UserMapRating } from './entities/user-map-rating.entity';
 
 export type MapListViewerProfile = {
     uid: string;
@@ -67,6 +70,10 @@ export class GraphEditMapsService {
         private readonly progressRepo: Repository<UserTopicProgress>,
         @InjectRepository(User)
         private readonly userRepo: Repository<User>,
+        @InjectRepository(UserMapFavorite)
+        private readonly favoriteRepo: Repository<UserMapFavorite>,
+        @InjectRepository(UserMapRating)
+        private readonly ratingRepo: Repository<UserMapRating>,
         private readonly nodesService: NodesService,
         private readonly usersService: UsersService,
         private readonly graphValidator: GraphValidatorService,
@@ -74,7 +81,10 @@ export class GraphEditMapsService {
     ) {}
 
     /** Каталог: усі опубліковані карти (меню «Карти», головна). */
-    async findPublished(viewer: MapListViewerProfile): Promise<MapListItemDto[]> {
+    async findPublished(
+        viewer: MapListViewerProfile,
+        query: MapCatalogQueryDto = {},
+    ): Promise<MapListItemDto[]> {
         const maps = await this.mapRepo.find({
             where: { status: MapStatus.PUBLISHED },
             order: { updatedAt: 'DESC' },
@@ -90,7 +100,16 @@ export class GraphEditMapsService {
                 graphValidated: true,
             },
         });
-        return this.enrichMapsForList(maps, viewer);
+        const items = await this.enrichMapsForList(maps, viewer);
+        return this.applyCatalogQuery(items, query);
+    }
+
+    /** Улюблені опубліковані карти поточного користувача. */
+    async findFavorites(
+        viewer: MapListViewerProfile,
+        query: MapCatalogQueryDto = {},
+    ): Promise<MapListItemDto[]> {
+        return this.findPublished(viewer, { ...query, favoritesOnly: true });
     }
 
     /** @deprecated Використовуйте findPublished або findMine */
@@ -99,7 +118,10 @@ export class GraphEditMapsService {
     }
 
     /** Мої карти: створені користувачем + ті, що проходить/проходив. */
-    async findMine(viewer: MapListViewerProfile): Promise<MapListItemDto[]> {
+    async findMine(
+        viewer: MapListViewerProfile,
+        query: MapCatalogQueryDto = {},
+    ): Promise<MapListItemDto[]> {
         const userUid = viewer.uid;
         const owned = await this.mapRepo.find({
             where: { ownerUid: userUid },
@@ -136,7 +158,8 @@ export class GraphEditMapsService {
         merged.sort(
             (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
         );
-        return this.enrichMapsForList(merged, viewer);
+        const items = await this.enrichMapsForList(merged, viewer);
+        return this.applyCatalogQuery(items, query);
     }
 
     private async enrichMapsForList(
@@ -157,7 +180,7 @@ export class GraphEditMapsService {
         if (viewerUid && ownerUids.includes(viewerUid) && !ownerProfiles.has(viewerUid)) {
             const me = await this.usersService.findByFirebaseUid(viewerUid);
             if (me) {
-                ownerProfiles.set(viewerUid, { name: me.name, email: me.email });
+                ownerProfiles.set(viewerUid, { id: me.id, name: me.name, email: me.email });
             }
         }
 
@@ -165,11 +188,17 @@ export class GraphEditMapsService {
             if (ownerProfiles.has(uid)) continue;
             const profile = await this.usersService.findByFirebaseUid(uid);
             if (profile) {
-                ownerProfiles.set(uid, { name: profile.name, email: profile.email });
+                ownerProfiles.set(uid, {
+                    id: profile.id,
+                    name: profile.name,
+                    email: profile.email,
+                });
             }
         }
 
         const authorCache = new Map<string, MapListAuthorDto>();
+        const mapIds = maps.map((m) => m.id);
+        const engagementByMap = await this.loadEngagementForMaps(mapIds, viewerUid);
         const items: MapListItemDto[] = [];
 
         for (const map of maps) {
@@ -198,15 +227,249 @@ export class GraphEditMapsService {
                 publishedAt: map.publishedAt,
                 author: this.resolveMapAuthor(map.ownerUid, viewer, ownerProfiles, authorCache),
                 myProgress,
+                engagement: engagementByMap.get(map.id) ?? this.emptyEngagement(),
             });
         }
 
         return items;
     }
 
+    private emptyEngagement(): MapListEngagementDto {
+        return {
+            averageRating: null,
+            ratingsCount: 0,
+            favoritesCount: 0,
+            myRating: null,
+            isFavorite: false,
+            favoritedAt: null,
+        };
+    }
+
+    private async loadEngagementForMaps(
+        mapIds: number[],
+        viewerUid: string,
+    ): Promise<Map<number, MapListEngagementDto>> {
+        const result = new Map<number, MapListEngagementDto>();
+        if (mapIds.length === 0) return result;
+
+        for (const id of mapIds) {
+            result.set(id, this.emptyEngagement());
+        }
+
+        const ratingAgg = await this.ratingRepo
+            .createQueryBuilder('r')
+            .select('r.map_id', 'mapId')
+            .addSelect('AVG(r.rating)', 'avgRating')
+            .addSelect('COUNT(*)', 'cnt')
+            .where('r.map_id IN (:...ids)', { ids: mapIds })
+            .groupBy('r.map_id')
+            .getRawMany<{ mapId: number; avgRating: string; cnt: string }>();
+
+        for (const row of ratingAgg) {
+            const mapId = Number(row.mapId);
+            const entry = result.get(mapId);
+            if (!entry) continue;
+            entry.ratingsCount = Number(row.cnt) || 0;
+            entry.averageRating =
+                entry.ratingsCount > 0 ? Math.round(Number(row.avgRating) * 10) / 10 : null;
+        }
+
+        const favoriteAgg = await this.favoriteRepo
+            .createQueryBuilder('f')
+            .select('f.map_id', 'mapId')
+            .addSelect('COUNT(*)', 'cnt')
+            .where('f.map_id IN (:...ids)', { ids: mapIds })
+            .groupBy('f.map_id')
+            .getRawMany<{ mapId: number; cnt: string }>();
+
+        for (const row of favoriteAgg) {
+            const mapId = Number(row.mapId);
+            const entry = result.get(mapId);
+            if (!entry) continue;
+            entry.favoritesCount = Number(row.cnt) || 0;
+        }
+
+        const trimmedViewer = viewerUid.trim();
+        if (trimmedViewer) {
+            const myRatings = await this.ratingRepo.find({
+                where: { userUid: trimmedViewer, mapId: In(mapIds) },
+                select: { mapId: true, rating: true },
+            });
+            for (const row of myRatings) {
+                const entry = result.get(row.mapId);
+                if (entry) entry.myRating = row.rating;
+            }
+
+            const myFavorites = await this.favoriteRepo.find({
+                where: { userUid: trimmedViewer, mapId: In(mapIds) },
+                select: { mapId: true, createdAt: true },
+            });
+            for (const row of myFavorites) {
+                const entry = result.get(row.mapId);
+                if (entry) {
+                    entry.isFavorite = true;
+                    entry.favoritedAt = row.createdAt;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private applyCatalogQuery(items: MapListItemDto[], query: MapCatalogQueryDto): MapListItemDto[] {
+        let filtered = [...items];
+
+        if (query.search) {
+            const needle = query.search.toLowerCase();
+            filtered = filtered.filter(
+                (item) =>
+                    item.title.toLowerCase().includes(needle) ||
+                    (item.description?.toLowerCase().includes(needle) ?? false) ||
+                    item.author.displayName.toLowerCase().includes(needle),
+            );
+        }
+
+        if (query.favoritesOnly) {
+            filtered = filtered.filter((item) => item.engagement.isFavorite);
+        }
+
+        if (query.minRating != null) {
+            filtered = filtered.filter(
+                (item) =>
+                    item.engagement.averageRating != null &&
+                    item.engagement.averageRating >= query.minRating!,
+            );
+        }
+
+        if (query.authorId != null) {
+            filtered = filtered.filter((item) => item.author.id === query.authorId);
+        }
+
+        if (query.status != null) {
+            filtered = filtered.filter((item) => item.status === query.status);
+        }
+
+        if (query.validatedOnly) {
+            filtered = filtered.filter((item) => item.graphValidated === true);
+        }
+
+        return this.sortCatalogItems(filtered, query);
+    }
+
+    private sortCatalogItems(items: MapListItemDto[], query: MapCatalogQueryDto): MapListItemDto[] {
+        const sortBy: MapCatalogSortBy = query.sortBy ?? 'updatedAt';
+        const sortOrder = query.sortOrder ?? 'desc';
+        const dir = sortOrder === 'asc' ? 1 : -1;
+
+        const sorted = [...items];
+        sorted.sort((a, b) => {
+            let cmp = 0;
+            switch (sortBy) {
+                case 'title':
+                    cmp = a.title.localeCompare(b.title, 'uk');
+                    break;
+                case 'publishedAt':
+                    cmp = this.compareDates(a.publishedAt, b.publishedAt);
+                    break;
+                case 'createdAt':
+                    cmp = this.compareDates(a.createdAt, b.createdAt);
+                    break;
+                case 'rating':
+                    cmp =
+                        (a.engagement.averageRating ?? 0) - (b.engagement.averageRating ?? 0) ||
+                        a.engagement.ratingsCount - b.engagement.ratingsCount;
+                    break;
+                case 'favorites':
+                    cmp =
+                        a.engagement.favoritesCount - b.engagement.favoritesCount ||
+                        (a.engagement.averageRating ?? 0) - (b.engagement.averageRating ?? 0);
+                    break;
+                case 'favoritedAt':
+                    cmp = this.compareDates(a.engagement.favoritedAt, b.engagement.favoritedAt);
+                    break;
+                case 'updatedAt':
+                default:
+                    cmp = this.compareDates(a.updatedAt, b.updatedAt);
+                    break;
+            }
+            if (cmp === 0) {
+                cmp = a.title.localeCompare(b.title, 'uk');
+            }
+            return cmp * dir;
+        });
+        return sorted;
+    }
+
+    private compareDates(a: Date | null | undefined, b: Date | null | undefined): number {
+        const ta = a ? new Date(a).getTime() : 0;
+        const tb = b ? new Date(b).getTime() : 0;
+        return ta - tb;
+    }
+
+    async setFavorite(
+        mapId: number,
+        viewerUid: string,
+        favorite: boolean,
+    ): Promise<MapListEngagementDto> {
+        const map = await this.mapRepo.findOne({ where: { id: mapId } });
+        if (!map) throw new NotFoundException(`Карту з id=${mapId} не знайдено`);
+        if (map.status !== MapStatus.PUBLISHED) {
+            throw new BadRequestException('Улюблене можна додавати лише для опублікованих карт');
+        }
+
+        const uid = viewerUid.trim();
+        const existing = await this.favoriteRepo.findOne({ where: { userUid: uid, mapId } });
+
+        if (favorite) {
+            if (!existing) {
+                await this.favoriteRepo.save(this.favoriteRepo.create({ userUid: uid, mapId }));
+            }
+        } else if (existing) {
+            await this.favoriteRepo.remove(existing);
+        }
+
+        const engagement = await this.loadEngagementForMaps([mapId], uid);
+        return engagement.get(mapId) ?? this.emptyEngagement();
+    }
+
+    async setRating(
+        mapId: number,
+        viewerUid: string,
+        rating: number | null,
+    ): Promise<MapListEngagementDto> {
+        const map = await this.mapRepo.findOne({ where: { id: mapId } });
+        if (!map) throw new NotFoundException(`Карту з id=${mapId} не знайдено`);
+        if (map.status !== MapStatus.PUBLISHED) {
+            throw new BadRequestException('Оцінку можна ставити лише для опублікованих карт');
+        }
+
+        const uid = viewerUid.trim();
+        const existing = await this.ratingRepo.findOne({ where: { userUid: uid, mapId } });
+
+        if (rating == null) {
+            if (existing) await this.ratingRepo.remove(existing);
+        } else {
+            const normalized = Math.round(rating);
+            if (normalized < 1 || normalized > 5) {
+                throw new BadRequestException('Оцінка має бути від 1 до 5');
+            }
+            if (existing) {
+                existing.rating = normalized;
+                await this.ratingRepo.save(existing);
+            } else {
+                await this.ratingRepo.save(
+                    this.ratingRepo.create({ userUid: uid, mapId, rating: normalized }),
+                );
+            }
+        }
+
+        const engagement = await this.loadEngagementForMaps([mapId], uid);
+        return engagement.get(mapId) ?? this.emptyEngagement();
+    }
+
     private async loadOwnerProfiles(
         ownerUids: string[],
-    ): Promise<Map<string, Pick<User, 'name' | 'email'>>> {
+    ): Promise<Map<string, Pick<User, 'id' | 'name' | 'email'>>> {
         const trimmed = [...new Set(ownerUids.map((u) => u.trim()).filter(Boolean))];
         if (trimmed.length === 0) return new Map();
 
@@ -216,10 +479,14 @@ export class GraphEditMapsService {
             .where('TRIM(u.firebase_uid) IN (:...uids)', { uids: trimmed })
             .getMany();
 
-        const map = new Map<string, Pick<User, 'name' | 'email'>>();
+        const map = new Map<string, Pick<User, 'id' | 'name' | 'email'>>();
         for (const u of users) {
             if (u.firebase_uid) {
-                map.set(u.firebase_uid.trim(), { name: u.name, email: u.email });
+                map.set(u.firebase_uid.trim(), {
+                    id: u.id,
+                    name: u.name,
+                    email: u.email,
+                });
             }
         }
         return map;
@@ -228,12 +495,13 @@ export class GraphEditMapsService {
     private resolveMapAuthor(
         ownerUid: string | null | undefined,
         viewer: MapListViewerProfile,
-        ownerProfiles: Map<string, Pick<User, 'name' | 'email'>>,
+        ownerProfiles: Map<string, Pick<User, 'id' | 'name' | 'email'>>,
         cache: Map<string, MapListAuthorDto>,
     ): MapListAuthorDto {
         const uid = ownerUid?.trim() ?? '';
         if (!uid) {
             return {
+                id: null,
                 uid: '',
                 name: null,
                 email: null,
@@ -254,19 +522,26 @@ export class GraphEditMapsService {
             email = viewer.email?.trim() || null;
         }
 
-        const author = this.authorFromProfile(uid, name, email);
+        const author = this.authorFromProfile(
+            uid,
+            fromDb?.id ?? null,
+            name,
+            email,
+        );
         cache.set(uid, author);
         return author;
     }
 
     private authorFromProfile(
         uid: string,
+        userId: number | null,
         name: string | null | undefined,
         email: string | null | undefined,
     ): MapListAuthorDto {
         const trimmedName = name?.trim() || null;
         const trimmedEmail = email?.trim() || null;
         return {
+            id: userId,
             uid,
             name: trimmedName,
             email: trimmedEmail,

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { User } from './entities/user.entity';
+import { GraphEditMap } from '../graph-edit-maps/entities/graph-edit-map.entity';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 
@@ -14,7 +15,7 @@ import { TopicsModule } from '../topics/topics.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, UserTopicProgress, Topic, Node]),
+        TypeOrmModule.forFeature([User, UserTopicProgress, Topic, Node, GraphEditMap]),
         TopicsModule,
     ],
     providers: [UsersService, UserTopicProgressService],
