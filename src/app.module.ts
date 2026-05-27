@@ -39,12 +39,15 @@ import { AuthRolesGuard } from './auth/auth-roles.guard';
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
                 synchronize: false,
                 logging: true,
-                ssl:
-                    useSsl && caPath
+                    ssl:
+                      useSsl
                         ? {
-                              ca: fs.readFileSync(caPath),
-                              rejectUnauthorized: true,
-                          }
+                            // Якщо є змінна з текстом сертифіката, беремо її, інакше читаємо з файлу
+                            ca: process.env.DB_SSL_CA
+                              ? process.env.DB_SSL_CA
+                              : (caPath ? fs.readFileSync(caPath) : undefined),
+                            rejectUnauthorized: process.env.NODE_ENV === 'production' ? false : true,
+                        }
                         : undefined,
             };
             },
