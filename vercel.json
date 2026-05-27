@@ -1,9 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "installCommand": "npm install",
   "builds": [
-    { "src": "dist/vercel.js", "use": "@vercel/node", "config": { "maxDuration": 60 } }
+    { "src": "dist/vercel.js", "use": "@vercel/node", "config": { "maxDuration": 60, "includeFiles": "dist/**" } }
   ],
   "routes": [
     { "src": "/(.*)", "dest": "dist/vercel.js" }
