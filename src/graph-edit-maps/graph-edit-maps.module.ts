@@ -11,7 +11,10 @@ import { Topic } from '../topics/entities/topic.entity';
 import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
 import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { UserTopicProgress } from '../users/entities/user-topic-progress.entity';
+import { User } from '../users/entities/user.entity';
 import { GraphModule } from '../common/graph/graph.module';
+import { NodesModule } from '../nodes/nodes.module';
+import { UsersModule } from '../users/users.module';
 
 @Module({
     imports: [
@@ -25,8 +28,11 @@ import { GraphModule } from '../common/graph/graph.module';
             KnowledgeGroup,
             GroupConnection,
             UserTopicProgress,
+            User,
         ]),
         GraphModule,
+        NodesModule,
+        UsersModule,
     ],
     controllers: [GraphEditMapsController],
     providers: [GraphEditMapsService],

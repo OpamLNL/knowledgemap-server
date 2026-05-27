@@ -30,14 +30,22 @@ export class GraphEditMapsController {
 
     @Get()
     @ApiOperation({ summary: 'Каталог опублікованих карт знань' })
-    findPublished() {
-        return this.service.findPublished();
+    findPublished(@Req() req: { user: { uid: string; name?: string; email?: string } }) {
+        return this.service.findPublished({
+            uid: req.user.uid,
+            name: req.user.name,
+            email: req.user.email,
+        });
     }
 
     @Get('mine')
     @ApiOperation({ summary: 'Мої карти (розроблені + з прогресом проходження)' })
-    findMine(@Req() req: { user: { uid: string } }) {
-        return this.service.findMine(req.user.uid);
+    findMine(@Req() req: { user: { uid: string; name?: string; email?: string } }) {
+        return this.service.findMine({
+            uid: req.user.uid,
+            name: req.user.name,
+            email: req.user.email,
+        });
     }
 
     @Get(':id')

@@ -59,8 +59,8 @@ export class AuthRolesGuard implements CanActivate {
 
         request.user = {
             uid: decoded.uid,
-            email: decoded.email,
-            name: decoded.name,
+            email: user.email ?? decoded.email,
+            name: user.name ?? decoded.name,
             role: user.role,
         };
 

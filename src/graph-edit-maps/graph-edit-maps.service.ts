@@ -24,6 +24,16 @@ import { ValidateGraphDto } from './dtos/validate-graph.dto';
 import { ImportMapJsonDto } from './dtos/map-json.dto';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
 import { UserRole } from '../users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
+import { NodesService } from '../nodes/nodes.service';
+import { UsersService } from '../users/users.service';
+import type { MapListAuthorDto, MapListItemDto } from './dtos/map-list-item.dto';
+
+export type MapListViewerProfile = {
+    uid: string;
+    name?: string | null;
+    email?: string | null;
+};
 import {
     filenameFromPublicUrl,
     nodeMediaAbsolutePath,
@@ -55,13 +65,17 @@ export class GraphEditMapsService {
         private readonly nodeMediaRepo: Repository<NodeMedia>,
         @InjectRepository(UserTopicProgress)
         private readonly progressRepo: Repository<UserTopicProgress>,
+        @InjectRepository(User)
+        private readonly userRepo: Repository<User>,
+        private readonly nodesService: NodesService,
+        private readonly usersService: UsersService,
         private readonly graphValidator: GraphValidatorService,
         private readonly dataSource: DataSource,
     ) {}
 
     /** Каталог: усі опубліковані карти (меню «Карти», головна). */
-    async findPublished(): Promise<GraphEditMap[]> {
-        return this.mapRepo.find({
+    async findPublished(viewer: MapListViewerProfile): Promise<MapListItemDto[]> {
+        const maps = await this.mapRepo.find({
             where: { status: MapStatus.PUBLISHED },
             order: { updatedAt: 'DESC' },
             select: {
@@ -75,16 +89,18 @@ export class GraphEditMapsService {
                 publishedAt: true,
                 graphValidated: true,
             },
-        }) as Promise<GraphEditMap[]>;
+        });
+        return this.enrichMapsForList(maps, viewer);
     }
 
     /** @deprecated Використовуйте findPublished або findMine */
-    async findAll(_userRole?: UserRole, _ownerUid?: string): Promise<GraphEditMap[]> {
-        return this.findPublished();
+    async findAll(_userRole?: UserRole, _ownerUid?: string): Promise<MapListItemDto[]> {
+        return this.findPublished({ uid: _ownerUid ?? '' });
     }
 
     /** Мої карти: створені користувачем + ті, що проходить/проходив. */
-    async findMine(userUid: string): Promise<GraphEditMap[]> {
+    async findMine(viewer: MapListViewerProfile): Promise<MapListItemDto[]> {
+        const userUid = viewer.uid;
         const owned = await this.mapRepo.find({
             where: { ownerUid: userUid },
             order: { updatedAt: 'DESC' },
@@ -120,7 +136,145 @@ export class GraphEditMapsService {
         merged.sort(
             (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
         );
-        return merged;
+        return this.enrichMapsForList(merged, viewer);
+    }
+
+    private async enrichMapsForList(
+        maps: GraphEditMap[],
+        viewer: MapListViewerProfile,
+    ): Promise<MapListItemDto[]> {
+        if (maps.length === 0) return [];
+
+        const viewerUid = viewer.uid.trim();
+        const ownerUids = [
+            ...new Set(
+                maps.map((m) => m.ownerUid?.trim()).filter((uid): uid is string => Boolean(uid)),
+            ),
+        ];
+
+        const ownerProfiles = await this.loadOwnerProfiles(ownerUids);
+
+        if (viewerUid && ownerUids.includes(viewerUid) && !ownerProfiles.has(viewerUid)) {
+            const me = await this.usersService.findByFirebaseUid(viewerUid);
+            if (me) {
+                ownerProfiles.set(viewerUid, { name: me.name, email: me.email });
+            }
+        }
+
+        for (const uid of ownerUids) {
+            if (ownerProfiles.has(uid)) continue;
+            const profile = await this.usersService.findByFirebaseUid(uid);
+            if (profile) {
+                ownerProfiles.set(uid, { name: profile.name, email: profile.email });
+            }
+        }
+
+        const authorCache = new Map<string, MapListAuthorDto>();
+        const items: MapListItemDto[] = [];
+
+        for (const map of maps) {
+            let myProgress: MapListItemDto['myProgress'] = null;
+
+            if (viewerUid && map.status === MapStatus.PUBLISHED) {
+                const summary = await this.nodesService.getProgressSummary(viewerUid, map.id);
+                myProgress = {
+                    total: summary.total,
+                    completed: summary.completed,
+                    available: summary.available,
+                    locked: summary.locked,
+                    percent: summary.percent,
+                };
+            }
+
+            items.push({
+                id: map.id,
+                title: map.title,
+                description: map.description,
+                ownerUid: map.ownerUid,
+                status: map.status,
+                graphValidated: map.graphValidated,
+                createdAt: map.createdAt,
+                updatedAt: map.updatedAt,
+                publishedAt: map.publishedAt,
+                author: this.resolveMapAuthor(map.ownerUid, viewer, ownerProfiles, authorCache),
+                myProgress,
+            });
+        }
+
+        return items;
+    }
+
+    private async loadOwnerProfiles(
+        ownerUids: string[],
+    ): Promise<Map<string, Pick<User, 'name' | 'email'>>> {
+        const trimmed = [...new Set(ownerUids.map((u) => u.trim()).filter(Boolean))];
+        if (trimmed.length === 0) return new Map();
+
+        const users = await this.userRepo
+            .createQueryBuilder('u')
+            .select(['u.id', 'u.firebase_uid', 'u.name', 'u.email'])
+            .where('TRIM(u.firebase_uid) IN (:...uids)', { uids: trimmed })
+            .getMany();
+
+        const map = new Map<string, Pick<User, 'name' | 'email'>>();
+        for (const u of users) {
+            if (u.firebase_uid) {
+                map.set(u.firebase_uid.trim(), { name: u.name, email: u.email });
+            }
+        }
+        return map;
+    }
+
+    private resolveMapAuthor(
+        ownerUid: string | null | undefined,
+        viewer: MapListViewerProfile,
+        ownerProfiles: Map<string, Pick<User, 'name' | 'email'>>,
+        cache: Map<string, MapListAuthorDto>,
+    ): MapListAuthorDto {
+        const uid = ownerUid?.trim() ?? '';
+        if (!uid) {
+            return {
+                uid: '',
+                name: null,
+                email: null,
+                displayName: 'Невідомий автор',
+            };
+        }
+
+        if (cache.has(uid)) {
+            return cache.get(uid)!;
+        }
+
+        const fromDb = ownerProfiles.get(uid);
+        let name = fromDb?.name?.trim() || null;
+        let email = fromDb?.email?.trim() || null;
+
+        if (!name && !email && viewer.uid.trim() === uid) {
+            name = viewer.name?.trim() || null;
+            email = viewer.email?.trim() || null;
+        }
+
+        const author = this.authorFromProfile(uid, name, email);
+        cache.set(uid, author);
+        return author;
+    }
+
+    private authorFromProfile(
+        uid: string,
+        name: string | null | undefined,
+        email: string | null | undefined,
+    ): MapListAuthorDto {
+        const trimmedName = name?.trim() || null;
+        const trimmedEmail = email?.trim() || null;
+        return {
+            uid,
+            name: trimmedName,
+            email: trimmedEmail,
+            displayName:
+                trimmedName ||
+                trimmedEmail?.split('@')[0]?.trim() ||
+                'Невідомий автор',
+        };
     }
 
     async findOne(id: number, userUid?: string, userRole?: UserRole): Promise<GraphEditMap> {
@@ -148,6 +302,10 @@ export class GraphEditMapsService {
 
         if (dto.title !== undefined) map.title = dto.title;
         if (dto.description !== undefined) map.description = dto.description ?? null;
+        if (!map.ownerUid && (userRole === UserRole.ADMIN || userRole === UserRole.TEACHER)) {
+            map.ownerUid = userUid;
+        }
+
         if (dto.status !== undefined) {
             if (dto.status === MapStatus.PUBLISHED) {
                 map.publishedAt = new Date();
@@ -184,6 +342,9 @@ export class GraphEditMapsService {
         map.status = MapStatus.PUBLISHED;
         map.publishedAt = new Date();
         map.graphValidated = validation.valid;
+        if (!map.ownerUid) {
+            map.ownerUid = userUid;
+        }
         return this.mapRepo.save(map);
     }
 

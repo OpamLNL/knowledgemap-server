@@ -82,10 +82,28 @@ export class UsersService {
     async findByFirebaseUid(
         uid: string,
     ): Promise<Pick<User, 'id' | 'email' | 'name' | 'role' | 'avatarUrl' | 'createdAt'> | null> {
-        const user = await this.usersRepository.findOne({
-            where: { firebase_uid: uid },
+        const trimmed = uid.trim();
+        if (!trimmed) return null;
+
+        let user = await this.usersRepository.findOne({
+            where: { firebase_uid: trimmed },
             select: ['id', 'email', 'name', 'role', 'avatarUrl', 'createdAt'],
         });
+
+        if (!user) {
+            user = await this.usersRepository
+                .createQueryBuilder('u')
+                .select([
+                    'u.id',
+                    'u.email',
+                    'u.name',
+                    'u.role',
+                    'u.avatarUrl',
+                    'u.createdAt',
+                ])
+                .where('TRIM(u.firebase_uid) = :uid', { uid: trimmed })
+                .getOne();
+        }
 
         if (!user) {
             return null;
