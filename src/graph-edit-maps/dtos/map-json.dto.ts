@@ -122,6 +122,24 @@ export class MapJsonGroupEdgeDto {
     type?: string | null;
 }
 
+/** Метадані карти з JSON-експорту (ігноруються при імпорті графа). */
+export class MapJsonExportMetaDto {
+    @IsString()
+    title: string;
+
+    @IsString()
+    @IsOptional()
+    description?: string | null;
+}
+
+export class MapJsonMediaStatsDto {
+    @IsInt()
+    embeddedImages: number;
+
+    @IsInt()
+    skippedImages: number;
+}
+
 export class ImportMapJsonDto {
     @IsInt()
     formatVersion: number;
@@ -156,4 +174,23 @@ export class ImportMapJsonDto {
     @IsIn(['merge', 'replace'])
     @IsOptional()
     importMode?: 'merge' | 'replace';
+
+    /** Поля з round-trip експорту — дозволені, але не змінюють поточну карту. */
+    @IsString()
+    @IsOptional()
+    exportedAt?: string;
+
+    @ValidateNested()
+    @Type(() => MapJsonExportMetaDto)
+    @IsOptional()
+    map?: MapJsonExportMetaDto;
+
+    @IsString()
+    @IsOptional()
+    mediaNote?: string;
+
+    @ValidateNested()
+    @Type(() => MapJsonMediaStatsDto)
+    @IsOptional()
+    mediaStats?: MapJsonMediaStatsDto;
 }

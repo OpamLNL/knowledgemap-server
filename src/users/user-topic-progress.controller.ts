@@ -48,11 +48,15 @@ export class UserTopicProgressController {
 
     @Post('me')
     @ApiOperation({ summary: 'Позначити тему як вивчену (студент)' })
-    markMyTopicComplete(
+    async markMyTopicComplete(
         @Req() req: { user: { uid: string } },
         @Body() dto: MarkTopicCompleteDto,
     ) {
-        return this.service.markTopicComplete(req.user.uid, dto.topicId);
+        const topicId = await this.nodesService.resolveAndValidateTopicForProgress(
+            req.user.uid,
+            dto,
+        );
+        return this.service.markTopicComplete(req.user.uid, topicId);
     }
 
     // ─── Admin ───

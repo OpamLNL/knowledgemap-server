@@ -907,59 +907,83 @@ export class GraphEditMapsService {
                 }
             }
 
+            const importGroups = dto.groups ?? [];
+            const groupIdMap = new Map<string, string>();
+
+            for (const g of importGroups) {
+                const existing = await queryRunner.manager.findOne(KnowledgeGroup, {
+                    where: { id: g.id },
+                });
+                if (existing?.mapId === mapId) {
+                    groupIdMap.set(g.id, g.id);
+                } else {
+                    groupIdMap.set(g.id, this.generateGroupId());
+                }
+            }
+
             const groupIds = new Set(
                 (await queryRunner.manager.find(KnowledgeGroup, { where: { mapId } })).map(
                     (g) => g.id,
                 ),
             );
 
-            for (const g of dto.groups ?? []) {
-                const existing = await queryRunner.manager.findOne(KnowledgeGroup, {
-                    where: { id: g.id },
+            for (const g of importGroups) {
+                const targetId = groupIdMap.get(g.id)!;
+                const parentId = g.parentId
+                    ? (groupIdMap.get(g.parentId) ?? null)
+                    : null;
+
+                const existingInTarget = await queryRunner.manager.findOne(KnowledgeGroup, {
+                    where: { id: targetId },
                 });
-                if (existing) {
-                    if (existing.mapId !== mapId) {
-                        throw new BadRequestException(`Група ${g.id} належить іншій карті`);
+                if (existingInTarget) {
+                    if (existingInTarget.mapId !== mapId) {
+                        throw new BadRequestException(
+                            `Група ${targetId} належить іншій карті`,
+                        );
                     }
-                    Object.assign(existing, {
+                    Object.assign(existingInTarget, {
                         title: g.title,
                         description: g.description ?? null,
-                        level: g.level ?? existing.level,
-                        sortOrder: g.sortOrder ?? existing.sortOrder,
-                        parentId: g.parentId ?? existing.parentId,
+                        level: g.level ?? existingInTarget.level,
+                        sortOrder: g.sortOrder ?? existingInTarget.sortOrder,
+                        parentId,
                     });
-                    await queryRunner.manager.save(existing);
+                    await queryRunner.manager.save(existingInTarget);
                 } else {
                     await queryRunner.manager.save(
                         queryRunner.manager.create(KnowledgeGroup, {
-                            id: g.id,
+                            id: targetId,
                             mapId,
                             title: g.title,
                             description: g.description ?? null,
                             level: g.level ?? 0,
                             sortOrder: g.sortOrder ?? 0,
-                            parentId: g.parentId ?? null,
+                            parentId,
                         }),
                     );
                 }
-                groupIds.add(g.id);
+                groupIds.add(targetId);
             }
 
             const keyToNodeId = new Map<string, number>();
 
             for (const nodeDto of dto.nodes) {
-                if (nodeDto.groupId && !groupIds.has(nodeDto.groupId)) {
+                const remappedGroupId = nodeDto.groupId
+                    ? (groupIdMap.get(nodeDto.groupId) ?? nodeDto.groupId)
+                    : null;
+                if (remappedGroupId && !groupIds.has(remappedGroupId)) {
                     throw new BadRequestException(
                         `Вузол ${nodeDto.key} посилається на неіснуючу групу ${nodeDto.groupId}`,
                     );
                 }
 
                 let topic: Topic | null = null;
-                if (nodeDto.groupId) {
+                if (remappedGroupId) {
                     topic = await this.createTopicForNodeInTransaction(
                         queryRunner,
                         nodeDto.title,
-                        nodeDto.groupId,
+                        remappedGroupId,
                     );
                 }
 
@@ -967,7 +991,7 @@ export class GraphEditMapsService {
                     queryRunner.manager.create(Node, {
                         title: nodeDto.title,
                         topicId: topic?.id ?? null,
-                        groupId: nodeDto.groupId ?? null,
+                        groupId: remappedGroupId,
                         mapId,
                         x: nodeDto.x ?? null,
                         y: nodeDto.y ?? null,
@@ -1002,16 +1026,18 @@ export class GraphEditMapsService {
             }
 
             for (const ge of dto.groupEdges ?? []) {
-                if (!groupIds.has(ge.from) || !groupIds.has(ge.to)) continue;
+                const fromId = groupIdMap.get(ge.from) ?? ge.from;
+                const toId = groupIdMap.get(ge.to) ?? ge.to;
+                if (!groupIds.has(fromId) || !groupIds.has(toId)) continue;
                 const duplicate = await queryRunner.manager.findOne(GroupConnection, {
-                    where: { mapId, fromGroupId: ge.from, toGroupId: ge.to },
+                    where: { mapId, fromGroupId: fromId, toGroupId: toId },
                 });
                 if (!duplicate) {
                     await queryRunner.manager.save(
                         queryRunner.manager.create(GroupConnection, {
                             mapId,
-                            fromGroupId: ge.from,
-                            toGroupId: ge.to,
+                            fromGroupId: fromId,
+                            toGroupId: toId,
                             type: ge.type ?? 'prerequisite',
                             source: 'import',
                         }),
@@ -1020,13 +1046,17 @@ export class GraphEditMapsService {
             }
 
             if (dto.groupLayout && Object.keys(dto.groupLayout).length > 0) {
+                const remappedLayout: Record<string, { x: number; y: number }> = {};
+                for (const [oldId, pos] of Object.entries(dto.groupLayout)) {
+                    remappedLayout[groupIdMap.get(oldId) ?? oldId] = pos;
+                }
                 const freshMap = await queryRunner.manager.findOne(GraphEditMap, {
                     where: { id: mapId },
                 });
                 if (freshMap) {
                     freshMap.groupLayoutJson = {
                         ...(mode === 'merge' ? (freshMap.groupLayoutJson ?? {}) : {}),
-                        ...dto.groupLayout,
+                        ...remappedLayout,
                     };
                     await queryRunner.manager.save(freshMap);
                 }
@@ -1053,6 +1083,10 @@ export class GraphEditMapsService {
             importedEdges: dto.edges?.length ?? 0,
             graph: await this.buildEditorGraphData(mapId),
         };
+    }
+
+    private generateGroupId(): string {
+        return `g_${Date.now().toString(36)}_${randomBytes(3).toString('hex').slice(0, 6)}`;
     }
 
     private async clearMapGraph(queryRunner: QueryRunner, mapId: number): Promise<void> {

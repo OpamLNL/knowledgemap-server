@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, IsNumber, IsDate } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsNumber, IsDate, ValidateIf } from 'class-validator';
 
 export class CreateUserTopicProgressDto {
     @IsString()
@@ -21,6 +21,14 @@ export class CreateUserTopicProgressDto {
 }
 
 export class MarkTopicCompleteDto {
+    @ValidateIf((dto: MarkTopicCompleteDto) => dto.nodeId == null)
     @IsInt()
-    topicId: number;
+    topicId?: number;
+
+    @ValidateIf((dto: MarkTopicCompleteDto) => dto.topicId == null)
+    @IsInt()
+    nodeId?: number;
+
+    @IsInt()
+    mapId: number;
 }

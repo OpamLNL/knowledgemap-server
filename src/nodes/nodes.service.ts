@@ -416,6 +416,68 @@ export class NodesService {
         };
     }
 
+    /** Перевіряє доступність теми на карті; за потреби створює Topic для вузла без topicId. */
+    async resolveAndValidateTopicForProgress(
+        userUid: string,
+        dto: { topicId?: number; nodeId?: number; mapId: number },
+    ): Promise<number> {
+        if (dto.topicId == null && dto.nodeId == null) {
+            throw new BadRequestException('Потрібен topicId або nodeId');
+        }
+
+        let topicId = dto.topicId ?? null;
+        let resolvedNodeId = dto.nodeId ?? null;
+
+        if (resolvedNodeId != null) {
+            const node = await this.nodeRepo.findOne({
+                where: { id: resolvedNodeId, mapId: dto.mapId },
+            });
+            if (!node) {
+                throw new NotFoundException(
+                    `Вузол ${resolvedNodeId} не знайдено на карті ${dto.mapId}`,
+                );
+            }
+            if (topicId != null && node.topicId != null && node.topicId !== topicId) {
+                throw new BadRequestException('topicId не відповідає вузлу');
+            }
+            if (node.topicId == null) {
+                if (!node.groupId) {
+                    throw new BadRequestException(
+                        'Вузол не привʼязаний до групи — неможливо зберегти прогрес',
+                    );
+                }
+                const topic = await this.ensureTopicForNode(node);
+                topicId = topic.id;
+            } else {
+                topicId = node.topicId;
+            }
+            resolvedNodeId = node.id;
+        } else if (topicId != null) {
+            const node = await this.nodeRepo.findOne({
+                where: { topicId, mapId: dto.mapId },
+            });
+            if (!node) {
+                throw new BadRequestException(
+                    `Тема ${topicId} не належить до карти ${dto.mapId}`,
+                );
+            }
+            resolvedNodeId = node.id;
+        }
+
+        const overview = await this.getMapOverview(userUid, dto.mapId);
+        const entry = overview.nodesIndex.find(
+            (n) => n.id === resolvedNodeId || (topicId != null && n.topicId === topicId),
+        );
+        if (!entry) {
+            throw new BadRequestException('Тема не знайдена на карті');
+        }
+        if (entry.status === 'locked') {
+            throw new BadRequestException('Спочатку завершіть попередні теми');
+        }
+
+        return topicId!;
+    }
+
     private async loadMapGraphContext(userUid: string, mapId?: number): Promise<MapGraphContext> {
         const resolvedMapId = mapId ?? (await this.getDefaultMapId());
         const map = await this.mapRepo.findOne({ where: { id: resolvedMapId } });
@@ -649,6 +711,36 @@ export class NodesService {
             if (!map.ownerUid || map.ownerUid === userUid) return;
         }
         throw new ForbiddenException('Недостатньо прав для редагування цієї карти');
+    }
+
+    private async ensureTopicForNode(node: Node): Promise<Topic> {
+        const trimmedTitle = node.title.trim() || 'Новий вузол';
+        const groupId = node.groupId!;
+
+        const maxOrder = await this.topicRepo
+            .createQueryBuilder('t')
+            .select('MAX(t.orderInGroup)', 'maxOrder')
+            .where('t.groupId = :groupId', { groupId })
+            .getRawOne<{ maxOrder: string | null }>();
+
+        const maxGlobal = await this.topicRepo
+            .createQueryBuilder('t')
+            .select('MAX(t.globalOrder)', 'maxGlobal')
+            .getRawOne<{ maxGlobal: string | null }>();
+
+        const topic = await this.topicRepo.save(
+            this.topicRepo.create({
+                title: trimmedTitle,
+                description: trimmedTitle,
+                groupId,
+                orderInGroup: (Number(maxOrder?.maxOrder) || 0) + 1,
+                globalOrder: (Number(maxGlobal?.maxGlobal) || 0) + 1,
+            }),
+        );
+
+        node.topicId = topic.id;
+        await this.nodeRepo.save(node);
+        return topic;
     }
 
     private async getDefaultMapId(): Promise<number> {
