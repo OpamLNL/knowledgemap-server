@@ -2,11 +2,8 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import express, { type Express } from 'express';
-import { json, urlencoded } from 'express';
+import { type Express, json, urlencoded } from 'express';
 import { AppModule } from './app.module';
-import { ensureNodeMediaUploadDir, NODE_MEDIA_UPLOAD_DIR } from './nodes/node-media.storage';
-import { ensureUserAvatarUploadDir, USER_AVATAR_UPLOAD_DIR } from './users/user-avatar.storage';
 
 export function getCorsOrigins(): string[] {
     const defaults = [
@@ -28,11 +25,6 @@ export function getCorsOrigins(): string[] {
 function configureApp(app: INestApplication): void {
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
-
-    ensureNodeMediaUploadDir();
-    ensureUserAvatarUploadDir();
-    app.use('/api/uploads/node-media', express.static(NODE_MEDIA_UPLOAD_DIR));
-    app.use('/api/uploads/avatars', express.static(USER_AVATAR_UPLOAD_DIR));
 
     app.setGlobalPrefix('api');
 

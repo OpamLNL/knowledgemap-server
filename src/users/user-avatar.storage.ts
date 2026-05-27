@@ -1,11 +1,10 @@
-import { existsSync, mkdirSync } from 'fs';
-import { memoryStorage } from 'multer';
 import { join } from 'path';
+import { memoryStorage } from 'multer';
 import type { Request } from 'express';
 import type { UploadedImageFile } from '../nodes/types/uploaded-image-file';
 
-/** Legacy локальні файли (до ImgBB) */
-export const USER_AVATAR_UPLOAD_DIR = join(process.cwd(), 'uploads', 'avatars');
+/** Legacy шлях (лише для читання/видалення старих записів у БД). */
+const USER_AVATAR_UPLOAD_DIR = join(process.cwd(), 'uploads', 'avatars');
 
 const ALLOWED_MIME = new Set([
     'image/jpeg',
@@ -13,12 +12,6 @@ const ALLOWED_MIME = new Set([
     'image/gif',
     'image/webp',
 ]);
-
-export function ensureUserAvatarUploadDir(): void {
-    if (!existsSync(USER_AVATAR_UPLOAD_DIR)) {
-        mkdirSync(USER_AVATAR_UPLOAD_DIR, { recursive: true });
-    }
-}
 
 export const userAvatarMulterOptions = {
     limits: { fileSize: 2 * 1024 * 1024 },
@@ -35,10 +28,6 @@ export const userAvatarMulterOptions = {
     },
     storage: memoryStorage(),
 };
-
-export function userAvatarPublicUrl(filename: string): string {
-    return `/api/uploads/avatars/${filename}`;
-}
 
 export function userAvatarAbsolutePath(filename: string): string {
     return join(USER_AVATAR_UPLOAD_DIR, filename);
