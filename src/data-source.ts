@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import 'dotenv/config';
-import * as fs from 'fs';
+import { buildMysqlSslOptions } from './config/mysql-ssl';
 import { User } from './users/entities/user.entity';
 import { UserTopicProgress } from './users/entities/user-topic-progress.entity';
 import { Topic } from './topics/entities/topic.entity';
@@ -20,11 +20,9 @@ import { NodeContent1730000000005 } from './migrations/1730000000005-NodeContent
 import { GroupMapId1730000000006 } from './migrations/1730000000006-GroupMapId';
 import { GraphValidated1730000000007 } from './migrations/1730000000007-GraphValidated';
 import { MapFavoritesAndRatings1730000000008 } from './migrations/1730000000008-MapFavoritesAndRatings';
+import { ImgbbDeleteUrl1730000000009 } from './migrations/1730000000009-ImgbbDeleteUrl';
 import { UserMapFavorite } from './graph-edit-maps/entities/user-map-favorite.entity';
 import { UserMapRating } from './graph-edit-maps/entities/user-map-rating.entity';
-
-const useSsl = process.env.DB_SSL === 'true';
-const caPath = process.env.DB_CA_PATH;
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -56,13 +54,9 @@ export const AppDataSource = new DataSource({
         GroupMapId1730000000006,
         GraphValidated1730000000007,
         MapFavoritesAndRatings1730000000008,
+        ImgbbDeleteUrl1730000000009,
     ],
     synchronize: false,
     logging: true,
-    ssl: useSsl && caPath
-        ? {
-              ca: fs.readFileSync(caPath),
-              rejectUnauthorized: true,
-          }
-        : undefined,
+    ssl: buildMysqlSslOptions(),
 });

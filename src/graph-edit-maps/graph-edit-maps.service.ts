@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, In, QueryRunner, QueryFailedError } from 'typeorm';
-import { readFile, writeFile } from 'fs/promises';
 import { extname } from 'path';
 import { randomBytes } from 'crypto';
 import { GraphEditMap, MapStatus } from './entities/graph-edit-map.entity';
@@ -39,10 +38,8 @@ export type MapListViewerProfile = {
 };
 import {
     filenameFromPublicUrl,
-    nodeMediaAbsolutePath,
-    nodeMediaPublicUrl,
-    ensureNodeMediaUploadDir,
 } from '../nodes/node-media.storage';
+import { ImgbbService } from '../common/imgbb/imgbb.service';
 
 export const MAP_JSON_FORMAT_VERSION = 1;
 const MAX_EMBED_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -78,6 +75,7 @@ export class GraphEditMapsService {
         private readonly usersService: UsersService,
         private readonly graphValidator: GraphValidatorService,
         private readonly dataSource: DataSource,
+        private readonly imgbb: ImgbbService,
     ) {}
 
     /** Каталог: усі опубліковані карти (меню «Карти», головна). */
@@ -1226,20 +1224,19 @@ export class GraphEditMapsService {
                             url: item.url,
                         };
 
-                        const filename = filenameFromPublicUrl(item.url);
-                        if (!filename) {
+                        if (!this.imgbb.isHostedImageUrl(item.url)) {
                             skippedImages++;
                             return base;
                         }
 
                         try {
-                            const buf = await readFile(nodeMediaAbsolutePath(filename));
-                            if (buf.length > MAX_EMBED_IMAGE_BYTES) {
+                            const buf = await this.imgbb.readImageBytes(item.url);
+                            if (!buf || buf.length > MAX_EMBED_IMAGE_BYTES) {
                                 skippedImages++;
                                 return base;
                             }
                             base.dataBase64 = buf.toString('base64');
-                            base.mimeType = mimeFromFilename(filename);
+                            base.mimeType = mimeFromUrl(item.url);
                             embeddedImages++;
                         } catch {
                             skippedImages++;
@@ -1291,7 +1288,7 @@ export class GraphEditMapsService {
                 type: e.type,
             })),
             mediaNote:
-                'Локальні зображення вбудовані як dataBase64. Зовнішні URL лишаються посиланнями без копіювання.',
+                'Зображення (ImgBB або legacy uploads) вбудовані як dataBase64. Інші URL лишаються посиланнями.',
             mediaStats: { embeddedImages, skippedImages },
         };
     }
@@ -1543,44 +1540,41 @@ export class GraphEditMapsService {
         media: ImportMapJsonDto['nodes'][number]['media'],
     ): Promise<void> {
         if (!media?.length) return;
-        ensureNodeMediaUploadDir();
 
         for (const item of media) {
+            let url: string | null = null;
+            let deleteUrl: string | null = null;
+
             if (item.dataBase64) {
-                const ext = extFromMime(item.mimeType) ?? extname(item.url ?? '') ?? '.jpg';
-                const filename = `node-${nodeId}-import-${Date.now()}-${randomBytes(4).toString('hex')}${ext}`;
                 const buf = Buffer.from(item.dataBase64, 'base64');
                 if (buf.length > MAX_EMBED_IMAGE_BYTES) continue;
-                await writeFile(nodeMediaAbsolutePath(filename), buf);
-                await queryRunner.manager.save(
-                    queryRunner.manager.create(NodeMedia, {
-                        nodeId,
-                        url: nodeMediaPublicUrl(filename),
-                        caption: item.caption?.trim() || null,
-                        sortOrder: item.sortOrder ?? 0,
-                    }),
-                );
-                continue;
-            }
-
-            const filename = item.url ? filenameFromPublicUrl(item.url) : null;
-            if (filename) {
-                try {
-                    const buf = await readFile(nodeMediaAbsolutePath(filename));
-                    const newName = `node-${nodeId}-import-${Date.now()}-${randomBytes(4).toString('hex')}${extname(filename)}`;
-                    await writeFile(nodeMediaAbsolutePath(newName), buf);
-                    await queryRunner.manager.save(
-                        queryRunner.manager.create(NodeMedia, {
-                            nodeId,
-                            url: nodeMediaPublicUrl(newName),
-                            caption: item.caption?.trim() || null,
-                            sortOrder: item.sortOrder ?? 0,
-                        }),
-                    );
-                } catch {
-                    /* файл недоступний — пропускаємо */
+                const uploaded = await this.imgbb.uploadImage(buf, `node-${nodeId}-import`);
+                url = uploaded.url;
+                deleteUrl = uploaded.deleteUrl;
+            } else if (item.url) {
+                if (item.url.startsWith('http://') || item.url.startsWith('https://')) {
+                    url = item.url;
+                } else if (filenameFromPublicUrl(item.url)) {
+                    const buf = await this.imgbb.readImageBytes(item.url);
+                    if (buf && buf.length <= MAX_EMBED_IMAGE_BYTES) {
+                        const uploaded = await this.imgbb.uploadImage(buf, `node-${nodeId}-import`);
+                        url = uploaded.url;
+                        deleteUrl = uploaded.deleteUrl;
+                    }
                 }
             }
+
+            if (!url) continue;
+
+            await queryRunner.manager.save(
+                queryRunner.manager.create(NodeMedia, {
+                    nodeId,
+                    url,
+                    deleteUrl,
+                    caption: item.caption?.trim() || null,
+                    sortOrder: item.sortOrder ?? 0,
+                }),
+            );
         }
     }
 
@@ -1725,6 +1719,13 @@ export class GraphEditMapsService {
             }),
         );
     }
+}
+
+function mimeFromUrl(url: string): string {
+    const legacyName = filenameFromPublicUrl(url);
+    if (legacyName) return mimeFromFilename(legacyName);
+    const pathname = url.split('?')[0] ?? '';
+    return mimeFromFilename(pathname);
 }
 
 function mimeFromFilename(filename: string): string {

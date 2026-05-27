@@ -13,8 +13,9 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import {
     filenameFromAvatarUrl,
     userAvatarAbsolutePath,
-    userAvatarPublicUrl,
 } from './user-avatar.storage';
+import type { UploadedImageFile } from '../nodes/types/uploaded-image-file';
+import { ImgbbService } from '../common/imgbb/imgbb.service';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +24,7 @@ export class UsersService {
         private readonly usersRepository: Repository<User>,
         @InjectRepository(GraphEditMap)
         private readonly mapRepository: Repository<GraphEditMap>,
+        private readonly imgbb: ImgbbService,
     ) {}
 
     /**
@@ -314,14 +316,22 @@ export class UsersService {
         };
     }
 
-    async updateAvatar(firebaseUid: string, filename: string) {
+    async updateAvatar(firebaseUid: string, file: UploadedImageFile) {
         const user = await this.usersRepository.findOne({ where: { firebase_uid: firebaseUid } });
         if (!user) {
             throw new NotFoundException('Користувача не знайдено');
         }
+        if (!file?.buffer?.length) {
+            throw new BadRequestException('Файл не передано');
+        }
 
-        await this.removeUploadedAvatarFile(user.avatarUrl);
-        user.avatarUrl = userAvatarPublicUrl(filename);
+        await this.removeUploadedAvatarFile(user);
+        const uploaded = await this.imgbb.uploadImage(
+            file.buffer,
+            `avatar-${firebaseUid.slice(0, 32)}`,
+        );
+        user.avatarUrl = uploaded.url;
+        user.avatarDeleteUrl = uploaded.deleteUrl;
         await this.usersRepository.save(user);
         return this.findByFirebaseUid(firebaseUid);
     }
@@ -332,8 +342,9 @@ export class UsersService {
             throw new NotFoundException('Користувача не знайдено');
         }
 
-        await this.removeUploadedAvatarFile(user.avatarUrl);
+        await this.removeUploadedAvatarFile(user);
         user.avatarUrl = undefined;
+        user.avatarDeleteUrl = null;
         await this.usersRepository.save(user);
         return this.findByFirebaseUid(firebaseUid);
     }
@@ -374,9 +385,13 @@ export class UsersService {
         };
     }
 
-    private async removeUploadedAvatarFile(avatarUrl?: string | null) {
-        if (!avatarUrl) return;
-        const filename = filenameFromAvatarUrl(avatarUrl);
+    private async removeUploadedAvatarFile(user: User) {
+        if (user.avatarDeleteUrl) {
+            await this.imgbb.deleteByUrl(user.avatarDeleteUrl);
+            return;
+        }
+
+        const filename = user.avatarUrl ? filenameFromAvatarUrl(user.avatarUrl) : null;
         if (!filename) return;
         try {
             await unlink(userAvatarAbsolutePath(filename));

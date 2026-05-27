@@ -29,6 +29,9 @@ export class User {
     @Column({ type: 'text', nullable: true })
     avatarUrl?: string;
 
+    @Column({ name: 'avatar_delete_url', type: 'varchar', length: 512, nullable: true })
+    avatarDeleteUrl?: string | null;
+
     @Column({ type: 'enum', enum: UserRole, default: UserRole.STUDENT })
     role: UserRole;
 

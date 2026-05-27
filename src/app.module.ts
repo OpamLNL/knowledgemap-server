@@ -2,7 +2,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as fs from 'fs';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,10 +13,12 @@ import { NodesModule } from './nodes/nodes.module';
 import { NodeConnectionsModule } from './node-connections/node-connections.module';
 import { GraphEditMapsModule } from './graph-edit-maps/graph-edit-maps.module';
 import { GraphModule } from './common/graph/graph.module';
+import { ImgbbModule } from './common/imgbb/imgbb.module';
 import { AdminModule } from './admin/admin.module';
 import { ProgressModule } from './progress/progress.module';
 import { ProfileModule } from './profile/profile.module';
 import { AuthRolesGuard } from './auth/auth-roles.guard';
+import { buildMysqlSslOptions } from './config/mysql-ssl';
 
 @Module({
     imports: [
@@ -27,8 +28,6 @@ import { AuthRolesGuard } from './auth/auth-roles.guard';
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => {
-                const useSsl = configService.get<string>('DB_SSL') === 'true';
-                const caPath = configService.get<string>('DB_CA_PATH');
                 return {
                 type: 'mysql',
                 host: configService.get<string>('DB_HOST'),
@@ -39,20 +38,12 @@ import { AuthRolesGuard } from './auth/auth-roles.guard';
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
                 synchronize: false,
                 logging: true,
-                    ssl:
-                      useSsl
-                        ? {
-                            // Якщо є змінна з текстом сертифіката, беремо її, інакше читаємо з файлу
-                            ca: process.env.DB_SSL_CA
-                              ? process.env.DB_SSL_CA
-                              : (caPath ? fs.readFileSync(caPath) : undefined),
-                            rejectUnauthorized: process.env.NODE_ENV === 'production' ? false : true,
-                        }
-                        : undefined,
+                ssl: buildMysqlSslOptions(),
             };
             },
         }),
         GraphModule,
+        ImgbbModule,
         UsersModule,
         TopicsModule,
         NodesModule,

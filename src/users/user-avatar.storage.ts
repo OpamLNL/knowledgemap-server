@@ -1,9 +1,10 @@
 import { existsSync, mkdirSync } from 'fs';
-import { diskStorage } from 'multer';
-import { extname, join } from 'path';
+import { memoryStorage } from 'multer';
+import { join } from 'path';
 import type { Request } from 'express';
 import type { UploadedImageFile } from '../nodes/types/uploaded-image-file';
 
+/** Legacy локальні файли (до ImgBB) */
 export const USER_AVATAR_UPLOAD_DIR = join(process.cwd(), 'uploads', 'avatars');
 
 const ALLOWED_MIME = new Set([
@@ -32,17 +33,7 @@ export const userAvatarMulterOptions = {
         }
         cb(null, true);
     },
-    storage: diskStorage({
-        destination: (_req, _file, cb) => {
-            ensureUserAvatarUploadDir();
-            cb(null, USER_AVATAR_UPLOAD_DIR);
-        },
-        filename: (req, file, cb) => {
-            const uid = (req as Request & { user?: { uid?: string } }).user?.uid ?? 'user';
-            const safeExt = extname(file.originalname).toLowerCase().slice(0, 8) || '.jpg';
-            cb(null, `${uid}-${Date.now()}${safeExt}`);
-        },
-    }),
+    storage: memoryStorage(),
 };
 
 export function userAvatarPublicUrl(filename: string): string {
@@ -60,5 +51,7 @@ export function filenameFromAvatarUrl(url: string): string | null {
 }
 
 export function isUploadedAvatarUrl(url: string | null | undefined): boolean {
-    return !!url?.startsWith('/api/uploads/avatars/');
+    if (!url) return false;
+    if (url.startsWith('/api/uploads/avatars/')) return true;
+    return url.includes('ibb.co') || url.includes('imgbb.com');
 }

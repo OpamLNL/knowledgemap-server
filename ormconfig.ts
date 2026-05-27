@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import * as fs from "node:fs";
+import { buildMysqlSslOptions } from './src/config/mysql-ssl';
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -10,10 +10,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME ?? 'knowledge_map',
     entities: ['src/**/*.entity{.ts,.js}'],
     migrations: ['src/migrations/*.ts'],
-
-    ssl: {
-        ca: fs.readFileSync(process.env.DB_CA_PATH!),
-    },
+    ssl: buildMysqlSslOptions(),
     synchronize: false,
     logging: true,
 });

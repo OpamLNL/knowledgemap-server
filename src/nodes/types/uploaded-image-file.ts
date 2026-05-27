@@ -1,6 +1,11 @@
-/** Мінімальний тип файлу від multer (без @types/multer) */
+/** Мінімальний тип файлу від multer (memoryStorage) */
 export interface UploadedImageFile {
-    filename: string;
+    fieldname?: string;
     originalname: string;
+    encoding?: string;
     mimetype: string;
+    buffer: Buffer;
+    size: number;
+    /** Лише для legacy diskStorage */
+    filename?: string;
 }

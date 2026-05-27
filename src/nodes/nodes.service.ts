@@ -16,10 +16,10 @@ import { GroupConnection } from '../topics/entities/group-connection.entity';
 import {
     filenameFromPublicUrl,
     nodeMediaAbsolutePath,
-    nodeMediaPublicUrl,
 } from './node-media.storage';
 import type { UploadedImageFile } from './types/uploaded-image-file';
 import { UserRole } from '../users/entities/user.entity';
+import { ImgbbService } from '../common/imgbb/imgbb.service';
 
 type GraphNodeDto = {
     id: number;
@@ -73,6 +73,7 @@ export class NodesService {
         @InjectRepository(GroupConnection)
         private readonly groupConnRepo: Repository<GroupConnection>,
         private readonly graphValidator: GraphValidatorService,
+        private readonly imgbb: ImgbbService,
     ) {}
 
     async findAll(mapId?: number): Promise<Node[]> {
@@ -154,9 +155,14 @@ export class NodesService {
         caption?: string | null,
     ): Promise<NodeContentDto> {
         await this.findOne(nodeId);
-        if (!file) {
+        if (!file?.buffer?.length) {
             throw new BadRequestException('Файл зображення не передано');
         }
+
+        const uploaded = await this.imgbb.uploadImage(
+            file.buffer,
+            `node-${nodeId}-${Date.now()}`,
+        );
 
         const maxOrder = await this.nodeMediaRepo
             .createQueryBuilder('m')
@@ -167,7 +173,8 @@ export class NodesService {
         await this.nodeMediaRepo.save(
             this.nodeMediaRepo.create({
                 nodeId,
-                url: nodeMediaPublicUrl(file.filename),
+                url: uploaded.url,
+                deleteUrl: uploaded.deleteUrl,
                 caption: caption?.trim() || null,
                 sortOrder: (Number(maxOrder?.maxOrder) || 0) + 1,
             }),
@@ -181,7 +188,7 @@ export class NodesService {
         if (!media) {
             throw new NotFoundException(`Зображення id=${mediaId} не знайдено для вузла ${nodeId}`);
         }
-        await this.deleteMediaFile(media.url);
+        await this.deleteMediaFile(media);
         await this.nodeMediaRepo.remove(media);
         return this.getNodeContent(nodeId);
     }
@@ -189,15 +196,20 @@ export class NodesService {
     private async deleteAllMediaForNode(nodeId: number): Promise<void> {
         const media = await this.nodeMediaRepo.find({ where: { nodeId } });
         for (const item of media) {
-            await this.deleteMediaFile(item.url);
+            await this.deleteMediaFile(item);
         }
         if (media.length > 0) {
             await this.nodeMediaRepo.remove(media);
         }
     }
 
-    private async deleteMediaFile(publicUrl: string): Promise<void> {
-        const filename = filenameFromPublicUrl(publicUrl);
+    private async deleteMediaFile(media: NodeMedia): Promise<void> {
+        if (media.deleteUrl) {
+            await this.imgbb.deleteByUrl(media.deleteUrl);
+            return;
+        }
+
+        const filename = filenameFromPublicUrl(media.url);
         if (!filename) return;
         try {
             await unlink(nodeMediaAbsolutePath(filename));

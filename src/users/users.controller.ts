@@ -133,7 +133,7 @@ export class UsersController {
             throw new BadRequestException('Файл не передано');
         }
         const firebaseUid = (req.user as { uid: string }).uid;
-        return this.usersService.updateAvatar(firebaseUid, file.filename);
+        return this.usersService.updateAvatar(firebaseUid, file);
     }
 
     @Delete('me/avatar')

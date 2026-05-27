@@ -1,9 +1,10 @@
 import { existsSync, mkdirSync } from 'fs';
-import { diskStorage } from 'multer';
-import { extname, join } from 'path';
+import { memoryStorage } from 'multer';
+import { join } from 'path';
 import type { Request } from 'express';
 import type { UploadedImageFile } from './types/uploaded-image-file';
 
+/** Legacy локальні файли (до ImgBB) */
 export const NODE_MEDIA_UPLOAD_DIR = join(process.cwd(), 'uploads', 'node-media');
 
 const ALLOWED_MIME = new Set([
@@ -32,17 +33,7 @@ export const nodeMediaMulterOptions = {
         }
         cb(null, true);
     },
-    storage: diskStorage({
-        destination: (_req, _file, cb) => {
-            ensureNodeMediaUploadDir();
-            cb(null, NODE_MEDIA_UPLOAD_DIR);
-        },
-        filename: (req, file, cb) => {
-            const nodeId = req.params?.id ?? '0';
-            const safeExt = extname(file.originalname).toLowerCase().slice(0, 8) || '.jpg';
-            cb(null, `node-${nodeId}-${Date.now()}${safeExt}`);
-        },
-    }),
+    storage: memoryStorage(),
 };
 
 export function nodeMediaPublicUrl(filename: string): string {

@@ -23,6 +23,9 @@ export class NodeMedia {
     @Column({ type: 'varchar', length: 512 })
     url: string;
 
+    @Column({ name: 'delete_url', type: 'varchar', length: 512, nullable: true })
+    deleteUrl: string | null;
+
     @Column({ type: 'varchar', length: 255, nullable: true })
     caption: string | null;
 
