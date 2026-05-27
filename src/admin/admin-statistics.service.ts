@@ -7,7 +7,7 @@ import { UserTopicProgressService } from '../users/user-topic-progress.service';
 import { Node } from '../nodes/entities/node.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
-import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap, MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
 import { NodesService } from '../nodes/nodes.service';
 
 @Injectable()
@@ -23,8 +23,8 @@ export class AdminStatisticsService {
         private readonly connectionRepo: Repository<NodeConnection>,
         @InjectRepository(Topic)
         private readonly topicRepo: Repository<Topic>,
-        @InjectRepository(KnowledgeMap)
-        private readonly mapRepo: Repository<KnowledgeMap>,
+        @InjectRepository(GraphEditMap)
+        private readonly mapRepo: Repository<GraphEditMap>,
         private readonly progressService: UserTopicProgressService,
         private readonly nodesService: NodesService,
     ) {}

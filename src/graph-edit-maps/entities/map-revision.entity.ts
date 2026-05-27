@@ -6,7 +6,7 @@ import {
     ManyToOne,
     JoinColumn,
 } from 'typeorm';
-import { KnowledgeMap } from './knowledge-map.entity';
+import { GraphEditMap } from './graph-edit-map.entity';
 
 @Entity('map_revisions')
 export class MapRevision {
@@ -16,9 +16,9 @@ export class MapRevision {
     @Column({ name: 'map_id', type: 'int' })
     mapId: number;
 
-    @ManyToOne(() => KnowledgeMap, { onDelete: 'CASCADE' })
+    @ManyToOne(() => GraphEditMap, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'map_id' })
-    map: KnowledgeMap;
+    map: GraphEditMap;
 
     @Column({ name: 'snapshot_json', type: 'json' })
     snapshotJson: {

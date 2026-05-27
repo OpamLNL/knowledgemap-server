@@ -14,18 +14,19 @@ import {
     HttpStatus,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
-import { KnowledgeMapsService } from './knowledge-maps.service';
-import { CreateKnowledgeMapDto, UpdateKnowledgeMapDto } from './dtos/create-knowledge-map.dto';
+import { GraphEditMapsService } from './graph-edit-maps.service';
+import { CreateGraphEditMapDto, UpdateGraphEditMapDto } from './dtos/create-graph-edit-map.dto';
 import { BulkSaveGraphDto, CreateRevisionDto } from './dtos/bulk-save-graph.dto';
 import { ValidateGraphDto } from './dtos/validate-graph.dto';
+import { ImportMapJsonDto } from './dtos/map-json.dto';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
 
-@ApiTags('knowledge-maps')
+@ApiTags('graph-edit-maps')
 @ApiBearerAuth('access-token')
-@Controller('knowledge-maps')
-export class KnowledgeMapsController {
-    constructor(private readonly service: KnowledgeMapsService) {}
+@Controller('graph-edit-maps')
+export class GraphEditMapsController {
+    constructor(private readonly service: GraphEditMapsService) {}
 
     @Get()
     @ApiOperation({ summary: 'Каталог опублікованих карт знань' })
@@ -49,7 +50,7 @@ export class KnowledgeMapsController {
     @Post()
     @ApiOperation({ summary: 'Створити нову карту (чернетку)' })
     create(
-        @Body() dto: CreateKnowledgeMapDto,
+        @Body() dto: CreateGraphEditMapDto,
         @Req() req: { user: { uid: string } },
     ) {
         return this.service.create(dto, req.user.uid);
@@ -60,7 +61,7 @@ export class KnowledgeMapsController {
     @ApiOperation({ summary: 'Оновити метадані карти' })
     update(
         @Param('id', ParseIntPipe) id: number,
-        @Body() dto: UpdateKnowledgeMapDto,
+        @Body() dto: UpdateGraphEditMapDto,
         @Req() req: { user: { uid: string; role: UserRole } },
     ) {
         return this.service.update(id, dto, req.user.uid, req.user.role);
@@ -119,10 +120,25 @@ export class KnowledgeMapsController {
         return this.service.validateGraphDraft(id, dto);
     }
 
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
     @Get(':id/export')
-    @ApiOperation({ summary: 'Експорт карти у JSON' })
-    exportJson(@Param('id', ParseIntPipe) id: number) {
-        return this.service.exportJson(id);
+    @ApiOperation({ summary: 'Експорт карти у JSON (вузли, групи, теорія, зображення)' })
+    exportJson(
+        @Param('id', ParseIntPipe) id: number,
+        @Req() req: { user: { uid: string; role: UserRole } },
+    ) {
+        return this.service.exportJson(id, req.user.uid, req.user.role);
+    }
+
+    @Roles(UserRole.ADMIN, UserRole.TEACHER)
+    @Post(':id/import-json')
+    @ApiOperation({ summary: 'Імпорт карти з JSON (merge — додати, replace — замінити)' })
+    importJson(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: ImportMapJsonDto,
+        @Req() req: { user: { uid: string; role: UserRole } },
+    ) {
+        return this.service.importJson(id, dto, req.user.uid, req.user.role);
     }
 
     @Roles(UserRole.ADMIN, UserRole.TEACHER)

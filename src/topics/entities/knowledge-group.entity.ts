@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { KnowledgeMap } from '../../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap } from '../../graph-edit-maps/entities/graph-edit-map.entity';
 
 @Entity('knowledge_groups')
 export class KnowledgeGroup {
@@ -9,9 +9,9 @@ export class KnowledgeGroup {
     @Column({ name: 'map_id', type: 'int' })
     mapId: number;
 
-    @ManyToOne(() => KnowledgeMap, { onDelete: 'CASCADE' })
+    @ManyToOne(() => GraphEditMap, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'map_id' })
-    map: KnowledgeMap;
+    map: GraphEditMap;
 
     @Column({ length: 255 })
     title: string;

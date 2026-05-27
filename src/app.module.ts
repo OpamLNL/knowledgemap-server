@@ -2,6 +2,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,7 +12,7 @@ import { UsersModule } from './users/users.module';
 import { TopicsModule } from './topics/topics.module';
 import { NodesModule } from './nodes/nodes.module';
 import { NodeConnectionsModule } from './node-connections/node-connections.module';
-import { KnowledgeMapsModule } from './knowledge-maps/knowledge-maps.module';
+import { GraphEditMapsModule } from './graph-edit-maps/graph-edit-maps.module';
 import { GraphModule } from './common/graph/graph.module';
 import { AdminModule } from './admin/admin.module';
 import { ProgressModule } from './progress/progress.module';
@@ -25,7 +26,10 @@ import { AuthRolesGuard } from './auth/auth-roles.guard';
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
-            useFactory: (configService: ConfigService) => ({
+            useFactory: (configService: ConfigService) => {
+                const useSsl = configService.get<string>('DB_SSL') === 'true';
+                const caPath = configService.get<string>('DB_CA_PATH');
+                return {
                 type: 'mysql',
                 host: configService.get<string>('DB_HOST'),
                 port: configService.get<number>('DB_PORT'),
@@ -35,20 +39,22 @@ import { AuthRolesGuard } from './auth/auth-roles.guard';
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
                 synchronize: false,
                 logging: true,
-                ssl: configService.get<boolean>('DB_SSL')
-                    ? {
-                          ca: configService.get<string>('DB_CA_PATH'),
-                          rejectUnauthorized: false,
-                      }
-                    : undefined,
-            }),
+                ssl:
+                    useSsl && caPath
+                        ? {
+                              ca: fs.readFileSync(caPath),
+                              rejectUnauthorized: true,
+                          }
+                        : undefined,
+            };
+            },
         }),
         GraphModule,
         UsersModule,
         TopicsModule,
         NodesModule,
         NodeConnectionsModule,
-        KnowledgeMapsModule,
+        GraphEditMapsModule,
         ProgressModule,
         ProfileModule,
         AdminModule,

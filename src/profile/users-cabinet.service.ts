@@ -2,10 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { User, UserRole } from '../users/entities/user.entity';
-import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap, MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
 import { Node } from '../nodes/entities/node.entity';
 import { UserTopicProgressService } from '../users/user-topic-progress.service';
-import { KnowledgeMapsService } from '../knowledge-maps/knowledge-maps.service';
+import { GraphEditMapsService } from '../graph-edit-maps/graph-edit-maps.service';
 import { NodesService } from '../nodes/nodes.service';
 
 type MapTeachingStats = {
@@ -35,7 +35,7 @@ export class UsersCabinetService {
         @InjectRepository(Node)
         private readonly nodeRepo: Repository<Node>,
         private readonly progressService: UserTopicProgressService,
-        private readonly mapsService: KnowledgeMapsService,
+        private readonly mapsService: GraphEditMapsService,
         private readonly nodesService: NodesService,
     ) {}
 

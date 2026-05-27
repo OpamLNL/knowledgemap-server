@@ -12,7 +12,7 @@ export enum MapStatus {
 }
 
 @Entity('knowledge_maps')
-export class KnowledgeMap {
+export class GraphEditMap {
     @PrimaryGeneratedColumn()
     id: number;
 

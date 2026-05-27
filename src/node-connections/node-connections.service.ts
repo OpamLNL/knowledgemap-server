@@ -5,7 +5,7 @@ import { NodeConnection } from './entities/node-connection.entity';
 import { CreateNodeConnectionDto, UpdateNodeConnectionDto } from './dto/create-node-connection.dto';
 import { Node } from '../nodes/entities/node.entity';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
-import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap, MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
 
 @Injectable()
 export class NodeConnectionsService {
@@ -14,8 +14,8 @@ export class NodeConnectionsService {
         private readonly repo: Repository<NodeConnection>,
         @InjectRepository(Node)
         private readonly nodeRepo: Repository<Node>,
-        @InjectRepository(KnowledgeMap)
-        private readonly mapRepo: Repository<KnowledgeMap>,
+        @InjectRepository(GraphEditMap)
+        private readonly mapRepo: Repository<GraphEditMap>,
         private readonly graphValidator: GraphValidatorService,
     ) {}
 

@@ -39,7 +39,7 @@ async function bootstrap() {
     });
 
     const config = new DocumentBuilder()
-        .setTitle('Knowledge Map API')
+        .setTitle('GraphEdit API')
         .setDescription('API для створення та редагування карт знань')
         .setVersion('2.0')
         .addBearerAuth(

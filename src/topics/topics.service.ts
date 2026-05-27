@@ -5,7 +5,7 @@ import { Topic } from './entities/topic.entity';
 import { CreateTopicDto } from './dtos/create-topic.dto';
 import { UpdateTopicDto } from './dtos/update-topic.dto';
 import { Node } from '../nodes/entities/node.entity';
-import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap, MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
 
 export interface TopicCatalogMapRef {
     mapId: number;
@@ -78,7 +78,7 @@ export class TopicsService {
 
         const linkQb = this.nodeRepository
             .createQueryBuilder('n')
-            .innerJoin(KnowledgeMap, 'm', 'm.id = n.map_id')
+            .innerJoin(GraphEditMap, 'm', 'm.id = n.map_id')
             .where('n.topic_id IS NOT NULL');
 
         if (params.mapId) {

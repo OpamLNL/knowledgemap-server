@@ -4,10 +4,10 @@ import { TopicsController } from './topics.controller';
 import { TopicsService } from './topics.service';
 import { Topic } from './entities/topic.entity';
 import { Node } from '../nodes/entities/node.entity';
-import { KnowledgeMap } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap } from '../graph-edit-maps/entities/graph-edit-map.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Topic, Node, KnowledgeMap])],
+    imports: [TypeOrmModule.forFeature([Topic, Node, GraphEditMap])],
     controllers: [TopicsController],
     providers: [TopicsService],
     exports: [TopicsService],

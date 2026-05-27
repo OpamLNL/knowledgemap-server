@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
-import { MapStatus } from '../entities/knowledge-map.entity';
+import { MapStatus } from '../entities/graph-edit-map.entity';
 
-export class CreateKnowledgeMapDto {
+export class CreateGraphEditMapDto {
     @IsString()
     @IsNotEmpty()
     title: string;
@@ -11,7 +11,7 @@ export class CreateKnowledgeMapDto {
     description?: string;
 }
 
-export class UpdateKnowledgeMapDto {
+export class UpdateGraphEditMapDto {
     @IsString()
     @IsOptional()
     title?: string;

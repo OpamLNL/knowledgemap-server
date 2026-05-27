@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { KnowledgeMap } from '../../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap } from '../../graph-edit-maps/entities/graph-edit-map.entity';
 
 @Entity('group_connections')
 export class GroupConnection {
@@ -9,9 +9,9 @@ export class GroupConnection {
     @Column({ name: 'map_id', type: 'int' })
     mapId: number;
 
-    @ManyToOne(() => KnowledgeMap, { onDelete: 'CASCADE' })
+    @ManyToOne(() => GraphEditMap, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'map_id' })
-    map: KnowledgeMap;
+    map: GraphEditMap;
 
     @Column({ name: 'from_group_id', type: 'varchar', length: 64 })
     fromGroupId: string;

@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { Node } from '../nodes/entities/node.entity';
 import { UsersModule } from '../users/users.module';
-import { KnowledgeMapsModule } from '../knowledge-maps/knowledge-maps.module';
+import { GraphEditMapsModule } from '../graph-edit-maps/graph-edit-maps.module';
 import { NodesModule } from '../nodes/nodes.module';
 import { UsersCabinetService } from './users-cabinet.service';
 import { ProfileController } from './profile.controller';
@@ -12,7 +12,7 @@ import { ProfileController } from './profile.controller';
     imports: [
         TypeOrmModule.forFeature([User, Node]),
         UsersModule,
-        KnowledgeMapsModule,
+        GraphEditMapsModule,
         NodesModule,
     ],
     providers: [UsersCabinetService],

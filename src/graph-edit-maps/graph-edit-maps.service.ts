@@ -6,25 +6,39 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, In, QueryRunner, QueryFailedError } from 'typeorm';
-import { KnowledgeMap, MapStatus } from './entities/knowledge-map.entity';
+import { readFile, writeFile } from 'fs/promises';
+import { extname } from 'path';
+import { randomBytes } from 'crypto';
+import { GraphEditMap, MapStatus } from './entities/graph-edit-map.entity';
 import { MapRevision } from './entities/map-revision.entity';
 import { Node } from '../nodes/entities/node.entity';
+import { NodeMedia } from '../nodes/entities/node-media.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
 import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
 import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { UserTopicProgress } from '../users/entities/user-topic-progress.entity';
-import { CreateKnowledgeMapDto, UpdateKnowledgeMapDto } from './dtos/create-knowledge-map.dto';
+import { CreateGraphEditMapDto, UpdateGraphEditMapDto } from './dtos/create-graph-edit-map.dto';
 import { BulkSaveGraphDto, BulkNodeDto, CreateRevisionDto } from './dtos/bulk-save-graph.dto';
 import { ValidateGraphDto } from './dtos/validate-graph.dto';
+import { ImportMapJsonDto } from './dtos/map-json.dto';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
 import { UserRole } from '../users/entities/user.entity';
+import {
+    filenameFromPublicUrl,
+    nodeMediaAbsolutePath,
+    nodeMediaPublicUrl,
+    ensureNodeMediaUploadDir,
+} from '../nodes/node-media.storage';
+
+export const MAP_JSON_FORMAT_VERSION = 1;
+const MAX_EMBED_IMAGE_BYTES = 5 * 1024 * 1024;
 
 @Injectable()
-export class KnowledgeMapsService {
+export class GraphEditMapsService {
     constructor(
-        @InjectRepository(KnowledgeMap)
-        private readonly mapRepo: Repository<KnowledgeMap>,
+        @InjectRepository(GraphEditMap)
+        private readonly mapRepo: Repository<GraphEditMap>,
         @InjectRepository(MapRevision)
         private readonly revisionRepo: Repository<MapRevision>,
         @InjectRepository(Node)
@@ -35,6 +49,10 @@ export class KnowledgeMapsService {
         private readonly topicRepo: Repository<Topic>,
         @InjectRepository(KnowledgeGroup)
         private readonly groupRepo: Repository<KnowledgeGroup>,
+        @InjectRepository(GroupConnection)
+        private readonly groupConnRepo: Repository<GroupConnection>,
+        @InjectRepository(NodeMedia)
+        private readonly nodeMediaRepo: Repository<NodeMedia>,
         @InjectRepository(UserTopicProgress)
         private readonly progressRepo: Repository<UserTopicProgress>,
         private readonly graphValidator: GraphValidatorService,
@@ -42,20 +60,31 @@ export class KnowledgeMapsService {
     ) {}
 
     /** Каталог: усі опубліковані карти (меню «Карти», головна). */
-    async findPublished(): Promise<KnowledgeMap[]> {
+    async findPublished(): Promise<GraphEditMap[]> {
         return this.mapRepo.find({
             where: { status: MapStatus.PUBLISHED },
             order: { updatedAt: 'DESC' },
-        });
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                ownerUid: true,
+                status: true,
+                createdAt: true,
+                updatedAt: true,
+                publishedAt: true,
+                graphValidated: true,
+            },
+        }) as Promise<GraphEditMap[]>;
     }
 
     /** @deprecated Використовуйте findPublished або findMine */
-    async findAll(_userRole?: UserRole, _ownerUid?: string): Promise<KnowledgeMap[]> {
+    async findAll(_userRole?: UserRole, _ownerUid?: string): Promise<GraphEditMap[]> {
         return this.findPublished();
     }
 
     /** Мої карти: створені користувачем + ті, що проходить/проходив. */
-    async findMine(userUid: string): Promise<KnowledgeMap[]> {
+    async findMine(userUid: string): Promise<GraphEditMap[]> {
         const owned = await this.mapRepo.find({
             where: { ownerUid: userUid },
             order: { updatedAt: 'DESC' },
@@ -79,7 +108,7 @@ export class KnowledgeMapsService {
             .map((r) => Number(r.mapId))
             .filter((id) => id && !ownedIds.has(id));
 
-        let fromProgress: KnowledgeMap[] = [];
+        let fromProgress: GraphEditMap[] = [];
         if (extraIds.length > 0) {
             fromProgress = await this.mapRepo.find({
                 where: { id: In(extraIds) },
@@ -94,13 +123,13 @@ export class KnowledgeMapsService {
         return merged;
     }
 
-    async findOne(id: number): Promise<KnowledgeMap> {
+    async findOne(id: number): Promise<GraphEditMap> {
         const map = await this.mapRepo.findOne({ where: { id } });
         if (!map) throw new NotFoundException(`Карту з id=${id} не знайдено`);
         return map;
     }
 
-    async create(dto: CreateKnowledgeMapDto, ownerUid: string): Promise<KnowledgeMap> {
+    async create(dto: CreateGraphEditMapDto, ownerUid: string): Promise<GraphEditMap> {
         const map = this.mapRepo.create({
             title: dto.title,
             description: dto.description ?? null,
@@ -110,7 +139,7 @@ export class KnowledgeMapsService {
         return this.mapRepo.save(map);
     }
 
-    async update(id: number, dto: UpdateKnowledgeMapDto, userUid: string, userRole: UserRole): Promise<KnowledgeMap> {
+    async update(id: number, dto: UpdateGraphEditMapDto, userUid: string, userRole: UserRole): Promise<GraphEditMap> {
         const map = await this.findOne(id);
         this.assertCanEdit(map, userUid, userRole);
 
@@ -136,11 +165,11 @@ export class KnowledgeMapsService {
             await manager.delete(GroupConnection, { mapId: id });
             await manager.delete(KnowledgeGroup, { mapId: id });
             await manager.delete(MapRevision, { mapId: id });
-            await manager.delete(KnowledgeMap, { id });
+            await manager.delete(GraphEditMap, { id });
         });
     }
 
-    async publish(id: number, userUid: string, userRole: UserRole): Promise<KnowledgeMap> {
+    async publish(id: number, userUid: string, userRole: UserRole): Promise<GraphEditMap> {
         const map = await this.findOne(id);
         this.assertCanEdit(map, userUid, userRole);
 
@@ -216,7 +245,7 @@ export class KnowledgeMapsService {
     /** Сувора валідація для UI «Валідувати» та публікації. */
     private async validateMapGraphStrict(
         mapId: number,
-        graph: Awaited<ReturnType<KnowledgeMapsService['getEditorGraph']>>,
+        graph: Awaited<ReturnType<GraphEditMapsService['getEditorGraph']>>,
     ) {
         const knowledgeGroups = await this.groupRepo.find({ where: { mapId } });
         const groupTitleById = Object.fromEntries(
@@ -566,7 +595,7 @@ export class KnowledgeMapsService {
             }
 
             if (dto.groupLayouts !== undefined && dto.groupLayouts.length > 0) {
-                const freshMap = await queryRunner.manager.findOne(KnowledgeMap, {
+                const freshMap = await queryRunner.manager.findOne(GraphEditMap, {
                     where: { id: mapId },
                 });
                 if (!freshMap) {
@@ -582,7 +611,7 @@ export class KnowledgeMapsService {
                     };
                 }
                 freshMap.groupLayoutJson = layout;
-                await queryRunner.manager.save(KnowledgeMap, freshMap);
+                await queryRunner.manager.save(GraphEditMap, freshMap);
                 map.groupLayoutJson = layout;
             }
 
@@ -677,19 +706,375 @@ export class KnowledgeMapsService {
         return any.id;
     }
 
-    async exportJson(mapId: number) {
+    async exportJson(mapId: number, userUid: string, userRole: UserRole) {
         const map = await this.findOne(mapId);
-        const graph = await this.getEditorGraph(mapId);
+        this.assertCanEdit(map, userUid, userRole);
+
+        const nodes = await this.nodeRepo.find({ where: { mapId } });
+        const edges = await this.connectionRepo.find({ where: { mapId } });
+        const groups = await this.groupRepo.find({
+            where: { mapId },
+            order: { sortOrder: 'ASC' },
+        });
+        const groupEdges = await this.groupConnRepo.find({ where: { mapId } });
+
+        const nodeIds = nodes.map((n) => n.id);
+        const mediaRows =
+            nodeIds.length > 0
+                ? await this.nodeMediaRepo.find({
+                      where: { nodeId: In(nodeIds) },
+                      order: { sortOrder: 'ASC', id: 'ASC' },
+                  })
+                : [];
+        const mediaByNodeId = new Map<number, NodeMedia[]>();
+        for (const m of mediaRows) {
+            const list = mediaByNodeId.get(m.nodeId) ?? [];
+            list.push(m);
+            mediaByNodeId.set(m.nodeId, list);
+        }
+
+        let embeddedImages = 0;
+        let skippedImages = 0;
+
+        const exportNodes = await Promise.all(
+            nodes.map(async (n) => {
+                const key = `node-${n.id}`;
+                const media = await Promise.all(
+                    (mediaByNodeId.get(n.id) ?? []).map(async (item) => {
+                        const base: {
+                            caption: string | null;
+                            sortOrder: number;
+                            url?: string;
+                            dataBase64?: string;
+                            mimeType?: string;
+                        } = {
+                            caption: item.caption,
+                            sortOrder: item.sortOrder,
+                            url: item.url,
+                        };
+
+                        const filename = filenameFromPublicUrl(item.url);
+                        if (!filename) {
+                            skippedImages++;
+                            return base;
+                        }
+
+                        try {
+                            const buf = await readFile(nodeMediaAbsolutePath(filename));
+                            if (buf.length > MAX_EMBED_IMAGE_BYTES) {
+                                skippedImages++;
+                                return base;
+                            }
+                            base.dataBase64 = buf.toString('base64');
+                            base.mimeType = mimeFromFilename(filename);
+                            embeddedImages++;
+                        } catch {
+                            skippedImages++;
+                        }
+                        return base;
+                    }),
+                );
+
+                return {
+                    key,
+                    title: n.title,
+                    groupId: n.groupId,
+                    x: n.x,
+                    y: n.y,
+                    color: n.color,
+                    theoryMd: n.theoryMd,
+                    media,
+                };
+            }),
+        );
+
+        const keyByNodeId = new Map(nodes.map((n) => [n.id, `node-${n.id}`]));
+
         return {
+            formatVersion: MAP_JSON_FORMAT_VERSION,
+            exportedAt: new Date().toISOString(),
             map: {
-                id: map.id,
                 title: map.title,
                 description: map.description,
-                status: map.status,
             },
-            ...graph,
-            exportedAt: new Date().toISOString(),
+            groups: groups.map((g) => ({
+                id: g.id,
+                title: g.title,
+                description: g.description,
+                level: g.level,
+                sortOrder: g.sortOrder,
+                parentId: g.parentId,
+            })),
+            groupEdges: groupEdges.map((e) => ({
+                from: e.fromGroupId,
+                to: e.toGroupId,
+                type: e.type,
+            })),
+            groupLayout: map.groupLayoutJson ?? {},
+            nodes: exportNodes,
+            edges: edges.map((e) => ({
+                from: keyByNodeId.get(e.fromNodeId) ?? String(e.fromNodeId),
+                to: keyByNodeId.get(e.toNodeId) ?? String(e.toNodeId),
+                type: e.type,
+            })),
+            mediaNote:
+                'Локальні зображення вбудовані як dataBase64. Зовнішні URL лишаються посиланнями без копіювання.',
+            mediaStats: { embeddedImages, skippedImages },
         };
+    }
+
+    async importJson(
+        mapId: number,
+        dto: ImportMapJsonDto,
+        userUid: string,
+        userRole: UserRole,
+    ) {
+        const map = await this.findOne(mapId);
+        this.assertCanEdit(map, userUid, userRole);
+
+        if (dto.formatVersion !== MAP_JSON_FORMAT_VERSION) {
+            throw new BadRequestException(
+                `Непідтримувана версія JSON (formatVersion=${dto.formatVersion})`,
+            );
+        }
+        if (!dto.nodes?.length) {
+            throw new BadRequestException('JSON не містить вузлів (nodes)');
+        }
+
+        const mode = dto.importMode ?? 'merge';
+        const nodeKeys = new Set(dto.nodes.map((n) => n.key));
+        for (const edge of dto.edges ?? []) {
+            if (!nodeKeys.has(edge.from) || !nodeKeys.has(edge.to)) {
+                throw new BadRequestException(
+                    `Ребро ${edge.from}→${edge.to} посилається на невідомий key вузла`,
+                );
+            }
+        }
+
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            if (mode === 'replace') {
+                await this.clearMapGraph(queryRunner, mapId);
+            }
+
+            if (map.status === MapStatus.PUBLISHED) {
+                const freshMap = await queryRunner.manager.findOne(GraphEditMap, {
+                    where: { id: mapId },
+                });
+                if (freshMap) {
+                    freshMap.status = MapStatus.DRAFT;
+                    await queryRunner.manager.save(freshMap);
+                }
+            }
+
+            const groupIds = new Set(
+                (await queryRunner.manager.find(KnowledgeGroup, { where: { mapId } })).map(
+                    (g) => g.id,
+                ),
+            );
+
+            for (const g of dto.groups ?? []) {
+                const existing = await queryRunner.manager.findOne(KnowledgeGroup, {
+                    where: { id: g.id },
+                });
+                if (existing) {
+                    if (existing.mapId !== mapId) {
+                        throw new BadRequestException(`Група ${g.id} належить іншій карті`);
+                    }
+                    Object.assign(existing, {
+                        title: g.title,
+                        description: g.description ?? null,
+                        level: g.level ?? existing.level,
+                        sortOrder: g.sortOrder ?? existing.sortOrder,
+                        parentId: g.parentId ?? existing.parentId,
+                    });
+                    await queryRunner.manager.save(existing);
+                } else {
+                    await queryRunner.manager.save(
+                        queryRunner.manager.create(KnowledgeGroup, {
+                            id: g.id,
+                            mapId,
+                            title: g.title,
+                            description: g.description ?? null,
+                            level: g.level ?? 0,
+                            sortOrder: g.sortOrder ?? 0,
+                            parentId: g.parentId ?? null,
+                        }),
+                    );
+                }
+                groupIds.add(g.id);
+            }
+
+            const keyToNodeId = new Map<string, number>();
+
+            for (const nodeDto of dto.nodes) {
+                if (nodeDto.groupId && !groupIds.has(nodeDto.groupId)) {
+                    throw new BadRequestException(
+                        `Вузол ${nodeDto.key} посилається на неіснуючу групу ${nodeDto.groupId}`,
+                    );
+                }
+
+                let topic: Topic | null = null;
+                if (nodeDto.groupId) {
+                    topic = await this.createTopicForNodeInTransaction(
+                        queryRunner,
+                        nodeDto.title,
+                        nodeDto.groupId,
+                    );
+                }
+
+                const created = await queryRunner.manager.save(
+                    queryRunner.manager.create(Node, {
+                        title: nodeDto.title,
+                        topicId: topic?.id ?? null,
+                        groupId: nodeDto.groupId ?? null,
+                        mapId,
+                        x: nodeDto.x ?? null,
+                        y: nodeDto.y ?? null,
+                        color: nodeDto.color ?? null,
+                        theoryMd: nodeDto.theoryMd ?? null,
+                    }),
+                );
+                keyToNodeId.set(nodeDto.key, created.id);
+
+                if (nodeDto.media?.length) {
+                    await this.importNodeMedia(queryRunner, created.id, nodeDto.media);
+                }
+            }
+
+            for (const edgeDto of dto.edges ?? []) {
+                const fromNodeId = keyToNodeId.get(edgeDto.from)!;
+                const toNodeId = keyToNodeId.get(edgeDto.to)!;
+
+                const duplicate = await queryRunner.manager.findOne(NodeConnection, {
+                    where: { mapId, fromNodeId, toNodeId },
+                });
+                if (!duplicate) {
+                    await queryRunner.manager.save(
+                        queryRunner.manager.create(NodeConnection, {
+                            mapId,
+                            fromNodeId,
+                            toNodeId,
+                            type: edgeDto.type ?? null,
+                        }),
+                    );
+                }
+            }
+
+            for (const ge of dto.groupEdges ?? []) {
+                if (!groupIds.has(ge.from) || !groupIds.has(ge.to)) continue;
+                const duplicate = await queryRunner.manager.findOne(GroupConnection, {
+                    where: { mapId, fromGroupId: ge.from, toGroupId: ge.to },
+                });
+                if (!duplicate) {
+                    await queryRunner.manager.save(
+                        queryRunner.manager.create(GroupConnection, {
+                            mapId,
+                            fromGroupId: ge.from,
+                            toGroupId: ge.to,
+                            type: ge.type ?? 'prerequisite',
+                            source: 'import',
+                        }),
+                    );
+                }
+            }
+
+            if (dto.groupLayout && Object.keys(dto.groupLayout).length > 0) {
+                const freshMap = await queryRunner.manager.findOne(GraphEditMap, {
+                    where: { id: mapId },
+                });
+                if (freshMap) {
+                    freshMap.groupLayoutJson = {
+                        ...(mode === 'merge' ? (freshMap.groupLayoutJson ?? {}) : {}),
+                        ...dto.groupLayout,
+                    };
+                    await queryRunner.manager.save(freshMap);
+                }
+            }
+
+            await queryRunner.commitTransaction();
+        } catch (err) {
+            await queryRunner.rollbackTransaction();
+            if (err instanceof QueryFailedError) {
+                throw new BadRequestException(`Помилка імпорту: ${err.message}`);
+            }
+            throw err;
+        } finally {
+            await queryRunner.release();
+        }
+
+        map.updatedAt = new Date();
+        await this.mapRepo.save(map);
+
+        return {
+            mapId,
+            importMode: mode,
+            importedNodes: dto.nodes.length,
+            importedEdges: dto.edges?.length ?? 0,
+            graph: await this.getEditorGraph(mapId),
+        };
+    }
+
+    private async clearMapGraph(queryRunner: QueryRunner, mapId: number): Promise<void> {
+        const nodes = await queryRunner.manager.find(Node, { where: { mapId } });
+        const nodeIds = nodes.map((n) => n.id);
+        if (nodeIds.length > 0) {
+            await queryRunner.manager.delete(NodeMedia, { nodeId: In(nodeIds) });
+        }
+        await queryRunner.manager.delete(NodeConnection, { mapId });
+        await queryRunner.manager.delete(Node, { mapId });
+        await queryRunner.manager.delete(GroupConnection, { mapId });
+        await queryRunner.manager.delete(KnowledgeGroup, { mapId });
+    }
+
+    private async importNodeMedia(
+        queryRunner: QueryRunner,
+        nodeId: number,
+        media: ImportMapJsonDto['nodes'][number]['media'],
+    ): Promise<void> {
+        if (!media?.length) return;
+        ensureNodeMediaUploadDir();
+
+        for (const item of media) {
+            if (item.dataBase64) {
+                const ext = extFromMime(item.mimeType) ?? extname(item.url ?? '') ?? '.jpg';
+                const filename = `node-${nodeId}-import-${Date.now()}-${randomBytes(4).toString('hex')}${ext}`;
+                const buf = Buffer.from(item.dataBase64, 'base64');
+                if (buf.length > MAX_EMBED_IMAGE_BYTES) continue;
+                await writeFile(nodeMediaAbsolutePath(filename), buf);
+                await queryRunner.manager.save(
+                    queryRunner.manager.create(NodeMedia, {
+                        nodeId,
+                        url: nodeMediaPublicUrl(filename),
+                        caption: item.caption?.trim() || null,
+                        sortOrder: item.sortOrder ?? 0,
+                    }),
+                );
+                continue;
+            }
+
+            const filename = item.url ? filenameFromPublicUrl(item.url) : null;
+            if (filename) {
+                try {
+                    const buf = await readFile(nodeMediaAbsolutePath(filename));
+                    const newName = `node-${nodeId}-import-${Date.now()}-${randomBytes(4).toString('hex')}${extname(filename)}`;
+                    await writeFile(nodeMediaAbsolutePath(newName), buf);
+                    await queryRunner.manager.save(
+                        queryRunner.manager.create(NodeMedia, {
+                            nodeId,
+                            url: nodeMediaPublicUrl(newName),
+                            caption: item.caption?.trim() || null,
+                            sortOrder: item.sortOrder ?? 0,
+                        }),
+                    );
+                } catch {
+                    /* файл недоступний — пропускаємо */
+                }
+            }
+        }
     }
 
     async getImportLibrary(
@@ -778,7 +1163,7 @@ export class KnowledgeMapsService {
         };
     }
 
-    private assertCanEdit(map: KnowledgeMap, userUid: string, userRole: UserRole): void {
+    private assertCanEdit(map: GraphEditMap, userUid: string, userRole: UserRole): void {
         if (userRole === UserRole.ADMIN) return;
         if (userRole === UserRole.TEACHER) {
             if (!map.ownerUid || map.ownerUid === userUid) return;
@@ -828,4 +1213,21 @@ export class KnowledgeMapsService {
             }),
         );
     }
+}
+
+function mimeFromFilename(filename: string): string {
+    const ext = extname(filename).toLowerCase();
+    if (ext === '.png') return 'image/png';
+    if (ext === '.gif') return 'image/gif';
+    if (ext === '.webp') return 'image/webp';
+    return 'image/jpeg';
+}
+
+function extFromMime(mime?: string | null): string | null {
+    if (!mime) return null;
+    if (mime.includes('png')) return '.png';
+    if (mime.includes('gif')) return '.gif';
+    if (mime.includes('webp')) return '.webp';
+    if (mime.includes('jpeg') || mime.includes('jpg')) return '.jpg';
+    return null;
 }

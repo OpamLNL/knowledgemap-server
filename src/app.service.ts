@@ -8,6 +8,6 @@ export class AppService {
 
     // AuthService.
 
-    return 'Knowledge Map Server!!';
+    return 'GraphEdit Server!!';
   }
 }

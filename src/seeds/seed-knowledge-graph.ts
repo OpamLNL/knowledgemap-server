@@ -6,7 +6,7 @@ import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
 import { Node } from '../nodes/entities/node.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
-import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap, MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
 
 const SEEDS_DIR = path.join(__dirname, '../seeds');
 const BATCH_SIZE = 150;
@@ -136,8 +136,8 @@ export async function seedTopicsWithGroups(): Promise<Map<number, Topic>> {
     return bySeedId;
 }
 
-export async function ensurePublishedMap(): Promise<KnowledgeMap> {
-    const mapRepo = AppDataSource.getRepository(KnowledgeMap);
+export async function ensurePublishedMap(): Promise<GraphEditMap> {
+    const mapRepo = AppDataSource.getRepository(GraphEditMap);
     let map = await mapRepo.findOne({ where: { status: MapStatus.PUBLISHED }, order: { id: 'ASC' } });
 
     if (!map) {
@@ -158,7 +158,7 @@ export async function ensurePublishedMap(): Promise<KnowledgeMap> {
 }
 
 export async function seedNodesForMap(
-    map: KnowledgeMap,
+    map: GraphEditMap,
     topicsBySeedId: Map<number, Topic>,
 ): Promise<Map<number, Node>> {
     const nodeRepo = AppDataSource.getRepository(Node);
@@ -189,7 +189,7 @@ export async function seedNodesForMap(
 }
 
 export async function seedNodeConnectionsFromCleanSeed(
-    map: KnowledgeMap,
+    map: GraphEditMap,
     topicsBySeedId: Map<number, Topic>,
 ): Promise<number> {
     const data = readJson<

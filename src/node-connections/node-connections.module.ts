@@ -4,12 +4,12 @@ import { NodeConnectionsService } from './node-connections.service';
 import { NodeConnectionsController } from './node-connections.controller';
 import { NodeConnection } from './entities/node-connection.entity';
 import { Node } from '../nodes/entities/node.entity';
-import { KnowledgeMap } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap } from '../graph-edit-maps/entities/graph-edit-map.entity';
 import { GraphModule } from '../common/graph/graph.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([NodeConnection, Node, KnowledgeMap]),
+        TypeOrmModule.forFeature([NodeConnection, Node, GraphEditMap]),
         GraphModule,
     ],
     providers: [NodeConnectionsService],

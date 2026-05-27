@@ -4,7 +4,7 @@ import { GroupConnection } from '../topics/entities/group-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
 import { Node } from '../nodes/entities/node.entity';
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
-import { KnowledgeMap } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap } from '../graph-edit-maps/entities/graph-edit-map.entity';
 import { IsNull, Not } from 'typeorm';
 
 async function verify() {
@@ -18,7 +18,7 @@ async function verify() {
     });
     const nodes = await AppDataSource.getRepository(Node).count();
     const edges = await AppDataSource.getRepository(NodeConnection).count();
-    const maps = await AppDataSource.getRepository(KnowledgeMap).find();
+    const maps = await AppDataSource.getRepository(GraphEditMap).find();
 
     const published = maps.find((m) => m.status === 'published') ?? maps[0];
     const mapId = published?.id ?? 1;

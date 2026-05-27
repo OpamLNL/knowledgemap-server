@@ -7,8 +7,8 @@ import { UserTopicProgress } from './users/entities/user-topic-progress.entity';
 import { Topic } from './topics/entities/topic.entity';
 import { Node } from './nodes/entities/node.entity';
 import { NodeConnection } from './node-connections/entities/node-connection.entity';
-import { KnowledgeMap } from './knowledge-maps/entities/knowledge-map.entity';
-import { MapRevision } from './knowledge-maps/entities/map-revision.entity';
+import { GraphEditMap } from './graph-edit-maps/entities/graph-edit-map.entity';
+import { MapRevision } from './graph-edit-maps/entities/map-revision.entity';
 import { KnowledgeGroup } from './topics/entities/knowledge-group.entity';
 import { GroupConnection } from './topics/entities/group-connection.entity';
 import { InitialSchema1730000000000 } from './migrations/1730000000000-InitialSchema';
@@ -36,7 +36,7 @@ export const AppDataSource = new DataSource({
         Topic,
         Node,
         NodeConnection,
-        KnowledgeMap,
+        GraphEditMap,
         MapRevision,
         KnowledgeGroup,
         GroupConnection,

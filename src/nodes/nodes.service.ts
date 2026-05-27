@@ -10,7 +10,7 @@ import { UserTopicProgress } from '../users/entities/user-topic-progress.entity'
 import { NodeConnection } from '../node-connections/entities/node-connection.entity';
 import { Topic } from '../topics/entities/topic.entity';
 import { GraphValidatorService } from '../common/graph/graph-validator.service';
-import { KnowledgeMap, MapStatus } from '../knowledge-maps/entities/knowledge-map.entity';
+import { GraphEditMap, MapStatus } from '../graph-edit-maps/entities/graph-edit-map.entity';
 import { KnowledgeGroup } from '../topics/entities/knowledge-group.entity';
 import { GroupConnection } from '../topics/entities/group-connection.entity';
 import {
@@ -38,7 +38,7 @@ type GraphNodeDto = {
 
 type MapGraphContext = {
     mapId: number;
-    map: KnowledgeMap | null;
+    map: GraphEditMap | null;
     nodes: Node[];
     connections: NodeConnection[];
     groups: KnowledgeGroup[];
@@ -65,8 +65,8 @@ export class NodesService {
         private readonly connectionRepo: Repository<NodeConnection>,
         @InjectRepository(Topic)
         private readonly topicRepo: Repository<Topic>,
-        @InjectRepository(KnowledgeMap)
-        private readonly mapRepo: Repository<KnowledgeMap>,
+        @InjectRepository(GraphEditMap)
+        private readonly mapRepo: Repository<GraphEditMap>,
         @InjectRepository(KnowledgeGroup)
         private readonly groupRepo: Repository<KnowledgeGroup>,
         @InjectRepository(GroupConnection)
