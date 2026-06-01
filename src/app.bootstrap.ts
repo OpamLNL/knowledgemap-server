@@ -62,8 +62,22 @@ function configureApp(app: INestApplication): void {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+
+  // На Vercel serverless локальні swagger-ui-dist часто дають 404 — підключаємо CDN.
+  const swaggerUiVersion = '5.20.1';
+  const swaggerCdn = `https://cdn.jsdelivr.net/npm/swagger-ui-dist@${swaggerUiVersion}`;
+  const onVercel = Boolean(process.env.VERCEL);
+
   SwaggerModule.setup('docs', app, document, {
     useGlobalPrefix: true,
+    ...(onVercel && {
+      customCssUrl: `${swaggerCdn}/swagger-ui.css`,
+      customJs: [
+        `${swaggerCdn}/swagger-ui-bundle.js`,
+        `${swaggerCdn}/swagger-ui-standalone-preset.js`,
+      ],
+      customfavIcon: `${swaggerCdn}/favicon-32x32.png`,
+    }),
   });
 }
 
